@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "pack_id": "memory-controller",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "pre_transaction_reset",
+      "description": "Reset still asserted; bus idle, no cycle in flight.",
+      "time_ns": 15,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.rst": "1'b1",
+            "tb_mem.wb_cyc": "1'b0",
+            "tb_mem.wb_stb": "1'b0",
+            "tb_mem.wb_ack": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_write_active",
+      "description": "First write transaction is mid-flight. Master has driven CYC+STB+WE; slave is about to acknowledge on the next posedge.",
+      "time_ns": 35,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.wb_cyc": "1'b1",
+            "tb_mem.wb_stb": "1'b1",
+            "tb_mem.wb_we": "1'b1",
+            "tb_mem.wb_ack": "1'b0",
+            "tb_mem.wb_adr": "32'h00000000",
+            "tb_mem.dat_master_to_slave": "32'hCAFE0000"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_write_ack",
+      "description": "Slave asserts ACK; master will deassert CYC/STB on the next posedge.",
+      "time_ns": 45,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.wb_cyc": "1'b1",
+            "tb_mem.wb_ack": "1'b1"
+          }
+        }
+      }
+    },
+    {
+      "name": "write_phase_end",
+      "description": "All 8 writes have completed. The master is moving from write phase to read phase; bus is idle for one cycle.",
+      "time_ns": 265,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.wb_cyc": "1'b0",
+            "tb_mem.wb_we": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_read_active",
+      "description": "First read transaction. Same address (0x00) but WE=0 and slave drives DAT_I.",
+      "time_ns": 285,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.wb_cyc": "1'b1",
+            "tb_mem.wb_stb": "1'b1",
+            "tb_mem.wb_we": "1'b0",
+            "tb_mem.wb_adr": "32'h00000000"
+          }
+        }
+      }
+    },
+    {
+      "name": "last_read_data_loaded",
+      "description": "Final readback of 0xCAFE0007 has been captured into last_read.",
+      "time_ns": 515,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.u_master.last_read": "32'hCAFE0007"
+          }
+        }
+      }
+    },
+    {
+      "name": "all_done",
+      "description": "All 8 writes + 8 reads complete; master asserts done.",
+      "time_ns": 525,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_mem.u_master.done": "1'b1",
+            "tb_mem.wb_cyc": "1'b0"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [
+    {
+      "decoder": "wishbone",
+      "binding_file": "decoders/wishbone_binding.json",
+      "expected_transactions": [
+        { "type": "WRITE", "addr": "0x00000000", "data": "0xCAFE0000" },
+        { "type": "WRITE", "addr": "0x00000004", "data": "0xCAFE0001" },
+        { "type": "WRITE", "addr": "0x00000008", "data": "0xCAFE0002" },
+        { "type": "WRITE", "addr": "0x0000000C", "data": "0xCAFE0003" },
+        { "type": "WRITE", "addr": "0x00000010", "data": "0xCAFE0004" },
+        { "type": "WRITE", "addr": "0x00000014", "data": "0xCAFE0005" },
+        { "type": "WRITE", "addr": "0x00000018", "data": "0xCAFE0006" },
+        { "type": "WRITE", "addr": "0x0000001C", "data": "0xCAFE0007" },
+        { "type": "READ",  "addr": "0x00000000", "data": "0xCAFE0000" },
+        { "type": "READ",  "addr": "0x00000004", "data": "0xCAFE0001" },
+        { "type": "READ",  "addr": "0x00000008", "data": "0xCAFE0002" },
+        { "type": "READ",  "addr": "0x0000000C", "data": "0xCAFE0003" },
+        { "type": "READ",  "addr": "0x00000010", "data": "0xCAFE0004" },
+        { "type": "READ",  "addr": "0x00000014", "data": "0xCAFE0005" },
+        { "type": "READ",  "addr": "0x00000018", "data": "0xCAFE0006" },
+        { "type": "READ",  "addr": "0x0000001C", "data": "0xCAFE0007" }
+      ]
+    }
+  ],
+  "cross_tool_deep_links": []
+}

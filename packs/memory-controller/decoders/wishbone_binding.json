@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "decoder": "wishbone",
+  "signal_bindings": {
+    "clk":   "tb_mem.clk",
+    "rst":   "tb_mem.rst",
+    "adr":   "tb_mem.wb_adr",
+    "dat_o": "tb_mem.dat_master_to_slave",
+    "dat_i": "tb_mem.dat_slave_to_master",
+    "we":    "tb_mem.wb_we",
+    "sel":   "tb_mem.wb_sel",
+    "stb":   "tb_mem.wb_stb",
+    "cyc":   "tb_mem.wb_cyc",
+    "ack":   "tb_mem.wb_ack"
+  },
+  "parameters": {
+    "variant": "B4",
+    "addr_width": 32,
+    "data_width": 32
+  }
+}

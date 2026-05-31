@@ -1,0 +1,34 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_mem.clk",
+    "tb_mem.rst",
+    "tb_mem.wb_cyc",
+    "tb_mem.wb_stb",
+    "tb_mem.wb_we",
+    "tb_mem.wb_ack",
+    "tb_mem.wb_adr",
+    "tb_mem.wb_sel",
+    "tb_mem.dat_master_to_slave",
+    "tb_mem.dat_slave_to_master",
+    "tb_mem.u_master.last_read",
+    "tb_mem.u_master.done"
+  ],
+  "_required_groups": [
+    { "name": "control", "children": ["tb_mem.wb_cyc", "tb_mem.wb_stb", "tb_mem.wb_we", "tb_mem.wb_ack"] },
+    { "name": "address_data", "children": ["tb_mem.wb_adr", "tb_mem.dat_master_to_slave", "tb_mem.dat_slave_to_master"] },
+    { "name": "master_state", "children": ["tb_mem.u_master.last_read", "tb_mem.u_master.done"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [
+    { "decoder": "wishbone", "file": "decoders/wishbone_binding.json" }
+  ],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_mem.wb_adr", "format": "hexadecimal" },
+    { "signal": "tb_mem.dat_master_to_slave", "format": "hexadecimal" },
+    { "signal": "tb_mem.dat_slave_to_master", "format": "hexadecimal" },
+    { "signal": "tb_mem.u_master.last_read", "format": "hexadecimal" }
+  ],
+  "_initial_cursor_time_ns": 285
+}

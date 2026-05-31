@@ -1,0 +1,58 @@
+schema_version: 1
+
+pack_id: memory-controller
+pack_version: 1.0.0
+pack_category: protocol
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Identify the Wishbone B4 cyc / stb / ack handshake from a raw waveform."
+    - "Apply the WaveCrux Wishbone decoder and read decoded WRITE / READ transactions."
+    - "Trace 8 writes followed by 8 readbacks of the same memory region."
+    - "Use the switching-activity heatmap to identify the most-toggling signals."
+prerequisites:
+  - counter-lab
+curriculum_topics:
+  - bus_protocols
+  - protocol_decoding
+  - memory
+estimated_duration_minutes: 90
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings:
+    - decoder: wishbone
+      file: decoders/wishbone_binding.json
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Wishbone B4 master + memory slave. Write a pattern then read it back; apply the Wishbone decoder."
