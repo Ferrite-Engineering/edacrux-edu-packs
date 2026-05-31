@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "pack_id": "uart-lab",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "idle_before_first_byte",
+      "description": "Reset just released; transmitter is in IDLE with the line at logic 1.",
+      "time_ns": 50,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_tx.dut.tx": "1'b1",
+            "tb_uart_tx.dut.tx_busy": "1'b0",
+            "tb_uart_tx.dut.state": "2'd0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_start_bit_asserted",
+      "description": "Transmitter is in START state and the line is held low for one bit time. The start bit begins at t=80 ns.",
+      "time_ns": 100,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_tx.dut.tx": "1'b0",
+            "tb_uart_tx.dut.tx_busy": "1'b1",
+            "tb_uart_tx.dut.state": "2'd1"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_data_bit_lsb",
+      "description": "Mid first data bit of byte 0x55. LSB of 0x55 is 1, so tx is high. 0x55 = 0b01010101, transmitted LSB-first: 1,0,1,0,1,0,1,0.",
+      "time_ns": 12000,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_tx.dut.tx": "1'b1",
+            "tb_uart_tx.dut.state": "2'd2"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_stop_bit",
+      "description": "After 8 data bits, the transmitter raises tx for one bit time (the stop bit). The stop bit for byte 0x55 begins at t=78200 ns.",
+      "time_ns": 82000,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_tx.dut.tx": "1'b1",
+            "tb_uart_tx.dut.state": "2'd3"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_first_byte",
+      "description": "First byte (0x55) has fully transmitted; the transmitter has returned to IDLE before the second byte starts.",
+      "time_ns": 86880,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_tx.dut.tx": "1'b1",
+            "tb_uart_tx.dut.tx_busy": "1'b0",
+            "tb_uart_tx.dut.state": "2'd0"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [
+    {
+      "decoder": "uart",
+      "binding_file": "decoders/uart_binding.json",
+      "expected_transactions": [
+        { "type": "BYTE", "value": "0x55" },
+        { "type": "BYTE", "value": "0xAA" },
+        { "type": "BYTE", "value": "0x55" },
+        { "type": "BYTE", "value": "0xAA" }
+      ]
+    }
+  ],
+  "cross_tool_deep_links": []
+}

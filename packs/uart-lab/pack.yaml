@@ -1,0 +1,58 @@
+schema_version: 1
+
+pack_id: uart-lab
+pack_version: 1.0.0
+pack_category: protocol
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Identify the start bit, 8 data bits (LSB first), and stop bit in a raw UART waveform."
+    - "Apply the WaveCrux UART decoder and read decoded bytes from the transaction table."
+    - "Measure the actual baud rate from a cursor-delta on a single bit period."
+    - "Map ASCII characters to wire bytes and back."
+prerequisites:
+  - counter-lab
+curriculum_topics:
+  - serial_protocols
+  - protocol_decoding
+  - uart
+estimated_duration_minutes: 75
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings:
+    - decoder: uart
+      file: decoders/uart_binding.json
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "UART transmitter walkthrough. Apply the WaveCrux UART decoder and read bytes from the transaction table."

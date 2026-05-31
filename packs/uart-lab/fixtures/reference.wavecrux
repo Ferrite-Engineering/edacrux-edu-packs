@@ -1,0 +1,23 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_uart_tx.clk",
+    "tb_uart_tx.rst_n",
+    "tb_uart_tx.tx_data",
+    "tb_uart_tx.tx_start",
+    "tb_uart_tx.dut.state",
+    "tb_uart_tx.dut.tx",
+    "tb_uart_tx.dut.tx_busy"
+  ],
+  "_required_groups": [],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [
+    { "decoder": "uart", "file": "decoders/uart_binding.json" }
+  ],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_uart_tx.dut.state", "format": "decimal" },
+    { "signal": "tb_uart_tx.tx_data", "format": "hexadecimal" }
+  ],
+  "_initial_cursor_time_ns": 100
+}

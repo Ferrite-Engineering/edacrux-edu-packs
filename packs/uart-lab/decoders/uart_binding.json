@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "decoder": "uart",
+  "signal_bindings": {
+    "tx": "tb_uart_tx.dut.tx"
+  },
+  "parameters": {
+    "baud_rate": 115200,
+    "data_bits": 8,
+    "stop_bits": 1,
+    "parity": "none"
+  }
+}
