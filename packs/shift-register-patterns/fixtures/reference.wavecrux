@@ -1,0 +1,24 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_shift.clk",
+    "tb_shift.rst_n",
+    "tb_shift.sin",
+    "tb_shift.u_shift.q",
+    "tb_shift.u_shift.sout",
+    "tb_shift.u_lfsr.state",
+    "tb_shift.u_lfsr.feedback"
+  ],
+  "_required_groups": [
+    { "name": "shift_register", "children": ["tb_shift.sin", "tb_shift.u_shift.q", "tb_shift.u_shift.sout"] },
+    { "name": "lfsr", "children": ["tb_shift.u_lfsr.state", "tb_shift.u_lfsr.feedback"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_shift.u_shift.q", "format": "binary" },
+    { "signal": "tb_shift.u_lfsr.state", "format": "binary" }
+  ],
+  "_initial_cursor_time_ns": 105
+}

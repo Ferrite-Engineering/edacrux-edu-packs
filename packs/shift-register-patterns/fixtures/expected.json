@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "pack_id": "shift-register-patterns",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "shift_reset_held",
+      "description": "Reset still asserted; shift register parked at zero, LFSR parked at the seed value 0x01.",
+      "time_ns": 15,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_shift.q": "8'h00",
+            "tb_shift.u_shift.sout": "1'b0",
+            "tb_shift.u_lfsr.state": "5'b00001"
+          }
+        }
+      }
+    },
+    {
+      "name": "shift_first_bit",
+      "description": "First posedge after reset release (t=30) shifts in sin=1; q becomes 0x01.",
+      "time_ns": 35,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_shift.q": "8'h01"
+          }
+        }
+      }
+    },
+    {
+      "name": "shift_mid_pattern",
+      "description": "Four bits (1,0,1,1) have been shifted in; q reads 0x0B.",
+      "time_ns": 65,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_shift.q": "8'h0B"
+          }
+        }
+      }
+    },
+    {
+      "name": "shift_full_pattern",
+      "description": "All 8 bits of the input pattern 1,0,1,1,0,1,0,0 have shifted in. q reads 0xB4 = 10110100 binary; sout (q[7]) reads 1.",
+      "time_ns": 105,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_shift.q": "8'hB4",
+            "tb_shift.u_shift.sout": "1'b1"
+          }
+        }
+      }
+    },
+    {
+      "name": "lfsr_initial",
+      "description": "LFSR is parked at its seed value 5'b00001 while reset is asserted.",
+      "time_ns": 25,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_lfsr.state": "5'b00001"
+          }
+        }
+      }
+    },
+    {
+      "name": "lfsr_mid_cycle",
+      "description": "Halfway through one LFSR period (cycle 12 of 31), state reaches 5'b01111.",
+      "time_ns": 145,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_lfsr.state": "5'b01111"
+          }
+        }
+      }
+    },
+    {
+      "name": "lfsr_period_returns",
+      "description": "After 31 clock cycles since the first transition at t=30, state returns to 5'b00001 at t=330. The LFSR period is therefore 310 ns (31 cycles).",
+      "time_ns": 335,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_shift.u_lfsr.state": "5'b00001"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

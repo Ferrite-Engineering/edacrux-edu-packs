@@ -1,0 +1,54 @@
+schema_version: 1
+
+pack_id: shift-register-patterns
+pack_version: 1.0.0
+pack_category: foundational
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Use the Q / E shortcuts to navigate signal transitions one step at a time."
+    - "Count transitions over a time range using the switching-activity panel."
+    - "Estimate signal frequency from a cursor-delta measurement."
+    - "Observe and measure a maximum-length LFSR period."
+prerequisites: []
+curriculum_topics:
+  - sequential_logic
+  - waveform_navigation
+estimated_duration_minutes: 60
+difficulty: intro
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Two shift registers side by side — deterministic and pseudo-random. Learn transition counting and frequency estimation."
