@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "pack_id": "spi-lab",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "pre_transfer_idle",
+      "description": "Reset just released; SCLK low (CPOL=0), CS_n high, MOSI 0. Idle state of a mode-0 SPI bus.",
+      "time_ns": 50,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.sclk": "1'b0",
+            "tb_spi.u_master.cs_n": "1'b1",
+            "tb_spi.u_master.mosi": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_byte_cs_asserted",
+      "description": "First byte (0x12) starts: CS_n is dropped at t=60 ns and the MSB of 0x12 (bit value 0) is presented on MOSI.",
+      "time_ns": 100,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.cs_n": "1'b0",
+            "tb_spi.u_master.sclk": "1'b0",
+            "tb_spi.u_master.mosi": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_byte_complete",
+      "description": "After 8 SCLK cycles (1620 ns from CS_n drop) the master raises CS_n at t=1680 ns and the slave latches 0x12 into last_byte.",
+      "time_ns": 1700,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.cs_n": "1'b1",
+            "tb_spi.u_master.sclk": "1'b0",
+            "tb_spi.u_slave.last_byte": "8'h12"
+          }
+        }
+      }
+    },
+    {
+      "name": "inter_byte_gap",
+      "description": "Between bytes the master holds CS_n high for 400 ns. The slave's last_byte holds the previous capture.",
+      "time_ns": 1900,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.cs_n": "1'b1",
+            "tb_spi.u_slave.last_byte": "8'h12"
+          }
+        }
+      }
+    },
+    {
+      "name": "third_byte_complete",
+      "description": "Third byte (0x56) latched. Per-byte cadence is 2040 ns including the gap: bytes complete at 1680, 3720, 5760, 7800 ns.",
+      "time_ns": 5780,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.cs_n": "1'b1",
+            "tb_spi.u_slave.last_byte": "8'h56"
+          }
+        }
+      }
+    },
+    {
+      "name": "fourth_byte_complete",
+      "description": "Final byte (0x78) latched at t=7800 ns. Bus returns to idle thereafter.",
+      "time_ns": 7820,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_spi.u_master.cs_n": "1'b1",
+            "tb_spi.u_slave.last_byte": "8'h78"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [
+    {
+      "decoder": "spi",
+      "binding_file": "decoders/spi_binding.json",
+      "expected_transactions": [
+        { "type": "WORD", "mosi": "0x12" },
+        { "type": "WORD", "mosi": "0x34" },
+        { "type": "WORD", "mosi": "0x56" },
+        { "type": "WORD", "mosi": "0x78" }
+      ]
+    }
+  ],
+  "cross_tool_deep_links": []
+}

@@ -1,0 +1,26 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_spi.clk",
+    "tb_spi.rst_n",
+    "tb_spi.u_master.cs_n",
+    "tb_spi.u_master.sclk",
+    "tb_spi.u_master.mosi",
+    "tb_spi.u_master.miso",
+    "tb_spi.u_slave.rx_shift",
+    "tb_spi.u_slave.last_byte"
+  ],
+  "_required_groups": [
+    { "name": "spi_bus", "children": ["tb_spi.u_master.cs_n", "tb_spi.u_master.sclk", "tb_spi.u_master.mosi", "tb_spi.u_master.miso"] },
+    { "name": "slave_state", "children": ["tb_spi.u_slave.rx_shift", "tb_spi.u_slave.last_byte"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [
+    { "decoder": "spi", "file": "decoders/spi_binding.json" }
+  ],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_spi.u_slave.last_byte", "format": "hexadecimal" }
+  ],
+  "_initial_cursor_time_ns": 1700
+}

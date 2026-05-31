@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "decoder": "spi",
+  "signal_bindings": {
+    "sclk": "tb_spi.u_master.sclk",
+    "mosi": "tb_spi.u_master.mosi",
+    "miso": "tb_spi.u_master.miso",
+    "cs_n": "tb_spi.u_master.cs_n"
+  },
+  "parameters": {
+    "cpol": 0,
+    "cpha": 0,
+    "bit_order": "msb_first",
+    "word_size": 8
+  }
+}

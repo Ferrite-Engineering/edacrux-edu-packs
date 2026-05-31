@@ -1,0 +1,58 @@
+schema_version: 1
+
+pack_id: spi-lab
+pack_version: 1.0.0
+pack_category: protocol
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Identify SPI clock polarity (CPOL) and phase (CPHA) from a waveform."
+    - "Apply the WaveCrux SPI decoder and correlate decoded bytes with MOSI bits."
+    - "Understand the role of CS_n in framing a multi-byte transfer."
+    - "Diagnose mode-mismatch failures by setting the decoder to the wrong mode."
+prerequisites:
+  - uart-lab
+curriculum_topics:
+  - serial_protocols
+  - protocol_decoding
+  - spi
+estimated_duration_minutes: 75
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings:
+    - decoder: spi
+      file: decoders/spi_binding.json
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "SPI mode-0 master walkthrough. Apply the WaveCrux SPI decoder and reason about CPOL / CPHA."
