@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "panel_name": "Basys 3 demo",
+  "widget": "basys3_board",
+  "bindings": {
+    "led[0]": "tb_basys3.dut.led[0]",
+    "led[1]": "tb_basys3.dut.led[1]",
+    "led[2]": "tb_basys3.dut.led[2]",
+    "led[3]": "tb_basys3.dut.led[3]",
+    "sw[0]":  "tb_basys3.dut.sw[0]",
+    "sw[1]":  "tb_basys3.dut.sw[1]",
+    "sw[2]":  "tb_basys3.dut.sw[2]",
+    "sw[3]":  "tb_basys3.dut.sw[3]",
+    "btn[0]": "tb_basys3.dut.btn[0]",
+    "btn[1]": "tb_basys3.dut.btn[1]",
+    "btn[2]": "tb_basys3.dut.btn[2]",
+    "btn[3]": "tb_basys3.dut.btn[3]",
+    "seg[a]": "tb_basys3.dut.seg[0]",
+    "seg[b]": "tb_basys3.dut.seg[1]",
+    "seg[c]": "tb_basys3.dut.seg[2]",
+    "seg[d]": "tb_basys3.dut.seg[3]",
+    "seg[e]": "tb_basys3.dut.seg[4]",
+    "seg[f]": "tb_basys3.dut.seg[5]",
+    "seg[g]": "tb_basys3.dut.seg[6]",
+    "an[0]":  "tb_basys3.dut.an[0]",
+    "an[1]":  "tb_basys3.dut.an[1]",
+    "an[2]":  "tb_basys3.dut.an[2]",
+    "an[3]":  "tb_basys3.dut.an[3]"
+  },
+  "comment": "Active-low conventions for both seg and an match the real Basys 3 board; the widget renders accordingly."
+}

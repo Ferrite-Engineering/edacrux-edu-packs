@@ -1,0 +1,57 @@
+schema_version: 1
+
+pack_id: stage-showcase-basys3
+pack_version: 1.0.0
+pack_category: foundational
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Open the Stage panel and instantiate the Basys 3 board widget."
+    - "Bind design signals to the board widget's I/O pins."
+    - "Scrub the cursor and observe LEDs and 7-segment display animate in sync with the waveform."
+    - "Understand the Stage view as a complementary debugging surface to the waveform view."
+prerequisites:
+  - traffic-light-fsm
+curriculum_topics:
+  - waveform_navigation
+  - hierarchy_browsing
+estimated_duration_minutes: 75
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels:
+    - name: "Basys 3 demo"
+      file: stage/basys3_layout.json
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "See your design come alive. Bind a Basys 3 design to WaveCrux's Stage panel and watch LEDs and 7-segments animate as you scrub the cursor."

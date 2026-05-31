@@ -1,0 +1,30 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_basys3.dut.clk",
+    "tb_basys3.dut.rst_n",
+    "tb_basys3.dut.sw",
+    "tb_basys3.dut.btn",
+    "tb_basys3.dut.led",
+    "tb_basys3.dut.count",
+    "tb_basys3.dut.seg",
+    "tb_basys3.dut.an"
+  ],
+  "_required_groups": [
+    { "name": "inputs", "children": ["tb_basys3.dut.sw", "tb_basys3.dut.btn"] },
+    { "name": "outputs", "children": ["tb_basys3.dut.led", "tb_basys3.dut.seg", "tb_basys3.dut.an"] },
+    { "name": "internal", "children": ["tb_basys3.dut.count"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [
+    { "name": "Basys 3 demo", "file": "stage/basys3_layout.json" }
+  ],
+  "_required_format_settings": [
+    { "signal": "tb_basys3.dut.sw", "format": "hexadecimal" },
+    { "signal": "tb_basys3.dut.led", "format": "hexadecimal" },
+    { "signal": "tb_basys3.dut.count", "format": "hexadecimal" },
+    { "signal": "tb_basys3.dut.seg", "format": "binary" }
+  ],
+  "_initial_cursor_time_ns": 1100
+}

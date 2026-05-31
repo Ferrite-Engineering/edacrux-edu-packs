@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "pack_id": "stage-showcase-basys3",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "initial_sw_passthrough",
+      "description": "Switches set to 0x5; LEDs mirror them. The Stage panel's Basys 3 widget shows LED0 and LED2 lit.",
+      "time_ns": 200,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_basys3.dut.sw": "4'h5",
+            "tb_basys3.dut.led": "4'h5",
+            "tb_basys3.dut.count": "4'h0"
+          },
+          "visible_signals": [
+            "tb_basys3.dut.sw",
+            "tb_basys3.dut.btn",
+            "tb_basys3.dut.led",
+            "tb_basys3.dut.count",
+            "tb_basys3.dut.seg",
+            "tb_basys3.dut.an"
+          ]
+        }
+      }
+    },
+    {
+      "name": "after_first_button_press",
+      "description": "btn[0] pressed once; counter increments to 1. The Stage 7-segment digit displays '1' (active-low pattern 7'b1111001).",
+      "time_ns": 500,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_basys3.dut.count": "4'h1",
+            "tb_basys3.dut.seg": "7'b1111001"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_sw_change_to_a",
+      "description": "Switches changed to 0xA; LEDs follow (LED1 and LED3 lit). Counter has reached 3 after btn[2] press; 7-segment shows '3' (active-low pattern 7'b0110000).",
+      "time_ns": 1100,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_basys3.dut.sw": "4'hA",
+            "tb_basys3.dut.led": "4'hA",
+            "tb_basys3.dut.count": "4'h3",
+            "tb_basys3.dut.seg": "7'b0110000"
+          }
+        }
+      }
+    },
+    {
+      "name": "midway_count_4",
+      "description": "Counter at 4; 7-segment displays '4' (active-low pattern 7'b0011001).",
+      "time_ns": 1400,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_basys3.dut.count": "4'h4",
+            "tb_basys3.dut.seg": "7'b0011001"
+          }
+        }
+      }
+    },
+    {
+      "name": "all_switches_high_count_6",
+      "description": "Switches at 0xF (all on, all LEDs lit) and counter at 6. The Stage panel renders a fully-lit LED bar over the digit '6'.",
+      "time_ns": 2700,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_basys3.dut.sw": "4'hF",
+            "tb_basys3.dut.led": "4'hF",
+            "tb_basys3.dut.count": "4'h6",
+            "tb_basys3.dut.seg": "7'b0000010"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}
