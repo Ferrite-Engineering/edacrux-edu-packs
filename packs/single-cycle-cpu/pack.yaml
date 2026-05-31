@@ -1,0 +1,59 @@
+schema_version: 1
+
+pack_id: single-cycle-cpu
+pack_version: 1.0.0
+pack_category: soc
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Apply the WaveCrux RISC-V instruction decoder to a PC + instr stream."
+    - "Navigate a CPU's register file in the signal-tree browser."
+    - "Correlate instruction execution with register-file state changes."
+    - "Observe branch behavior in the waveform (taken branch skipping an instruction)."
+prerequisites:
+  - mux-and-adder
+  - counter-lab
+curriculum_topics:
+  - riscv
+  - sequential_logic
+  - hierarchy_browsing
+estimated_duration_minutes: 90
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings:
+    - decoder: riscv
+      file: decoders/riscv_binding.json
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Trace a tiny RISC-V single-cycle CPU executing a known program. Use the RISC-V instruction decoder and register file viewer."

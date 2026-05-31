@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "decoder": "riscv",
+  "signal_bindings": {
+    "pc":    "tb_rv32_cpu.dut.pc",
+    "instr": "tb_rv32_cpu.dut.instr"
+  },
+  "parameters": {
+    "xlen": 32,
+    "isa": "RV32I"
+  }
+}

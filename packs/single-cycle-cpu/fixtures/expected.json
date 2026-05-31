@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "pack_id": "single-cycle-cpu",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "reset_held",
+      "description": "Reset is still asserted; PC is at 0 and the first instruction is presented on the instr bus.",
+      "time_ns": 15,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000000",
+            "tb_rv32_cpu.dut.instr": "32'h00500093"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_first_addi",
+      "description": "First ADDI (x1 <- 5) has retired; PC has advanced to 0x4 and x1 holds 5.",
+      "time_ns": 35,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000004",
+            "tb_rv32_cpu.dut.u_regfile.regs[1]": "32'h00000005"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_add_and_sub",
+      "description": "ADD x3, x1, x2 and SUB x4, x2, x1 have both retired. x3 = 12 (0x0C), x4 = 2.",
+      "time_ns": 65,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000010",
+            "tb_rv32_cpu.dut.u_regfile.regs[3]": "32'h0000000C",
+            "tb_rv32_cpu.dut.u_regfile.regs[4]": "32'h00000002"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_lw",
+      "description": "SW (mem[0] <- 12) has executed and LW (x5 <- mem[0]) has retired. x5 = 12.",
+      "time_ns": 85,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000018",
+            "tb_rv32_cpu.dut.u_regfile.regs[5]": "32'h0000000C",
+            "tb_rv32_cpu.dut.dmem[0]": "32'h0000000C"
+          }
+        }
+      }
+    },
+    {
+      "name": "branch_taken_pc_advance",
+      "description": "BEQ x3, x5, +8 is taken (x3 == x5 == 12). PC jumps from 0x18 directly to 0x20, skipping the ADDI x6 at 0x1C.",
+      "time_ns": 95,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000020",
+            "tb_rv32_cpu.dut.u_regfile.regs[6]": "32'h00000000"
+          }
+        }
+      }
+    },
+    {
+      "name": "after_second_add",
+      "description": "ADD x9, x7, x8 has retired. x7 = 10, x8 = 11, x9 = 21 (0x15).",
+      "time_ns": 125,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.u_regfile.regs[7]": "32'h0000000A",
+            "tb_rv32_cpu.dut.u_regfile.regs[8]": "32'h0000000B",
+            "tb_rv32_cpu.dut.u_regfile.regs[9]": "32'h00000015"
+          }
+        }
+      }
+    },
+    {
+      "name": "jal_self_loop",
+      "description": "All 14 dynamic instructions executed; JAL x0, 0 is in flight and PC has stabilised at 0x38.",
+      "time_ns": 200,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_rv32_cpu.dut.pc": "32'h00000038",
+            "tb_rv32_cpu.dut.instr": "32'h0000006F",
+            "tb_rv32_cpu.dut.u_regfile.regs[10]": "32'h00000042",
+            "tb_rv32_cpu.dut.u_regfile.regs[11]": "32'h00000042",
+            "tb_rv32_cpu.dut.dmem[1]": "32'h00000042"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [
+    {
+      "decoder": "riscv",
+      "binding_file": "decoders/riscv_binding.json",
+      "expected_transactions": [
+        { "pc": "0x00", "mnemonic": "addi x1, x0, 5" },
+        { "pc": "0x04", "mnemonic": "addi x2, x0, 7" },
+        { "pc": "0x08", "mnemonic": "add x3, x1, x2" },
+        { "pc": "0x0C", "mnemonic": "sub x4, x2, x1" },
+        { "pc": "0x10", "mnemonic": "sw x3, 0(x0)" },
+        { "pc": "0x14", "mnemonic": "lw x5, 0(x0)" },
+        { "pc": "0x18", "mnemonic": "beq x3, x5, 0x20" },
+        { "pc": "0x20", "mnemonic": "addi x7, x0, 10" },
+        { "pc": "0x24", "mnemonic": "addi x8, x0, 11" },
+        { "pc": "0x28", "mnemonic": "add x9, x7, x8" },
+        { "pc": "0x2C", "mnemonic": "addi x10, x0, 66" },
+        { "pc": "0x30", "mnemonic": "sw x10, 4(x0)" },
+        { "pc": "0x34", "mnemonic": "lw x11, 4(x0)" },
+        { "pc": "0x38", "mnemonic": "jal x0, 0x38" }
+      ]
+    }
+  ],
+  "cross_tool_deep_links": []
+}
