@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "pack_id": "debug-hunt",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "buggy_idles_while_enable_high",
+      "description": "During the t=22..200 ns window enable is high. The golden counter increments every cycle; the buggy counter (gated on ~enable) stays at 0x00. This is the moment a waveform diff first lights up.",
+      "time_ns": 100,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter_buggy.dut.enable": "1'b1",
+            "tb_counter_buggy.dut.count": "8'h00"
+          }
+        }
+      }
+    },
+    {
+      "name": "buggy_counts_while_enable_low",
+      "description": "When enable drops to 0 at t=200 ns, the buggy counter starts incrementing (~enable = 1). The golden counter is paused here.",
+      "time_ns": 215,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter_buggy.dut.enable": "1'b0",
+            "tb_counter_buggy.dut.count": "8'h02"
+          }
+        }
+      }
+    },
+    {
+      "name": "buggy_stops_again_with_enable_high",
+      "description": "At t=300 ns enable returns to 1; the buggy counter freezes at the value it reached (0x0A) and never advances again before the simulation ends. The golden counter resumes incrementing from this point.",
+      "time_ns": 400,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter_buggy.dut.enable": "1'b1",
+            "tb_counter_buggy.dut.count": "8'h0A"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

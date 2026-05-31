@@ -1,0 +1,55 @@
+schema_version: 1
+
+pack_id: debug-hunt
+pack_version: 1.0.0
+pack_category: debugging
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Load two VCD files side-by-side as a primary + reference comparison."
+    - "Configure the WaveCrux waveform-diff feature and jump between differences."
+    - "Use the X-trace cause-and-effect view (Open Core) to walk back from a symptom to its root."
+    - "Propose a one-line source change to fix the identified bug."
+prerequisites:
+  - counter-lab
+curriculum_topics:
+  - signal_tracing
+  - cross_tool_debugging
+estimated_duration_minutes: 90
+difficulty: intermediate
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Find an intentional bug using WaveCrux's waveform diff and X-trace features. Real debugging in a known-answer scenario."

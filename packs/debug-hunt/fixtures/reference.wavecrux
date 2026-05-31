@@ -1,0 +1,26 @@
+{
+  "_TODO": "Generate this file by opening fixtures/buggy.vcd AND fixtures/golden.vcd in WaveCrux as side-by-side comparison sources, configuring the waveform diff as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_counter_buggy.dut.clk",
+    "tb_counter_buggy.dut.rst_n",
+    "tb_counter_buggy.dut.enable",
+    "tb_counter_buggy.dut.count"
+  ],
+  "_required_groups": [],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_counter_buggy.dut.count", "format": "hexadecimal" }
+  ],
+  "_required_comparison_setup": {
+    "primary_vcd": "fixtures/buggy.vcd",
+    "reference_vcd": "fixtures/golden.vcd",
+    "mode": "waveform_diff",
+    "signal_mapping": [
+      { "primary": "tb_counter_buggy.dut.count", "reference": "tb_counter_golden.dut.count" },
+      { "primary": "tb_counter_buggy.dut.enable", "reference": "tb_counter_golden.dut.enable" }
+    ]
+  },
+  "_initial_cursor_time_ns": 100
+}
