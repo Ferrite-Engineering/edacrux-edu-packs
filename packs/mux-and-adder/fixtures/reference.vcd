@@ -1,0 +1,217 @@
+$date
+	Sun May 31 14:28:34 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module tb_top $end
+$var wire 8 ! result [7:0] $end
+$var wire 1 " cout $end
+$var reg 8 # a_in [7:0] $end
+$var reg 8 $ b_in [7:0] $end
+$var reg 8 % c_in [7:0] $end
+$var reg 1 & cin $end
+$var reg 1 ' clk $end
+$var reg 1 ( sel $end
+$scope module dut $end
+$var wire 8 ) a_in [7:0] $end
+$var wire 8 * b_in [7:0] $end
+$var wire 8 + c_in [7:0] $end
+$var wire 1 & cin $end
+$var wire 1 ' clk $end
+$var wire 1 ( sel $end
+$var wire 8 , result [7:0] $end
+$var wire 8 - mux_out [7:0] $end
+$var wire 1 " cout $end
+$scope module u_add $end
+$var wire 8 . b [7:0] $end
+$var wire 1 & cin $end
+$var wire 8 / sum [7:0] $end
+$var wire 1 " cout $end
+$var wire 8 0 a [7:0] $end
+$upscope $end
+$scope module u_mux $end
+$var wire 8 1 a [7:0] $end
+$var wire 8 2 b [7:0] $end
+$var wire 1 ( sel $end
+$var wire 8 3 y [7:0] $end
+$var parameter 32 4 WIDTH $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b1000 4
+$end
+#0
+$dumpvars
+b0 3
+b0 2
+b0 1
+b0 0
+b0 /
+b0 .
+b0 -
+b0 ,
+b0 +
+b0 *
+b0 )
+0(
+1'
+0&
+b0 %
+b0 $
+b0 #
+0"
+b0 !
+$end
+#5
+0'
+#10
+1'
+#15
+0'
+#20
+1'
+#25
+0'
+#30
+1'
+#35
+0'
+#40
+1'
+#45
+0'
+#50
+b100010 !
+b100010 ,
+b100010 /
+b10010 -
+b10010 0
+b10010 3
+1'
+b10000 %
+b10000 +
+b10000 .
+b110100 $
+b110100 *
+b110100 2
+b10010 #
+b10010 )
+b10010 1
+#55
+0'
+#60
+1'
+#65
+0'
+#70
+1'
+#75
+0'
+#80
+1'
+#85
+0'
+#90
+1'
+#95
+0'
+#100
+b1000100 !
+b1000100 ,
+b1000100 /
+b110100 -
+b110100 0
+b110100 3
+1'
+1(
+#105
+0'
+#110
+1'
+#115
+0'
+#120
+1'
+#125
+0'
+#130
+1'
+#135
+0'
+#140
+1'
+#145
+0'
+#150
+1"
+b0 !
+b0 ,
+b0 /
+b11111111 -
+b11111111 0
+b11111111 3
+1'
+b1 %
+b1 +
+b1 .
+b11111111 #
+b11111111 )
+b11111111 1
+0(
+#155
+0'
+#160
+1'
+#165
+0'
+#170
+1'
+#175
+0'
+#180
+1'
+#185
+0'
+#190
+1'
+#195
+0'
+#200
+b10000000 -
+b10000000 0
+b10000000 3
+1'
+b10000000 %
+b10000000 +
+b10000000 .
+b10000000 $
+b10000000 *
+b10000000 2
+1(
+#205
+0'
+#210
+1'
+#215
+0'
+#220
+1'
+#225
+0'
+#230
+1'
+#235
+0'
+#240
+1'
+#245
+0'
+#250
+1'

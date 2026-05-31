@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "pack_id": "mux-and-adder",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "case1_mid",
+      "description": "sel=0 selects a=0x12; adder sums 0x12 + 0x10 = 0x22 with no carry-out.",
+      "time_ns": 75,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_top.dut.sel": "1'b0",
+            "tb_top.dut.a_in": "8'h12",
+            "tb_top.dut.b_in": "8'h34",
+            "tb_top.dut.c_in": "8'h10",
+            "tb_top.dut.cin": "1'b0",
+            "tb_top.dut.u_mux.y": "8'h12",
+            "tb_top.dut.result": "8'h22",
+            "tb_top.dut.cout": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "case2_mid",
+      "description": "sel=1 routes b=0x34 through the mux; adder sums 0x34 + 0x10 = 0x44.",
+      "time_ns": 125,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_top.dut.sel": "1'b1",
+            "tb_top.dut.u_mux.y": "8'h34",
+            "tb_top.dut.result": "8'h44",
+            "tb_top.dut.cout": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "case3_mid",
+      "description": "sel=0 routes a=0xFF; adder sums 0xFF + 0x01 = 0x100 — result wraps to 0x00 with cout=1.",
+      "time_ns": 175,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_top.dut.sel": "1'b0",
+            "tb_top.dut.u_mux.y": "8'hFF",
+            "tb_top.dut.result": "8'h00",
+            "tb_top.dut.cout": "1'b1"
+          }
+        }
+      }
+    },
+    {
+      "name": "case4_mid",
+      "description": "sel=1 routes b=0x80; adder sums 0x80 + 0x80 = 0x100 — result wraps to 0x00 with cout=1.",
+      "time_ns": 225,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_top.dut.sel": "1'b1",
+            "tb_top.dut.u_mux.y": "8'h80",
+            "tb_top.dut.result": "8'h00",
+            "tb_top.dut.cout": "1'b1"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

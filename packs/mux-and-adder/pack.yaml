@@ -1,0 +1,55 @@
+schema_version: 1
+
+pack_id: mux-and-adder
+pack_version: 1.0.0
+pack_category: foundational
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Navigate a hierarchical design in the signal-tree browser."
+    - "Use the signal-search dialog with substring and glob patterns."
+    - "Filter the signal-tree view by signal direction (input vs output)."
+    - "Display the same signal in multiple formats simultaneously across multiple lanes."
+prerequisites: []
+curriculum_topics:
+  - combinational_logic
+  - hierarchy_browsing
+  - waveform_navigation
+estimated_duration_minutes: 45
+difficulty: intro
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Combinational hierarchy walkthrough. Learn the signal-tree browser, signal search, and hierarchical navigation in WaveCrux."

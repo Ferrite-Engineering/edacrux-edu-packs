@@ -1,0 +1,30 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_top.dut.clk",
+    "tb_top.dut.sel",
+    "tb_top.dut.a_in",
+    "tb_top.dut.b_in",
+    "tb_top.dut.c_in",
+    "tb_top.dut.cin",
+    "tb_top.dut.u_mux.y",
+    "tb_top.dut.result",
+    "tb_top.dut.cout"
+  ],
+  "_required_groups": [
+    { "name": "inputs", "children": ["tb_top.dut.sel", "tb_top.dut.a_in", "tb_top.dut.b_in", "tb_top.dut.c_in", "tb_top.dut.cin"] },
+    { "name": "internal", "children": ["tb_top.dut.u_mux.y"] },
+    { "name": "outputs", "children": ["tb_top.dut.result", "tb_top.dut.cout"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_top.dut.a_in", "format": "hexadecimal" },
+    { "signal": "tb_top.dut.b_in", "format": "hexadecimal" },
+    { "signal": "tb_top.dut.c_in", "format": "hexadecimal" },
+    { "signal": "tb_top.dut.u_mux.y", "format": "hexadecimal" },
+    { "signal": "tb_top.dut.result", "format": "hexadecimal" }
+  ],
+  "_initial_cursor_time_ns": 75
+}
