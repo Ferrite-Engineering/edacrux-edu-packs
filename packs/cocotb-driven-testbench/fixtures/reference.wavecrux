@@ -1,0 +1,21 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, loading fixtures/cocotb_run.log via File > Open Cocotb Log..., and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_uart_rx.clk",
+    "tb_uart_rx.rst_n",
+    "tb_uart_rx.rx",
+    "tb_uart_rx.dut.state",
+    "tb_uart_rx.dut.rx_data",
+    "tb_uart_rx.dut.rx_valid"
+  ],
+  "_required_groups": [],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_cocotb_log": "fixtures/cocotb_run.log",
+  "_required_format_settings": [
+    { "signal": "tb_uart_rx.dut.rx_data", "format": "hexadecimal" },
+    { "signal": "tb_uart_rx.dut.state", "format": "decimal" }
+  ],
+  "_initial_cursor_time_ns": 82620
+}

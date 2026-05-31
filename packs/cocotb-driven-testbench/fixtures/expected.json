@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "pack_id": "cocotb-driven-testbench",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "idle_before_first_byte",
+      "description": "Reset released; rx line idle (high). Matches the cocotb-log entry 'Reset released' at 45 ns.",
+      "time_ns": 100,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_rx.dut.rx": "1'b1",
+            "tb_uart_rx.dut.state": "2'd0",
+            "tb_uart_rx.dut.rx_valid": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_byte_received",
+      "description": "rx_valid pulses for one clock when the first byte (0x55) completes. Matches the cocotb-log entry 'Received byte 0x55' at 82620 ns.",
+      "time_ns": 82620,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_rx.dut.rx_valid": "1'b1",
+            "tb_uart_rx.dut.rx_data": "8'h55"
+          }
+        }
+      }
+    },
+    {
+      "name": "second_byte_received",
+      "description": "Second byte 0xAA captured. Matches cocotb-log 'Received byte 0xAA' at 170420 ns.",
+      "time_ns": 170420,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_rx.dut.rx_valid": "1'b1",
+            "tb_uart_rx.dut.rx_data": "8'hAA"
+          }
+        }
+      }
+    },
+    {
+      "name": "third_byte_received",
+      "description": "Third byte 0x55 captured. Matches cocotb-log 'Received byte 0x55' at 258220 ns.",
+      "time_ns": 258220,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_rx.dut.rx_valid": "1'b1",
+            "tb_uart_rx.dut.rx_data": "8'h55"
+          }
+        }
+      }
+    },
+    {
+      "name": "fourth_byte_received",
+      "description": "Final byte 0xAA captured. Matches cocotb-log 'Received byte 0xAA' at 346020 ns -- the cocotb log lands the cursor here when clicked.",
+      "time_ns": 346020,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_uart_rx.dut.rx_valid": "1'b1",
+            "tb_uart_rx.dut.rx_data": "8'hAA"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

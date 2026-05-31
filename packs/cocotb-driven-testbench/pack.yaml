@@ -1,0 +1,56 @@
+schema_version: 1
+
+pack_id: cocotb-driven-testbench
+pack_version: 1.0.0
+pack_category: verification
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Read and interpret a structured cocotb log file."
+    - "Load a cocotb log into WaveCrux alongside its companion VCD."
+    - "Observe time-correlated log overlay on the waveform canvas."
+    - "Click a log line to jump the cursor to the corresponding simulation time."
+    - "Filter the cocotb log by severity (INFO, DEBUG, ERROR) and by keyword."
+prerequisites:
+  - uart-lab
+curriculum_topics:
+  - verification_methodology
+  - uart
+estimated_duration_minutes: 90
+difficulty: advanced
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Modern Python-driven verification with cocotb. Correlate cocotb log messages with waveform events using WaveCrux's cocotb log correlation."
