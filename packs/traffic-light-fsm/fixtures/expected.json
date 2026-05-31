@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "pack_id": "traffic-light-fsm",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "initial_red",
+      "description": "Reset is still held low; FSM is parked in the RED state.",
+      "time_ns": 25,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_traffic_light.dut.state": "2'b00",
+            "tb_traffic_light.dut.red_light": "1'b1",
+            "tb_traffic_light.dut.green_light": "1'b0",
+            "tb_traffic_light.dut.yellow_light": "1'b0"
+          },
+          "fsm_active_state": {
+            "signal": "tb_traffic_light.dut.state",
+            "state_name": "RED"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_red_to_green",
+      "description": "After 30 RED-state cycles (300 ns) the FSM transitions to GREEN at t=320 ns. At t=325 it is established in GREEN.",
+      "time_ns": 325,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_traffic_light.dut.state": "2'b01",
+            "tb_traffic_light.dut.red_light": "1'b0",
+            "tb_traffic_light.dut.green_light": "1'b1",
+            "tb_traffic_light.dut.yellow_light": "1'b0"
+          },
+          "fsm_active_state": {
+            "signal": "tb_traffic_light.dut.state",
+            "state_name": "GREEN"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_green_to_yellow",
+      "description": "After 30 GREEN-state cycles (300 ns) the FSM transitions to YELLOW at t=620 ns. At t=625 it is established in YELLOW.",
+      "time_ns": 625,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_traffic_light.dut.state": "2'b10",
+            "tb_traffic_light.dut.red_light": "1'b0",
+            "tb_traffic_light.dut.green_light": "1'b0",
+            "tb_traffic_light.dut.yellow_light": "1'b1"
+          },
+          "fsm_active_state": {
+            "signal": "tb_traffic_light.dut.state",
+            "state_name": "YELLOW"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_yellow_to_red",
+      "description": "After 30 YELLOW-state cycles the FSM cycles back to RED at t=920 ns. The full RED -> GREEN -> YELLOW -> RED period is therefore 900 ns (90 cycles).",
+      "time_ns": 925,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_traffic_light.dut.state": "2'b00",
+            "tb_traffic_light.dut.red_light": "1'b1",
+            "tb_traffic_light.dut.green_light": "1'b0",
+            "tb_traffic_light.dut.yellow_light": "1'b0"
+          },
+          "fsm_active_state": {
+            "signal": "tb_traffic_light.dut.state",
+            "state_name": "RED"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

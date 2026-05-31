@@ -1,0 +1,56 @@
+schema_version: 1
+
+pack_id: traffic-light-fsm
+pack_version: 1.0.0
+pack_category: foundational
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Identify each FSM state from the 2-bit state signal."
+    - "Apply a GTKWave-compatible translate filter so state values render as named labels."
+    - "Use the FSM Visualizer panel to see state transitions graphically."
+    - "Place named markers and measure the FSM period from the marker delta."
+prerequisites: []
+curriculum_topics:
+  - finite_state_machines
+  - sequential_logic
+estimated_duration_minutes: 60
+difficulty: intro
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters:
+    - signal: tb_traffic_light.dut.state
+      file: translate/fsm_states.txt
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "Visualize a 3-state traffic-light FSM. Apply translate filters and use the FSM Visualizer to see state transitions."

@@ -1,0 +1,21 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_traffic_light.dut.clk",
+    "tb_traffic_light.dut.rst_n",
+    "tb_traffic_light.dut.state",
+    "tb_traffic_light.dut.red_light",
+    "tb_traffic_light.dut.green_light",
+    "tb_traffic_light.dut.yellow_light"
+  ],
+  "_required_groups": [],
+  "_required_translate_filters": [
+    { "signal": "tb_traffic_light.dut.state", "file": "translate/fsm_states.txt" }
+  ],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_traffic_light.dut.state", "format": "binary" }
+  ],
+  "_initial_cursor_time_ns": 325
+}
