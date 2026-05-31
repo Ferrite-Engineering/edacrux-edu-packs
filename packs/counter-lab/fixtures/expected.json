@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "pack_id": "counter-lab",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "held_in_reset",
+      "description": "Reset is still asserted; count is parked at zero.",
+      "time_ns": 10,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.rst_n": "1'b0",
+            "tb_counter.dut.count": "8'h00",
+            "tb_counter.dut.overflow": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "post_reset_zero",
+      "description": "Reset released at t=22 ns. The next posedge (t=30) is what increments the counter, so at t=25 it is still parked at zero with the reset released.",
+      "time_ns": 25,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.rst_n": "1'b1",
+            "tb_counter.dut.enable": "1'b1",
+            "tb_counter.dut.count": "8'h00",
+            "tb_counter.dut.overflow": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_increment",
+      "description": "First clock posedge with reset deasserted and enable high (t=30) increments count to 1.",
+      "time_ns": 35,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.count": "8'h01",
+            "tb_counter.dut.overflow": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "mid_range",
+      "description": "Counter has been incrementing for ~1.3 microseconds and reads 0x80.",
+      "time_ns": 1305,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.count": "8'h80",
+            "tb_counter.dut.overflow": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "pre_rollover",
+      "description": "Counter is parked at 0xFF for one cycle; overflow strobe is high.",
+      "time_ns": 2575,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.count": "8'hFF",
+            "tb_counter.dut.overflow": "1'b1"
+          }
+        }
+      }
+    },
+    {
+      "name": "post_rollover",
+      "description": "Counter has rolled over to 0x00; overflow strobe has fallen.",
+      "time_ns": 2585,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_counter.dut.count": "8'h00",
+            "tb_counter.dut.overflow": "1'b0"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

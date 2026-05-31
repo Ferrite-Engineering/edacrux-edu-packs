@@ -1,0 +1,60 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: counter-lab
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Open a VCD file in WaveCrux and add signals to the lane panel."
+    - "Use the cursor and value column to read signal values at specific times."
+    - "Change display format (hex, decimal, binary) per signal."
+    - "Use the Q / E keyboard shortcuts to jump between transitions."
+    - "Identify the rollover event from the overflow strobe."
+prerequisites: []
+curriculum_topics:
+  - sequential_logic
+  - waveform_navigation
+estimated_duration_minutes: 45
+difficulty: intro
+
+# === Source material ===
+primary_hdl: verilog
+alternates: []
+
+# === Content paths (relative to pack root) ===
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings: []
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "8-bit synchronous counter — your first WaveCrux lab. Learn to open VCD files, add signals, change formats, and navigate transitions."

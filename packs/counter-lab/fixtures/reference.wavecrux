@@ -1,0 +1,18 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_counter.dut.clk",
+    "tb_counter.dut.rst_n",
+    "tb_counter.dut.enable",
+    "tb_counter.dut.count",
+    "tb_counter.dut.overflow"
+  ],
+  "_required_groups": [],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_counter.dut.count", "format": "hexadecimal" }
+  ],
+  "_initial_cursor_time_ns": 25
+}
