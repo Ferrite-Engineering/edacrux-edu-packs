@@ -1,0 +1,58 @@
+schema_version: 1
+
+pack_id: axi4-lite-peripheral
+pack_version: 1.0.0
+pack_category: protocol
+
+tier: A
+required_tools:
+  - product: wavecrux
+    min_version: "1.0.0"
+    max_version: "2.0.0"
+optional_tools: []
+
+learning_objectives:
+  en:
+    - "Identify the five AXI4-Lite channels (AW, W, B, AR, R) in a waveform."
+    - "Recognize the VALID / READY handshake on each channel."
+    - "Apply the WaveCrux AXI4-Lite decoder and read WRITE / READ transactions with response codes."
+    - "Locate the exact cycle on which a SLVERR is returned and explain the response channel that carries it."
+prerequisites:
+  - memory-controller
+curriculum_topics:
+  - bus_protocols
+  - protocol_decoding
+  - axi
+estimated_duration_minutes: 90
+difficulty: advanced
+
+primary_hdl: verilog
+alternates: []
+
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    waveform_fst: fixtures/reference.fst
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+  translate_filters: []
+  decoder_bindings:
+    - decoder: axi4lite
+      file: decoders/axi4lite_binding.json
+  stage_panels: []
+
+verified_against: []
+locales:
+  - en
+maintainers:
+  - name: "EDACrux Core Team"
+    email: "edu@edacrux.com"
+short_description:
+  en: "AXI4-Lite peripheral debug -- including protocol violation detection on an unmapped address access."

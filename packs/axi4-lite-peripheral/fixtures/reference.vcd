@@ -1,0 +1,703 @@
+$date
+	Sun May 31 14:51:40 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module tb_axil $end
+$var wire 1 ! awready $end
+$var wire 1 " wready $end
+$var wire 1 # wvalid $end
+$var wire 4 $ wstrb [3:0] $end
+$var wire 32 % wdata [31:0] $end
+$var wire 1 & rvalid $end
+$var wire 2 ' rresp [1:0] $end
+$var wire 1 ( rready $end
+$var wire 32 ) rdata [31:0] $end
+$var wire 2 * last_rresp [1:0] $end
+$var wire 32 + last_rdata [31:0] $end
+$var wire 2 , last_bresp [1:0] $end
+$var wire 1 - done $end
+$var wire 1 . bvalid $end
+$var wire 2 / bresp [1:0] $end
+$var wire 1 0 bready $end
+$var wire 1 1 awvalid $end
+$var wire 32 2 awaddr [31:0] $end
+$var wire 1 3 arvalid $end
+$var wire 1 4 arready $end
+$var wire 32 5 araddr [31:0] $end
+$var reg 1 6 aclk $end
+$var reg 1 7 aresetn $end
+$scope module u_master $end
+$var wire 1 6 aclk $end
+$var wire 1 7 aresetn $end
+$var wire 1 ! awready $end
+$var wire 1 " wready $end
+$var wire 1 & rvalid $end
+$var wire 2 8 rresp [1:0] $end
+$var wire 32 9 rdata [31:0] $end
+$var wire 1 . bvalid $end
+$var wire 2 : bresp [1:0] $end
+$var wire 1 4 arready $end
+$var parameter 4 ; S_DONE $end
+$var parameter 4 < S_IDLE $end
+$var parameter 4 = S_RD1_REQ $end
+$var parameter 4 > S_RD1_RESP $end
+$var parameter 4 ? S_RD2_REQ $end
+$var parameter 4 @ S_RD2_RESP $end
+$var parameter 4 A S_WR1_REQ $end
+$var parameter 4 B S_WR1_RESP $end
+$var parameter 4 C S_WR2_REQ $end
+$var parameter 4 D S_WR2_RESP $end
+$var parameter 4 E S_WR3_REQ $end
+$var parameter 4 F S_WR3_RESP $end
+$var reg 32 G araddr [31:0] $end
+$var reg 1 3 arvalid $end
+$var reg 32 H awaddr [31:0] $end
+$var reg 1 1 awvalid $end
+$var reg 1 0 bready $end
+$var reg 1 - done $end
+$var reg 2 I last_bresp [1:0] $end
+$var reg 32 J last_rdata [31:0] $end
+$var reg 2 K last_rresp [1:0] $end
+$var reg 1 ( rready $end
+$var reg 4 L state [3:0] $end
+$var reg 32 M wdata [31:0] $end
+$var reg 4 N wstrb [3:0] $end
+$var reg 1 # wvalid $end
+$scope task do_read_req $end
+$var reg 32 O addr [31:0] $end
+$upscope $end
+$scope task do_write_req $end
+$var reg 32 P addr [31:0] $end
+$var reg 32 Q data [31:0] $end
+$upscope $end
+$upscope $end
+$scope module u_slave $end
+$var wire 1 6 aclk $end
+$var wire 32 R araddr [31:0] $end
+$var wire 1 7 aresetn $end
+$var wire 1 4 arready $end
+$var wire 1 3 arvalid $end
+$var wire 32 S awaddr [31:0] $end
+$var wire 1 ! awready $end
+$var wire 1 1 awvalid $end
+$var wire 1 0 bready $end
+$var wire 1 T read_handshake $end
+$var wire 1 ( rready $end
+$var wire 32 U wdata [31:0] $end
+$var wire 1 " wready $end
+$var wire 32 V write_addr [31:0] $end
+$var wire 1 W write_handshake $end
+$var wire 4 X wstrb [3:0] $end
+$var wire 1 # wvalid $end
+$var wire 3 Y word_idx_w [2:0] $end
+$var wire 3 Z word_idx_r [2:0] $end
+$var wire 1 [ addr_in_range_w $end
+$var wire 1 \ addr_in_range_r $end
+$var parameter 2 ] RESP_OKAY $end
+$var parameter 2 ^ RESP_SLVERR $end
+$var reg 2 _ bresp [1:0] $end
+$var reg 1 . bvalid $end
+$var reg 32 ` rdata [31:0] $end
+$var reg 2 a rresp [1:0] $end
+$var reg 1 & rvalid $end
+$var integer 32 b i [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b10 ^
+b0 ]
+b110 F
+b101 E
+b100 D
+b11 C
+b10 B
+b1 A
+b1010 @
+b1001 ?
+b1000 >
+b111 =
+b0 <
+b1011 ;
+$end
+#0
+$dumpvars
+b1000 b
+b0 a
+b0 `
+b0 _
+1\
+1[
+b0 Z
+b0 Y
+b0 X
+0W
+b0 V
+b0 U
+0T
+b0 S
+b0 R
+bx Q
+bx P
+bx O
+b0 N
+b0 M
+b1 L
+b0 K
+b0 J
+b0 I
+b0 H
+b0 G
+b0 :
+b0 9
+b0 8
+07
+16
+b0 5
+14
+03
+b0 2
+01
+00
+b0 /
+0.
+0-
+b0 ,
+b0 +
+b0 *
+b0 )
+0(
+b0 '
+0&
+b0 %
+b0 $
+0#
+1"
+1!
+$end
+#5
+06
+#10
+b1000 b
+16
+#15
+06
+#20
+b1000 b
+16
+#22
+17
+#25
+06
+#30
+1W
+1#
+b1111 $
+b1111 N
+b1111 X
+b10100000101000000000000000000000 %
+b10100000101000000000000000000000 M
+b10100000101000000000000000000000 U
+11
+b10100000101000000000000000000000 Q
+b0 P
+16
+#35
+06
+#40
+0W
+b10 L
+10
+0#
+01
+1.
+16
+#45
+06
+#50
+0.
+b11 L
+00
+16
+#55
+06
+#60
+1W
+b1 Y
+1#
+b10110001101100010001000100010001 %
+b10110001101100010001000100010001 M
+b10110001101100010001000100010001 U
+11
+b100 V
+b100 2
+b100 H
+b100 S
+b10110001101100010001000100010001 Q
+b100 P
+16
+#65
+06
+#70
+0W
+b100 L
+10
+0#
+01
+1.
+16
+#75
+06
+#80
+0.
+b101 L
+00
+16
+#85
+06
+#90
+1W
+0[
+b111 Y
+1#
+b11011110101011011100000011011110 %
+b11011110101011011100000011011110 M
+b11011110101011011100000011011110 U
+11
+b11111100 V
+b11111100 2
+b11111100 H
+b11111100 S
+b11011110101011011100000011011110 Q
+b11111100 P
+16
+#95
+06
+#100
+0W
+b110 L
+10
+0#
+01
+1.
+b10 /
+b10 :
+b10 _
+16
+#105
+06
+#110
+0.
+b111 L
+b10 ,
+b10 I
+00
+16
+#115
+06
+#120
+1T
+13
+b0 O
+16
+#125
+06
+#130
+0T
+04
+b1000 L
+1(
+03
+1&
+b10100000101000000000000000000000 )
+b10100000101000000000000000000000 9
+b10100000101000000000000000000000 `
+16
+#135
+06
+#140
+14
+0&
+b1001 L
+b10100000101000000000000000000000 +
+b10100000101000000000000000000000 J
+0(
+16
+#145
+06
+#150
+1T
+0\
+13
+b10000000 5
+b10000000 G
+b10000000 R
+b10000000 O
+16
+#155
+06
+#160
+0T
+04
+b1010 L
+1(
+03
+1&
+b10 '
+b10 8
+b10 a
+b11011110101011011011111011101111 )
+b11011110101011011011111011101111 9
+b11011110101011011011111011101111 `
+16
+#165
+06
+#170
+14
+0&
+b1011 L
+b11011110101011011011111011101111 +
+b11011110101011011011111011101111 J
+b10 *
+b10 K
+0(
+16
+#175
+06
+#180
+1-
+16
+#185
+06
+#190
+16
+#195
+06
+#200
+16
+#205
+06
+#210
+16
+#215
+06
+#220
+16
+#225
+06
+#230
+16
+#235
+06
+#240
+16
+#245
+06
+#250
+16
+#255
+06
+#260
+16
+#265
+06
+#270
+16
+#275
+06
+#280
+16
+#285
+06
+#290
+16
+#295
+06
+#300
+16
+#305
+06
+#310
+16
+#315
+06
+#320
+16
+#325
+06
+#330
+16
+#335
+06
+#340
+16
+#345
+06
+#350
+16
+#355
+06
+#360
+16
+#365
+06
+#370
+16
+#375
+06
+#380
+16
+#385
+06
+#390
+16
+#395
+06
+#400
+16
+#405
+06
+#410
+16
+#415
+06
+#420
+16
+#425
+06
+#430
+16
+#435
+06
+#440
+16
+#445
+06
+#450
+16
+#455
+06
+#460
+16
+#465
+06
+#470
+16
+#475
+06
+#480
+16
+#485
+06
+#490
+16
+#495
+06
+#500
+16
+#505
+06
+#510
+16
+#515
+06
+#520
+16
+#525
+06
+#530
+16
+#535
+06
+#540
+16
+#545
+06
+#550
+16
+#555
+06
+#560
+16
+#565
+06
+#570
+16
+#575
+06
+#580
+16
+#585
+06
+#590
+16
+#595
+06
+#600
+16
+#605
+06
+#610
+16
+#615
+06
+#620
+16
+#625
+06
+#630
+16
+#635
+06
+#640
+16
+#645
+06
+#650
+16
+#655
+06
+#660
+16
+#665
+06
+#670
+16
+#675
+06
+#680
+16
+#685
+06
+#690
+16
+#695
+06
+#700
+16
+#705
+06
+#710
+16
+#715
+06
+#720
+16
+#725
+06
+#730
+16
+#735
+06
+#740
+16
+#745
+06
+#750
+16
+#755
+06
+#760
+16
+#765
+06
+#770
+16
+#775
+06
+#780
+16
+#785
+06
+#790
+16
+#795
+06
+#800
+16
+#805
+06
+#810
+16
+#815
+06
+#820
+16
+#825
+06
+#830
+16
+#835
+06
+#840
+16
+#845
+06
+#850
+16
+#855
+06
+#860
+16
+#865
+06
+#870
+16
+#875
+06
+#880
+16
+#885
+06
+#890
+16
+#895
+06
+#900
+16
+#905
+06
+#910
+16
+#915
+06
+#920
+16
+#925
+06
+#930
+16
+#935
+06
+#940
+16
+#945
+06
+#950
+16
+#955
+06
+#960
+16
+#965
+06
+#970
+16
+#975
+06
+#980
+16
+#985
+06
+#990
+16
+#995
+06
+#1000
+16

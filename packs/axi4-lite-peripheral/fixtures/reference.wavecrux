@@ -1,0 +1,45 @@
+{
+  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
+  "_required_signals": [
+    "tb_axil.aclk",
+    "tb_axil.aresetn",
+    "tb_axil.awvalid",
+    "tb_axil.awready",
+    "tb_axil.awaddr",
+    "tb_axil.wvalid",
+    "tb_axil.wready",
+    "tb_axil.wdata",
+    "tb_axil.bvalid",
+    "tb_axil.bready",
+    "tb_axil.bresp",
+    "tb_axil.arvalid",
+    "tb_axil.arready",
+    "tb_axil.araddr",
+    "tb_axil.rvalid",
+    "tb_axil.rready",
+    "tb_axil.rdata",
+    "tb_axil.rresp",
+    "tb_axil.u_master.done"
+  ],
+  "_required_groups": [
+    { "name": "aw_channel", "children": ["tb_axil.awvalid","tb_axil.awready","tb_axil.awaddr"] },
+    { "name": "w_channel",  "children": ["tb_axil.wvalid","tb_axil.wready","tb_axil.wdata"] },
+    { "name": "b_channel",  "children": ["tb_axil.bvalid","tb_axil.bready","tb_axil.bresp"] },
+    { "name": "ar_channel", "children": ["tb_axil.arvalid","tb_axil.arready","tb_axil.araddr"] },
+    { "name": "r_channel",  "children": ["tb_axil.rvalid","tb_axil.rready","tb_axil.rdata","tb_axil.rresp"] }
+  ],
+  "_required_translate_filters": [],
+  "_required_decoder_bindings": [
+    { "decoder": "axi4lite", "file": "decoders/axi4lite_binding.json" }
+  ],
+  "_required_stage_panels": [],
+  "_required_format_settings": [
+    { "signal": "tb_axil.awaddr", "format": "hexadecimal" },
+    { "signal": "tb_axil.araddr", "format": "hexadecimal" },
+    { "signal": "tb_axil.wdata", "format": "hexadecimal" },
+    { "signal": "tb_axil.rdata", "format": "hexadecimal" },
+    { "signal": "tb_axil.bresp", "format": "binary" },
+    { "signal": "tb_axil.rresp", "format": "binary" }
+  ],
+  "_initial_cursor_time_ns": 105
+}

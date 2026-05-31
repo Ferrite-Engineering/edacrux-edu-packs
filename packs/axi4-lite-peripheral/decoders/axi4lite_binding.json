@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "decoder": "axi4lite",
+  "signal_bindings": {
+    "aclk":    "tb_axil.aclk",
+    "aresetn": "tb_axil.aresetn",
+    "awaddr":  "tb_axil.awaddr",
+    "awvalid": "tb_axil.awvalid",
+    "awready": "tb_axil.awready",
+    "wdata":   "tb_axil.wdata",
+    "wstrb":   "tb_axil.wstrb",
+    "wvalid":  "tb_axil.wvalid",
+    "wready":  "tb_axil.wready",
+    "bresp":   "tb_axil.bresp",
+    "bvalid":  "tb_axil.bvalid",
+    "bready":  "tb_axil.bready",
+    "araddr":  "tb_axil.araddr",
+    "arvalid": "tb_axil.arvalid",
+    "arready": "tb_axil.arready",
+    "rdata":   "tb_axil.rdata",
+    "rresp":   "tb_axil.rresp",
+    "rvalid":  "tb_axil.rvalid",
+    "rready":  "tb_axil.rready"
+  },
+  "parameters": {
+    "addr_width": 32,
+    "data_width": 32
+  }
+}

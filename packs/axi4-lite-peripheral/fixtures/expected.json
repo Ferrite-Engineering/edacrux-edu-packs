@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "pack_id": "axi4-lite-peripheral",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "pre_transaction_reset",
+      "description": "Reset still asserted; all five channels idle.",
+      "time_ns": 15,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.aresetn": "1'b0",
+            "tb_axil.awvalid": "1'b0",
+            "tb_axil.wvalid": "1'b0",
+            "tb_axil.bvalid": "1'b0",
+            "tb_axil.arvalid": "1'b0",
+            "tb_axil.rvalid": "1'b0"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_write_request_active",
+      "description": "Master drives AW and W channels simultaneously for the first write (addr=0x00, data=0xA0A00000).",
+      "time_ns": 35,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.awvalid": "1'b1",
+            "tb_axil.awaddr": "32'h00000000",
+            "tb_axil.wvalid": "1'b1",
+            "tb_axil.wdata": "32'hA0A00000",
+            "tb_axil.wstrb": "4'hF"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_write_response_okay",
+      "description": "Slave returns OKAY (BRESP=0b00) for the first write.",
+      "time_ns": 45,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.bvalid": "1'b1",
+            "tb_axil.bresp": "2'b00"
+          }
+        }
+      }
+    },
+    {
+      "name": "third_write_slverr",
+      "description": "Third write targets unmapped address 0xFC. Slave returns SLVERR (BRESP=0b10).",
+      "time_ns": 105,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.awaddr": "32'h000000FC",
+            "tb_axil.bvalid": "1'b1",
+            "tb_axil.bresp": "2'b10",
+            "tb_axil.u_master.last_bresp": "2'b10"
+          }
+        }
+      }
+    },
+    {
+      "name": "first_read_response_okay",
+      "description": "First read from address 0x00 returns the previously-written 0xA0A00000 with RRESP=OKAY.",
+      "time_ns": 135,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.rvalid": "1'b1",
+            "tb_axil.rdata": "32'hA0A00000",
+            "tb_axil.rresp": "2'b00"
+          }
+        }
+      }
+    },
+    {
+      "name": "second_read_slverr",
+      "description": "Second read targets unmapped address 0x80. Slave returns sentinel 0xDEADBEEF with RRESP=SLVERR.",
+      "time_ns": 165,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.rvalid": "1'b1",
+            "tb_axil.rdata": "32'hDEADBEEF",
+            "tb_axil.rresp": "2'b10"
+          }
+        }
+      }
+    },
+    {
+      "name": "all_done",
+      "description": "Sequence complete (2 OK writes, 1 SLVERR write, 1 OK read, 1 SLVERR read). Master asserts done.",
+      "time_ns": 185,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.u_master.done": "1'b1",
+            "tb_axil.u_master.last_bresp": "2'b10",
+            "tb_axil.u_master.last_rresp": "2'b10",
+            "tb_axil.u_master.last_rdata": "32'hDEADBEEF"
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [
+    {
+      "decoder": "axi4lite",
+      "binding_file": "decoders/axi4lite_binding.json",
+      "expected_transactions": [
+        { "type": "WRITE", "addr": "0x00000000", "data": "0xA0A00000", "resp": "OKAY" },
+        { "type": "WRITE", "addr": "0x00000004", "data": "0xB1B11111", "resp": "OKAY" },
+        { "type": "WRITE", "addr": "0x000000FC", "data": "0xDEADC0DE", "resp": "SLVERR" },
+        { "type": "READ",  "addr": "0x00000000", "data": "0xA0A00000", "resp": "OKAY" },
+        { "type": "READ",  "addr": "0x00000080", "data": "0xDEADBEEF", "resp": "SLVERR" }
+      ]
+    }
+  ],
+  "cross_tool_deep_links": []
+}
