@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "engine": "verilator",
+  "note": "no CDC analysis \u2014 free toolchain has no CDC engine",
+  "violations": []
+}

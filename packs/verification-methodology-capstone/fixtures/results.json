@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "suite": "alu_periph_regression",
+  "tests": [
+    {
+      "name": "add",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "sub",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "and",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "or",
+      "outcome": "pass",
+      "detail": null
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

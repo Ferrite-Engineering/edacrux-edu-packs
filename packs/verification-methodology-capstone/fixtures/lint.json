@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "engine": "verilator",
+  "violations": [
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "alu_periph.v",
+      "line": 5,
+      "symbol": "ctrl",
+      "message": "Bits of signal are not used: 'ctrl'[7:2]"
+    },
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "alu_periph.v",
+      "line": 6,
+      "symbol": "spare",
+      "message": "Signal is not driven, nor used: 'spare'"
+    },
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "decoder.v",
+      "line": 1,
+      "symbol": "addr",
+      "message": "Bits of signal are not used: 'addr'[3:0]"
+    }
+  ]
+}

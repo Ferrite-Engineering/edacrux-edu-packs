@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "suite": "soc_cdc",
+  "tests": [
+    {
+      "name": "sync_handshake_captures",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "req_is_two_flop_clean",
+      "outcome": "pass",
+      "detail": null
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0
+  }
+}

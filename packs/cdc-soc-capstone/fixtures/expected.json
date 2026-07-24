@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "pack_id": "cdc-soc-capstone",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "two_domains_and_a_synchronizer",
+      "description": "NetCrux: the SoC is a producer (clk_a domain), a consumer (clk_b domain) and a two-flop synchronizer between them. Identifying the clock domains and what does — and does not — cross safely is the heart of the project.",
+      "tool_states": {
+        "netcrux": {
+          "module": "soc_top",
+          "submodules_present": ["producer", "sync2", "consumer"]
+        }
+      }
+    },
+    {
+      "name": "synchronizer_is_two_flops",
+      "description": "NetCrux: the synchronizer is exactly two flip-flops in series — the correct structure for a single-bit crossing. The data bus, by contrast, crosses with no synchronizer at all.",
+      "tool_states": {
+        "netcrux": {
+          "module": "sync2",
+          "instance_counts": { "$adff": 2 }
+        }
+      }
+    },
+    {
+      "name": "safe_path_regression_green",
+      "description": "SimCrux: the safe request path works — the synchronized request is a clean two-flop value and drives a capture. The regression does NOT assert the captured data, because that path is the hazard.",
+      "tool_states": {
+        "simcrux": { "total_tests": 2, "outcome_counts": { "pass": 2, "fail": 0 } }
+      }
+    },
+    {
+      "name": "reset_state",
+      "description": "WaveCrux: during reset the captured register is zero.",
+      "time_ns": 15,
+      "tool_states": {
+        "wavecrux": { "signal_values": { "tb_soc.captured": "8'd0" } }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": [
+    {
+      "name": "unsynced_data_across_tools",
+      "source_tool": "netcrux",
+      "source_action": "having found in the structure that the 8-bit data bus crosses clk_a to clk_b with no synchronizer, examine that bus in the waveform",
+      "target_tool": "wavecrux",
+      "expected_target_state": "the data bus and the clk_b capture edge are shown; because data changes every clk_a with no synchronizer, a clk_b sample can land mid-transition — the multi-bit CDC hazard the structure predicted"
+    }
+  ]
+}

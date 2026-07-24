@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    { "kind": "signal", "ref": "", "path": "tb_alu_periph.we",     "name": "we",     "format": "binary",      "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_alu_periph.addr",   "name": "addr",   "format": "hexadecimal", "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_alu_periph.wdata",  "name": "wdata",  "format": "hexadecimal", "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_alu_periph.result", "name": "result", "format": "unsignedDecimal", "height": 30.0 }
+  ],
+  "cursor": { "primary": 120, "secondary": null },
+  "markers": {},
+  "view": { "ticksPerPixel": 2.0, "panOffsetTicks": 0.0, "scrollOffset": 0.0 },
+  "panels": { "signalTree": true, "valueColumn": true, "transactionView": false, "stageView": false, "statisticsStrip": false, "cocotbLogPanel": false, "rtlSource": false },
+  "translateFilters": {},
+  "stage": { "panels": [] },
+  "activeTheme": "wavecrux-dark"
+}

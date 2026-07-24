@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "pack_id": "verification-methodology-capstone",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "structure_integrates_four_blocks",
+      "description": "NetCrux: the peripheral integrates a decoder, three register slots and an ALU — the unit under verification.",
+      "tool_states": {
+        "netcrux": {
+          "module": "alu_periph",
+          "submodules_present": ["decoder", "reg4", "alu8"],
+          "instance_counts": { "reg4": 3 }
+        }
+      }
+    },
+    {
+      "name": "lint_baseline_has_findings",
+      "description": "LintCrux: the starting design is not clean — the unused `spare` register is one finding to triage as part of the methodology pass.",
+      "tool_states": {
+        "lintcrux": { "violations_present": [ { "rule": "UNUSEDSIGNAL", "symbol": "spare" } ] }
+      }
+    },
+    {
+      "name": "regression_baseline_green",
+      "description": "SimCrux: the four provided directed tests (add, sub, and, or) all pass — a green baseline the student extends toward full coverage.",
+      "tool_states": {
+        "simcrux": {
+          "total_tests": 4,
+          "outcome_counts": { "pass": 4, "fail": 0 }
+        }
+      }
+    },
+    {
+      "name": "result_bus_idle_at_reset",
+      "description": "WaveCrux: before any operand is written, the result bus reads zero.",
+      "time_ns": 40,
+      "tool_states": {
+        "wavecrux": { "signal_values": { "tb_alu_periph.result": "8'd0" } }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": [
+    {
+      "name": "coverage_gap_across_tools",
+      "source_tool": "simcrux",
+      "source_action": "identify an untested opcode or operand corner in the regression, then examine it in the structure and the waveform",
+      "target_tool": "netcrux",
+      "expected_target_state": "the ALU and its operand registers are shown, guiding which cases the extended test suite must cover to exercise the whole datapath"
+    }
+  ]
+}

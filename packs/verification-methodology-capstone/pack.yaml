@@ -1,0 +1,67 @@
+schema_version: 1
+pack_id: verification-methodology-capstone
+pack_version: 1.0.0
+pack_category: capstone
+tier: C
+required_tools:
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: lintcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: simcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: wavecrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+learning_objectives:
+  en:
+    - "Take a small integrated design through a complete verification-methodology pass across all four tools."
+    - "Document the structure of a unit under verification from its schematic."
+    - "Triage a lint baseline to a defensible fix/waive decision per finding."
+    - "Extend a directed regression toward meaningful coverage of the datapath."
+    - "Use the waveform to justify that each new test exercises what it claims to."
+    - "Produce a verification report that ties the four views into one argument for correctness."
+prerequisites:
+  - lint-triage-101
+  - module-tour
+  - regression-hello-world
+  - counter-lab
+curriculum_topics:
+  - verification_methodology
+  - coverage
+  - cross_tool_debug
+estimated_duration_minutes: 1200
+difficulty: advanced
+primary_hdl: verilog
+alternates: []
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    netlist:
+      netcrux: fixtures/netlist.json
+    lint:
+      lintcrux: fixtures/lint.json
+    results:
+      simcrux: fixtures/results.json
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+verified_against: []
+locales:
+  - en
+maintainers:
+  - Ferrite Engineering
+short_description: >
+  A four-tool capstone project: take a register-mapped ALU peripheral through a
+  full verification-methodology pass — document its structure, triage its lint,
+  extend its regression to coverage, and justify it all from the waveform.
