@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "pack_id": "memory-controller-review",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "lint_flags_shadow",
+      "description": "LintCrux reports `shadow` as an unused signal in the register file — a dead scratch register left in the RTL.",
+      "tool_states": {
+        "lintcrux": {
+          "violations_present": [ { "rule": "UNUSEDSIGNAL", "symbol": "shadow" } ]
+        }
+      }
+    },
+    {
+      "name": "lint_flags_unused_addr_bits",
+      "description": "LintCrux also reports that the low address bits are unused — the decoder only looks at the top nibble.",
+      "tool_states": {
+        "lintcrux": {
+          "violations_present": [ { "rule": "UNUSEDSIGNAL", "symbol": "addr" } ]
+        }
+      }
+    },
+    {
+      "name": "structure_top",
+      "description": "In NetCrux, mem_ctrl is assembled from the address decoder and the register file.",
+      "tool_states": {
+        "netcrux": {
+          "module": "mem_ctrl",
+          "submodules_present": ["addr_decoder", "regfile"]
+        }
+      }
+    },
+    {
+      "name": "regfile_has_three_real_registers",
+      "description": "The register file synthesises to exactly three flip-flop banks — ctrl, data0, data1. Not four: the `shadow` register lint flagged has been dead-code-eliminated by synthesis, so it is not in the structure at all. This is the crossing the pack teaches — a lint finding whose resolution is visible in the netlist.",
+      "tool_states": {
+        "netcrux": {
+          "module": "regfile",
+          "instance_counts": { "$adffe": 3 }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": [
+    {
+      "name": "shadow_lint_to_structure",
+      "source_tool": "lintcrux",
+      "source_action": "open the UNUSEDSIGNAL finding on `shadow` and cross-probe to the structure",
+      "target_tool": "netcrux",
+      "expected_target_state": "the regfile module is shown, and `shadow` is absent from its synthesised cells — confirming the unused register was dropped, so the finding is safe to resolve by deleting it"
+    }
+  ]
+}

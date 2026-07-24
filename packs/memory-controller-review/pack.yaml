@@ -1,0 +1,62 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: memory-controller-review
+pack_version: 1.0.0
+pack_category: integration
+
+# === Tier and tool dependency ===
+tier: B
+required_tools:
+  - product: lintcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Read a lint report on a register-mapped memory controller and identify the real findings."
+    - "Cross-probe from a lint finding to the structure it concerns in NetCrux."
+    - "See that a signal flagged as unused has been dropped by synthesis — the finding and its resolution in two views."
+    - "Distinguish a lint finding that is a design intent from one that is dead code."
+    - "Decide, with both the lint and the structure in front of you, what to fix and what to keep."
+prerequisites:
+  - lint-triage-101
+  - module-tour
+curriculum_topics:
+  - lint_triage
+  - schematic_navigation
+  - cross_tool_debug
+estimated_duration_minutes: 90
+difficulty: intermediate
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    netlist:
+      netcrux: fixtures/netlist.json
+    lint:
+      lintcrux: fixtures/lint.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  A NetCrux + LintCrux pair pack: triage a memory controller's lint report, then
+  cross-probe each finding into the schematic — including an unused register that
+  synthesis has already dropped from the structure.

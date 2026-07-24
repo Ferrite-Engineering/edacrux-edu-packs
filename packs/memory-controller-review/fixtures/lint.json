@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "engine": "verilator",
+  "violations": [
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "addr_decoder.v",
+      "line": 8,
+      "symbol": "addr",
+      "message": "Bits of signal are not used: 'addr'[3:0]"
+    },
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "regfile.v",
+      "line": 13,
+      "symbol": "shadow",
+      "message": "Signal is not driven, nor used: 'shadow'"
+    }
+  ]
+}
