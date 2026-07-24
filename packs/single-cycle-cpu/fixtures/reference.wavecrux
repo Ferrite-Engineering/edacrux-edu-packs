@@ -1,34 +1,86 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_rv32_cpu.clk",
-    "tb_rv32_cpu.rst",
-    "tb_rv32_cpu.dut.pc",
-    "tb_rv32_cpu.dut.instr",
-    "tb_rv32_cpu.dut.alu_out",
-    "tb_rv32_cpu.dut.rf_we",
-    "tb_rv32_cpu.dut.branch_taken"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.clk",
+      "name": "clk",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.rst",
+      "name": "rst",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.dut.pc",
+      "name": "pc",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.dut.instr",
+      "name": "instr",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.dut.alu_out",
+      "name": "alu_out",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.dut.rf_we",
+      "name": "rf_we",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_rv32_cpu.dut.branch_taken",
+      "name": "branch_taken",
+      "format": "hexadecimal",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [
-    { "name": "fetch", "children": ["tb_rv32_cpu.dut.pc", "tb_rv32_cpu.dut.instr"] },
-    { "name": "registers", "children": [
-      "tb_rv32_cpu.dut.u_regfile.regs[1]", "tb_rv32_cpu.dut.u_regfile.regs[2]",
-      "tb_rv32_cpu.dut.u_regfile.regs[3]", "tb_rv32_cpu.dut.u_regfile.regs[4]",
-      "tb_rv32_cpu.dut.u_regfile.regs[5]", "tb_rv32_cpu.dut.u_regfile.regs[6]",
-      "tb_rv32_cpu.dut.u_regfile.regs[7]", "tb_rv32_cpu.dut.u_regfile.regs[8]",
-      "tb_rv32_cpu.dut.u_regfile.regs[9]", "tb_rv32_cpu.dut.u_regfile.regs[10]",
-      "tb_rv32_cpu.dut.u_regfile.regs[11]"
-    ] },
-    { "name": "execute", "children": ["tb_rv32_cpu.dut.alu_out", "tb_rv32_cpu.dut.rf_we", "tb_rv32_cpu.dut.branch_taken"] }
-  ],
-  "_required_translate_filters": [],
-  "_required_decoder_bindings": [
-    { "decoder": "riscv", "file": "decoders/riscv_binding.json" }
-  ],
-  "_required_stage_panels": [],
-  "_required_format_settings": [
-    { "signal": "tb_rv32_cpu.dut.pc", "format": "hexadecimal" },
-    { "signal": "tb_rv32_cpu.dut.instr", "format": "hexadecimal" }
-  ],
-  "_initial_cursor_time_ns": 85
+  "cursor": {
+    "primary": 85,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": false,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }

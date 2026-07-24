@@ -1,23 +1,86 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_uart_tx.clk",
-    "tb_uart_tx.rst_n",
-    "tb_uart_tx.tx_data",
-    "tb_uart_tx.tx_start",
-    "tb_uart_tx.dut.state",
-    "tb_uart_tx.dut.tx",
-    "tb_uart_tx.dut.tx_busy"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.clk",
+      "name": "clk",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.rst_n",
+      "name": "rst_n",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.tx_data",
+      "name": "tx_data",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.tx_start",
+      "name": "tx_start",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.dut.state",
+      "name": "state",
+      "format": "unsignedDecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.dut.tx",
+      "name": "tx",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_uart_tx.dut.tx_busy",
+      "name": "tx_busy",
+      "format": "hexadecimal",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [],
-  "_required_translate_filters": [],
-  "_required_decoder_bindings": [
-    { "decoder": "uart", "file": "decoders/uart_binding.json" }
-  ],
-  "_required_stage_panels": [],
-  "_required_format_settings": [
-    { "signal": "tb_uart_tx.dut.state", "format": "decimal" },
-    { "signal": "tb_uart_tx.tx_data", "format": "hexadecimal" }
-  ],
-  "_initial_cursor_time_ns": 100
+  "cursor": {
+    "primary": 100,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": false,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }

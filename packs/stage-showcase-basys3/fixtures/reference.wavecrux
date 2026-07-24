@@ -1,30 +1,94 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_basys3.dut.clk",
-    "tb_basys3.dut.rst_n",
-    "tb_basys3.dut.sw",
-    "tb_basys3.dut.btn",
-    "tb_basys3.dut.led",
-    "tb_basys3.dut.count",
-    "tb_basys3.dut.seg",
-    "tb_basys3.dut.an"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.clk",
+      "name": "clk",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.rst_n",
+      "name": "rst_n",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.sw",
+      "name": "sw",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.btn",
+      "name": "btn",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.led",
+      "name": "led",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.count",
+      "name": "count",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.seg",
+      "name": "seg",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_basys3.dut.an",
+      "name": "an",
+      "format": "hexadecimal",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [
-    { "name": "inputs", "children": ["tb_basys3.dut.sw", "tb_basys3.dut.btn"] },
-    { "name": "outputs", "children": ["tb_basys3.dut.led", "tb_basys3.dut.seg", "tb_basys3.dut.an"] },
-    { "name": "internal", "children": ["tb_basys3.dut.count"] }
-  ],
-  "_required_translate_filters": [],
-  "_required_decoder_bindings": [],
-  "_required_stage_panels": [
-    { "name": "Basys 3 demo", "file": "stage/basys3_layout.json" }
-  ],
-  "_required_format_settings": [
-    { "signal": "tb_basys3.dut.sw", "format": "hexadecimal" },
-    { "signal": "tb_basys3.dut.led", "format": "hexadecimal" },
-    { "signal": "tb_basys3.dut.count", "format": "hexadecimal" },
-    { "signal": "tb_basys3.dut.seg", "format": "binary" }
-  ],
-  "_initial_cursor_time_ns": 1100
+  "cursor": {
+    "primary": 1100,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": true,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }

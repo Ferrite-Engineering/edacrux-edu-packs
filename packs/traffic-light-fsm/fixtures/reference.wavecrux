@@ -1,21 +1,78 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_traffic_light.dut.clk",
-    "tb_traffic_light.dut.rst_n",
-    "tb_traffic_light.dut.state",
-    "tb_traffic_light.dut.red_light",
-    "tb_traffic_light.dut.green_light",
-    "tb_traffic_light.dut.yellow_light"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.clk",
+      "name": "clk",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.rst_n",
+      "name": "rst_n",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.state",
+      "name": "state",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.red_light",
+      "name": "red_light",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.green_light",
+      "name": "green_light",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_traffic_light.dut.yellow_light",
+      "name": "yellow_light",
+      "format": "hexadecimal",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [],
-  "_required_translate_filters": [
-    { "signal": "tb_traffic_light.dut.state", "file": "translate/fsm_states.txt" }
-  ],
-  "_required_decoder_bindings": [],
-  "_required_stage_panels": [],
-  "_required_format_settings": [
-    { "signal": "tb_traffic_light.dut.state", "format": "binary" }
-  ],
-  "_initial_cursor_time_ns": 325
+  "cursor": {
+    "primary": 325,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": false,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }

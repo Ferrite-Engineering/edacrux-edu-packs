@@ -1,30 +1,102 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_top.dut.clk",
-    "tb_top.dut.sel",
-    "tb_top.dut.a_in",
-    "tb_top.dut.b_in",
-    "tb_top.dut.c_in",
-    "tb_top.dut.cin",
-    "tb_top.dut.u_mux.y",
-    "tb_top.dut.result",
-    "tb_top.dut.cout"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.clk",
+      "name": "clk",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.sel",
+      "name": "sel",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.a_in",
+      "name": "a_in",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.b_in",
+      "name": "b_in",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.c_in",
+      "name": "c_in",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.cin",
+      "name": "cin",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.u_mux.y",
+      "name": "y",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.result",
+      "name": "result",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_top.dut.cout",
+      "name": "cout",
+      "format": "hexadecimal",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [
-    { "name": "inputs", "children": ["tb_top.dut.sel", "tb_top.dut.a_in", "tb_top.dut.b_in", "tb_top.dut.c_in", "tb_top.dut.cin"] },
-    { "name": "internal", "children": ["tb_top.dut.u_mux.y"] },
-    { "name": "outputs", "children": ["tb_top.dut.result", "tb_top.dut.cout"] }
-  ],
-  "_required_translate_filters": [],
-  "_required_decoder_bindings": [],
-  "_required_stage_panels": [],
-  "_required_format_settings": [
-    { "signal": "tb_top.dut.a_in", "format": "hexadecimal" },
-    { "signal": "tb_top.dut.b_in", "format": "hexadecimal" },
-    { "signal": "tb_top.dut.c_in", "format": "hexadecimal" },
-    { "signal": "tb_top.dut.u_mux.y", "format": "hexadecimal" },
-    { "signal": "tb_top.dut.result", "format": "hexadecimal" }
-  ],
-  "_initial_cursor_time_ns": 75
+  "cursor": {
+    "primary": 75,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": false,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }

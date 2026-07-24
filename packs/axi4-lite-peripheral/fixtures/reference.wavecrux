@@ -1,45 +1,182 @@
 {
-  "_TODO": "Generate this file by opening fixtures/reference.vcd in WaveCrux, configuring the session as described below, and using File > Save Session. Replace this placeholder.",
-  "_required_signals": [
-    "tb_axil.aclk",
-    "tb_axil.aresetn",
-    "tb_axil.awvalid",
-    "tb_axil.awready",
-    "tb_axil.awaddr",
-    "tb_axil.wvalid",
-    "tb_axil.wready",
-    "tb_axil.wdata",
-    "tb_axil.bvalid",
-    "tb_axil.bready",
-    "tb_axil.bresp",
-    "tb_axil.arvalid",
-    "tb_axil.arready",
-    "tb_axil.araddr",
-    "tb_axil.rvalid",
-    "tb_axil.rready",
-    "tb_axil.rdata",
-    "tb_axil.rresp",
-    "tb_axil.u_master.done"
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.aclk",
+      "name": "aclk",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.aresetn",
+      "name": "aresetn",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.awvalid",
+      "name": "awvalid",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.awready",
+      "name": "awready",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.awaddr",
+      "name": "awaddr",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.wvalid",
+      "name": "wvalid",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.wready",
+      "name": "wready",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.wdata",
+      "name": "wdata",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.bvalid",
+      "name": "bvalid",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.bready",
+      "name": "bready",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.bresp",
+      "name": "bresp",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.arvalid",
+      "name": "arvalid",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.arready",
+      "name": "arready",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.araddr",
+      "name": "araddr",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.rvalid",
+      "name": "rvalid",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.rready",
+      "name": "rready",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.rdata",
+      "name": "rdata",
+      "format": "hexadecimal",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.rresp",
+      "name": "rresp",
+      "format": "binary",
+      "height": 30.0
+    },
+    {
+      "kind": "signal",
+      "ref": "",
+      "path": "tb_axil.u_master.done",
+      "name": "done",
+      "format": "binary",
+      "height": 30.0
+    }
   ],
-  "_required_groups": [
-    { "name": "aw_channel", "children": ["tb_axil.awvalid","tb_axil.awready","tb_axil.awaddr"] },
-    { "name": "w_channel",  "children": ["tb_axil.wvalid","tb_axil.wready","tb_axil.wdata"] },
-    { "name": "b_channel",  "children": ["tb_axil.bvalid","tb_axil.bready","tb_axil.bresp"] },
-    { "name": "ar_channel", "children": ["tb_axil.arvalid","tb_axil.arready","tb_axil.araddr"] },
-    { "name": "r_channel",  "children": ["tb_axil.rvalid","tb_axil.rready","tb_axil.rdata","tb_axil.rresp"] }
-  ],
-  "_required_translate_filters": [],
-  "_required_decoder_bindings": [
-    { "decoder": "axi4lite", "file": "decoders/axi4lite_binding.json" }
-  ],
-  "_required_stage_panels": [],
-  "_required_format_settings": [
-    { "signal": "tb_axil.awaddr", "format": "hexadecimal" },
-    { "signal": "tb_axil.araddr", "format": "hexadecimal" },
-    { "signal": "tb_axil.wdata", "format": "hexadecimal" },
-    { "signal": "tb_axil.rdata", "format": "hexadecimal" },
-    { "signal": "tb_axil.bresp", "format": "binary" },
-    { "signal": "tb_axil.rresp", "format": "binary" }
-  ],
-  "_initial_cursor_time_ns": 105
+  "cursor": {
+    "primary": 105,
+    "secondary": null
+  },
+  "markers": {},
+  "view": {
+    "ticksPerPixel": 1.0,
+    "panOffsetTicks": 0.0,
+    "scrollOffset": 0.0
+  },
+  "panels": {
+    "signalTree": true,
+    "valueColumn": true,
+    "transactionView": false,
+    "stageView": false,
+    "statisticsStrip": false,
+    "cocotbLogPanel": false,
+    "rtlSource": false
+  },
+  "translateFilters": {},
+  "stage": {
+    "panels": []
+  },
+  "activeTheme": "wavecrux-dark"
 }
