@@ -90,25 +90,32 @@ Full license text: [`LICENSE-CONTENT`](LICENSE-CONTENT).
 Attribution: *EDACrux WaveCrux EDU Learning Packs, &copy; 2026 Ferrite
 Engineering, licensed under CC-BY-4.0.*
 
-## Repository move at beta launch
+## Where this lives
 
-This catalog stages in the closed-source `wavecrux-pro` repo during pre-beta
-development. At **WaveCrux beta launch** it migrates to a public repository
-at `edacrux/edacrux-edu-packs` and is then consumed by `edu.edacrux.com` as
-its source of truth. The CC-BY-4.0 license and the
-forward-compatible manifest schema are designed to make that move a pure
-copy — no schema migration, no licence flip.
+This catalog staged in the closed-source `wavecrux-pro` repo through pre-beta
+development and now lives here, public, at
+**[`Ferrite-Engineering/edacrux-edu-packs`](https://github.com/Ferrite-Engineering/edacrux-edu-packs)**.
+The full commit history came across with it. The CC-BY-4.0 licence and the
+forward-compatible manifest schema were chosen to make that move a pure copy —
+no schema migration, no licence flip — and that is how it went.
 
-## Related planning documents (private, in the `edacrux` repo)
+## Status — read this before relying on a pack
 
-These provide the broader strategic context but are not required to use the
-packs:
+The twelve packs here are complete and usable: real RTL, testbenches,
+simulator-built VCD and FST fixtures, student handouts and instructor notes.
+Two things are **not** done yet, and the honest statement of them is:
 
-- `edacrux/docs/SUITE_PROJECT_PLAN.md` — suite-wide product-tier framework,
-  EDU verification flow, beta strategy.
-- `edacrux/docs/COMMERCIAL_LAUNCH_PLAN.md` — Phase 6 commerce flows.
-- `wavecrux-pro/docs/WAVECRUX_PROJECT_PLAN.md` §10.5 — Open Core vs EDU vs
-  Pro vs Enterprise feature matrix.
+- **`fixtures/reference.wavecrux` is a placeholder in every pack.** Each is a
+  JSON stub with a `_TODO` describing the session it should contain. The labs
+  work without it — students open the VCD or FST directly — but the "open a
+  pre-arranged session" step is not yet real.
+- **`verified_against` is empty in every `pack.yaml`.** No pack has been
+  machine-verified against a release, because the verifier
+  (`edacrux-pack-verify`) does not exist yet. Every pack carries a full
+  checkpoint contract in `fixtures/expected.json` ready for it.
+
+Neither is a blocker for teaching from these today. Both are being worked on,
+and this section gets deleted rather than softened when they land.
 
 ## Forward-compatible manifest schema
 
