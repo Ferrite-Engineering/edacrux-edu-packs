@@ -23,7 +23,18 @@ for pack in */; do
   # -X drops extra Unix metadata Windows tooling has no use for.
   zip -qrX "$OUT/$name.zip" "$name" \
       -x "$name/build/*" -x "*/.DS_Store" -x "*/._*"
-  printf "  %-28s %s\n" "$name.zip" "$(du -h "$OUT/$name.zip" | awk '{print $1}')"
+  printf "  %-32s %s\n" "$name.zip" "$(du -h "$OUT/$name.zip" | awk '{print $1}')"
+
+  # Student archive: the same pack minus the two things a student should not
+  # start with — the instructor/ folder (rubric, misconceptions, solution) and
+  # fixtures/expected.json (the checkpoint contract, which literally states the
+  # value each signal holds at each time, i.e. the answers). A professor hands
+  # THIS to a class; the full pack stays theirs. Handout, design, testbench and
+  # the waveform/netlist to open are all included.
+  zip -qrX "$OUT/$name-student.zip" "$name" \
+      -x "$name/build/*" -x "$name/instructor/*" -x "$name/fixtures/expected.json" \
+      -x "*/.DS_Store" -x "*/._*"
+  printf "  %-32s %s\n" "$name-student.zip" "$(du -h "$OUT/$name-student.zip" | awk '{print $1}')"
 done
 
 # One archive with everything, for a professor adopting the whole curriculum.
