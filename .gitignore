@@ -5,3 +5,4 @@ packs/*/build/
 # macOS finder metadata — noise in a repo professors will clone.
 .DS_Store
 ._*
+dist/
