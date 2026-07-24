@@ -57,8 +57,11 @@ jobs:
       # reproducible from the RTL beside them. Rebuilding catches RTL that
       # changed without its waveform being regenerated — which is exactly how a
       # handout starts describing something the waveform no longer does.
-      - name: Install Icarus Verilog
-        run: sudo apt-get update && sudo apt-get install -y iverilog
+      # The toolchains the packs' build.sh scripts invoke. iverilog builds the
+      # WaveCrux waveform fixtures; yosys synthesises the NetCrux netlists.
+      # verilator is here for the LintCrux packs as they land.
+      - name: Install simulation and synthesis tools
+        run: sudo apt-get update && sudo apt-get install -y iverilog yosys verilator
 
       - name: Rebuild every pack's fixtures from its RTL
         run: |
