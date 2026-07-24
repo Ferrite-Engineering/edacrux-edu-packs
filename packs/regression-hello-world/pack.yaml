@@ -1,0 +1,55 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: regression-hello-world
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: simcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Run a directed regression suite and open the results in SimCrux."
+    - "Read the pass/fail summary and per-test status on the dashboard."
+    - "Locate a single named test and read its outcome and detail."
+    - "Understand a directed test: known inputs, a known expected output, an automatic check."
+    - "Recognise what a clean, all-green regression looks like before you have to debug a red one."
+prerequisites: []
+curriculum_topics:
+  - regression_testing
+  - verification_methodology
+  - test_dashboards
+estimated_duration_minutes: 45
+difficulty: intro
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    results:
+      simcrux: fixtures/results.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  Run a six-test directed regression over a small ALU and read the results in
+  SimCrux: the pass/fail summary, per-test status, and what a clean all-green
+  run looks like.

@@ -267,6 +267,50 @@ def verify_lintcrux_checkpoint(rep: LintReport, cp: dict, add) -> None:
             "" if got > 0 else "rule not present")
 
 
+class TestResults:
+    """Normalised regression results — what a SimCrux dashboard renders.
+    Produced by a pack's build.sh from a real simulator run (e.g. iverilog),
+    so the contract is checked against outcomes the testbench actually reported."""
+
+    def __init__(self, path: pathlib.Path):
+        self.data = json.loads(path.read_text())
+        self.tests = self.data.get("tests", [])
+
+    def by_name(self, name: str) -> dict | None:
+        for t in self.tests:
+            if t.get("name") == name:
+                return t
+        return None
+
+    def count(self, outcome: str) -> int:
+        return sum(1 for t in self.tests if t.get("outcome") == outcome)
+
+
+def verify_simcrux_checkpoint(res: TestResults, cp: dict, add) -> None:
+    name = cp.get("name", "<unnamed>")
+    st = (cp.get("tool_states") or {}).get("simcrux") or {}
+
+    tt = st.get("total_tests")
+    if tt is not None:
+        add(f"checkpoint {name}: suite has {tt} tests", len(res.tests) == tt,
+            "" if len(res.tests) == tt else f"results have {len(res.tests)}")
+
+    for outcome, want in (st.get("outcome_counts") or {}).items():
+        got = res.count(outcome)
+        add(f"checkpoint {name}: {want} test(s) {outcome}", got == want,
+            "" if got == want else f"results have {got}")
+
+    # Named tests with an expected outcome — "the add_carry test passes".
+    for want in st.get("tests") or []:
+        tn, outcome = want.get("name"), want.get("outcome")
+        t = res.by_name(tn)
+        if t is None:
+            add(f"checkpoint {name}: test {tn} is in the suite", False, "not found")
+            continue
+        add(f"checkpoint {name}: test {tn} is {outcome}", t.get("outcome") == outcome,
+            "" if t.get("outcome") == outcome else f"it is {t.get('outcome')}")
+
+
 def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:
     name = cp.get("name", "<unnamed>")
     st = (cp.get("tool_states") or {}).get("netcrux") or {}
@@ -359,6 +403,7 @@ def verify_pack(pack: pathlib.Path) -> Result:
         "wavecrux": ("fixtures/reference.vcd",),
         "netcrux": ("fixtures/netlist.json",),
         "lintcrux": ("fixtures/lint.json",),
+        "simcrux": ("fixtures/results.json",),
     }
     for rel in common + fixture_by_tool.get(primary_tool, ()):
         r.add(f"{rel} present", (pack / rel).exists())
@@ -444,6 +489,23 @@ def verify_pack(pack: pathlib.Path) -> Result:
         r.add("lint.json has a violations list", isinstance(rep.violations, list))
         for cp in checkpoints:
             verify_lintcrux_checkpoint(rep, cp, r.add)
+        return r
+
+    # SimCrux: checkpoints assert regression outcomes against the results.
+    if primary_tool == "simcrux":
+        res_path = pack / "fixtures" / "results.json"
+        if not res_path.exists():
+            r.add("fixtures/results.json present", False, "missing")
+            return r
+        try:
+            res = TestResults(res_path)
+        except json.JSONDecodeError as e:
+            r.add("results.json is valid JSON", False, str(e))
+            return r
+        r.add("results.json is valid JSON", True)
+        r.add("results.json has a tests list", isinstance(res.tests, list))
+        for cp in checkpoints:
+            verify_simcrux_checkpoint(res, cp, r.add)
         return r
 
     # WaveCrux: checkpoints assert signal values against the waveform.

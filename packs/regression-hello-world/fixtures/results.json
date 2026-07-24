@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "suite": "alu4_regression",
+  "tests": [
+    {
+      "name": "add_basic",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "add_carry",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "sub_basic",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "and_basic",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "or_basic",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "sub_zero",
+      "outcome": "pass",
+      "detail": null
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0
+  }
+}

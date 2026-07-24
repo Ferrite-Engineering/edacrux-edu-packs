@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "pack_id": "regression-hello-world",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "suite_runs_six_tests",
+      "description": "The regression is six directed tests over the ALU. Reading the run count off the dashboard is the first thing a student does.",
+      "tool_states": { "simcrux": { "total_tests": 6 } }
+    },
+    {
+      "name": "all_green",
+      "description": "Every test passes — a clean regression. The dashboard is all green; nothing to debug this time.",
+      "tool_states": { "simcrux": { "outcome_counts": { "pass": 6, "fail": 0 } } }
+    },
+    {
+      "name": "named_tests_pass",
+      "description": "The specific directed cases — add with carry, subtract, the bitwise ops — each pass. Students locate a named test on the dashboard and read its status.",
+      "tool_states": {
+        "simcrux": {
+          "tests": [
+            { "name": "add_carry", "outcome": "pass" },
+            { "name": "sub_basic", "outcome": "pass" },
+            { "name": "and_basic", "outcome": "pass" },
+            { "name": "or_basic",  "outcome": "pass" }
+          ]
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}
