@@ -25,4 +25,9 @@ if command -v vcd2fst >/dev/null 2>&1; then
     vcd2fst fixtures/reference.vcd fixtures/reference.fst >/dev/null
 fi
 
-echo "Built golden.vcd / buggy.vcd / reference.vcd"
+# NetCrux half of the pair: synthesise the BUGGY counter so students can cross-
+# probe from the misbehaving `count` in the waveform to the structure that drives
+# it — the enabled register and its increment adder.
+yosys -q -p "read_verilog src/counter_buggy.v; hierarchy -top counter; proc; opt; write_json fixtures/netlist.json"
+
+echo "Built golden.vcd / buggy.vcd / reference.vcd / netlist.json"

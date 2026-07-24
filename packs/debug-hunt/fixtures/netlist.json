@@ -1,0 +1,120 @@
+{
+  "creator": "Yosys 0.67+post (git sha1 b8e7da6f40ae8f552c116bf6c359b07c6533e159, Release, AppleClang clang++ 21.0.0.21000099)",
+  "modules": {
+    "counter": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "src/counter_buggy.v:13.1-23.10"
+      },
+      "ports": {
+        "clk": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "rst_n": {
+          "direction": "input",
+          "bits": [ 3 ]
+        },
+        "enable": {
+          "direction": "input",
+          "bits": [ 4 ]
+        },
+        "count": {
+          "direction": "output",
+          "bits": [ 5, 6, 7, 8, 9, 10, 11, 12 ]
+        }
+      },
+      "cells": {
+        "$add$src/counter_buggy.v:21$4": {
+          "hide_name": 1,
+          "type": "$add",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000001000",
+            "B_SIGNED": "00000000000000000000000000000000",
+            "B_WIDTH": "00000000000000000000000000001000",
+            "Y_WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "src": "src/counter_buggy.v:21.37-21.49"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 5, 6, 7, 8, 9, 10, 11, 12 ],
+            "B": [ "1", "0", "0", "0", "0", "0", "0", "0" ],
+            "Y": [ 13, 14, 15, 16, 17, 18, 19, 20 ]
+          }
+        },
+        "$auto$ff.cc:337:slice$12": {
+          "hide_name": 1,
+          "type": "$adffe",
+          "parameters": {
+            "ARST_POLARITY": "00000000000000000000000000000000",
+            "ARST_VALUE": "00000000",
+            "CLK_POLARITY": "00000000000000000000000000000001",
+            "EN_POLARITY": "00000000000000000000000000000000",
+            "WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "src": "src/counter_buggy.v:19.5-22.8"
+          },
+          "port_directions": {
+            "ARST": "input",
+            "CLK": "input",
+            "D": "input",
+            "EN": "input",
+            "Q": "output"
+          },
+          "connections": {
+            "ARST": [ 3 ],
+            "CLK": [ 2 ],
+            "D": [ 13, 14, 15, 16, 17, 18, 19, 20 ],
+            "EN": [ 4 ],
+            "Q": [ 5, 6, 7, 8, 9, 10, 11, 12 ]
+          }
+        }
+      },
+      "netnames": {
+        "$add$src/counter_buggy.v:21$4_Y": {
+          "hide_name": 1,
+          "bits": [ 13, 14, 15, 16, 17, 18, 19, 20 ],
+          "attributes": {
+            "src": "src/counter_buggy.v:21.37-21.49"
+          }
+        },
+        "clk": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "src/counter_buggy.v:14.23-14.26"
+          }
+        },
+        "count": {
+          "hide_name": 0,
+          "bits": [ 5, 6, 7, 8, 9, 10, 11, 12 ],
+          "attributes": {
+            "src": "src/counter_buggy.v:17.23-17.28"
+          }
+        },
+        "enable": {
+          "hide_name": 0,
+          "bits": [ 4 ],
+          "attributes": {
+            "src": "src/counter_buggy.v:16.23-16.29"
+          }
+        },
+        "rst_n": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "src/counter_buggy.v:15.23-15.28"
+          }
+        }
+      }
+    }
+  }
+}

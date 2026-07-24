@@ -113,3 +113,28 @@ A screenshot showing:
 - A marker on the BEQ branch-taken cycle.
 
 Plus answers to Parts 2, 3, and the three exercises.
+
+---
+
+## Cross-probing to the datapath (NetCrux)
+
+The waveform showed you the CPU *in time* — instructions flowing through, registers
+changing value cycle by cycle. NetCrux shows you the CPU *in space*: the datapath
+those values move through.
+
+```
+netcrux fixtures/netlist.json
+```
+
+- The top module, `rv32_cpu`, is assembled from two blocks you can push into: an
+  **instruction memory** (`imem`) and a **register file** (`regfile`). Find both.
+- Pick a register whose value you watched change in the waveform. In NetCrux, open
+  `regfile` and find the write path: the write-address, write-data and write-enable
+  that an executing instruction drives.
+- Connect the two views: the value you saw appear at a specific time in the
+  waveform arrived through exactly this write path in the structure. Time and space,
+  the same event.
+
+> On a full install this is a cross-probe: select the register in WaveCrux, land on
+> its write path in NetCrux. Here you make the jump by hand — the structure you land
+> on is the real synthesised datapath.

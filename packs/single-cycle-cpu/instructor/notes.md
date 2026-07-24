@@ -107,3 +107,17 @@ but only 15 instructions are populated. The remaining slots stay at
 0, which a real CPU would interpret as an illegal instruction, but
 the JAL at PC=0x38 traps execution before any of those slots are
 ever fetched.
+
+## Cross-tool upgrade (WaveCrux + NetCrux)
+
+Now a pair. The WaveCrux half is unchanged — trace the RISC-V program through the
+waveform, reading registers and the instruction stream over time. The NetCrux half
+adds the *spatial* view: the same CPU as a datapath assembled from an instruction
+memory and a register file, so students connect "this register changed at cycle N"
+to "through this write path".
+
+The structural facts (rv32_cpu instantiates imem and regfile) are machine-verified
+against the synthesised netlist. The cross-probe deep-link — register in WaveCrux to
+write path in NetCrux — is declared but not machine-verified; a live cross-probe
+needs both apps under automation, which the suite does not yet expose. The jump is
+by hand here, onto real structure.

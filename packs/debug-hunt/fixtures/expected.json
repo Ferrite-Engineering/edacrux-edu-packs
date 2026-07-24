@@ -41,8 +41,29 @@
           }
         }
       }
+    },
+    {
+      "name": "counter_structure",
+      "description": "In NetCrux, the buggy counter is one enabled register fed by an increment adder \u2014 an $adffe and an $add. This is the structure whose enable the bug corrupts.",
+      "tool_states": {
+        "netcrux": {
+          "module": "counter",
+          "cell_types_present": [
+            "$add",
+            "$adffe"
+          ]
+        }
+      }
     }
   ],
   "decoder_expectations": [],
-  "cross_tool_deep_links": []
+  "cross_tool_deep_links": [
+    {
+      "name": "count_waveform_to_enable_cone",
+      "source_tool": "wavecrux",
+      "source_action": "having found via the golden/buggy waveform diff that `count` advances when it should hold, cross-probe the `count` signal to its driving structure",
+      "target_tool": "netcrux",
+      "expected_target_state": "the counter's enabled register is shown; tracing the fan-in cone of its enable reveals it is driven by the INVERTED enable input \u2014 the structural signature of the `~enable` bug the waveform only hinted at"
+    }
+  ]
 }

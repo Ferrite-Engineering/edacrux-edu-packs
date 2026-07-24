@@ -99,6 +99,19 @@
           }
         }
       }
+    },
+    {
+      "name": "datapath_structure",
+      "description": "In NetCrux, the CPU top is assembled from an instruction memory and a register file \u2014 the two blocks a single-cycle datapath is built around.",
+      "tool_states": {
+        "netcrux": {
+          "module": "rv32_cpu",
+          "submodules_present": [
+            "imem",
+            "regfile"
+          ]
+        }
+      }
     }
   ],
   "decoder_expectations": [
@@ -106,22 +119,72 @@
       "decoder": "riscv",
       "binding_file": "decoders/riscv_binding.json",
       "expected_transactions": [
-        { "pc": "0x00", "mnemonic": "addi x1, x0, 5" },
-        { "pc": "0x04", "mnemonic": "addi x2, x0, 7" },
-        { "pc": "0x08", "mnemonic": "add x3, x1, x2" },
-        { "pc": "0x0C", "mnemonic": "sub x4, x2, x1" },
-        { "pc": "0x10", "mnemonic": "sw x3, 0(x0)" },
-        { "pc": "0x14", "mnemonic": "lw x5, 0(x0)" },
-        { "pc": "0x18", "mnemonic": "beq x3, x5, 0x20" },
-        { "pc": "0x20", "mnemonic": "addi x7, x0, 10" },
-        { "pc": "0x24", "mnemonic": "addi x8, x0, 11" },
-        { "pc": "0x28", "mnemonic": "add x9, x7, x8" },
-        { "pc": "0x2C", "mnemonic": "addi x10, x0, 66" },
-        { "pc": "0x30", "mnemonic": "sw x10, 4(x0)" },
-        { "pc": "0x34", "mnemonic": "lw x11, 4(x0)" },
-        { "pc": "0x38", "mnemonic": "jal x0, 0x38" }
+        {
+          "pc": "0x00",
+          "mnemonic": "addi x1, x0, 5"
+        },
+        {
+          "pc": "0x04",
+          "mnemonic": "addi x2, x0, 7"
+        },
+        {
+          "pc": "0x08",
+          "mnemonic": "add x3, x1, x2"
+        },
+        {
+          "pc": "0x0C",
+          "mnemonic": "sub x4, x2, x1"
+        },
+        {
+          "pc": "0x10",
+          "mnemonic": "sw x3, 0(x0)"
+        },
+        {
+          "pc": "0x14",
+          "mnemonic": "lw x5, 0(x0)"
+        },
+        {
+          "pc": "0x18",
+          "mnemonic": "beq x3, x5, 0x20"
+        },
+        {
+          "pc": "0x20",
+          "mnemonic": "addi x7, x0, 10"
+        },
+        {
+          "pc": "0x24",
+          "mnemonic": "addi x8, x0, 11"
+        },
+        {
+          "pc": "0x28",
+          "mnemonic": "add x9, x7, x8"
+        },
+        {
+          "pc": "0x2C",
+          "mnemonic": "addi x10, x0, 66"
+        },
+        {
+          "pc": "0x30",
+          "mnemonic": "sw x10, 4(x0)"
+        },
+        {
+          "pc": "0x34",
+          "mnemonic": "lw x11, 4(x0)"
+        },
+        {
+          "pc": "0x38",
+          "mnemonic": "jal x0, 0x38"
+        }
       ]
     }
   ],
-  "cross_tool_deep_links": []
+  "cross_tool_deep_links": [
+    {
+      "name": "register_value_to_datapath",
+      "source_tool": "wavecrux",
+      "source_action": "having read a register's value change in the waveform as instructions execute, cross-probe that register to the structure that writes it",
+      "target_tool": "netcrux",
+      "expected_target_state": "the register file module is shown, with the write-address, write-data and write-enable paths that the executing instruction drives \u2014 connecting the value you saw change in time to the datapath that changed it"
+    }
+  ]
 }

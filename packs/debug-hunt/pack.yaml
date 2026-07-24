@@ -4,11 +4,14 @@ pack_id: debug-hunt
 pack_version: 1.0.0
 pack_category: debugging
 
-tier: A
+tier: B
 required_tools:
   - product: wavecrux
     min_version: "1.0.0"
     max_version: "2.0.0"
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
 optional_tools: []
 
 learning_objectives:

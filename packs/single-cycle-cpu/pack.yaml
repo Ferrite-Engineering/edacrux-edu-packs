@@ -4,11 +4,14 @@ pack_id: single-cycle-cpu
 pack_version: 1.0.0
 pack_category: soc
 
-tier: A
+tier: B
 required_tools:
   - product: wavecrux
     min_version: "1.0.0"
     max_version: "2.0.0"
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
 optional_tools: []
 
 learning_objectives:
@@ -36,6 +39,8 @@ content:
   fixtures:
     waveform_vcd: fixtures/reference.vcd
     waveform_fst: fixtures/reference.fst
+      netlist:
+        netcrux: fixtures/netlist.json
     sessions:
       wavecrux: fixtures/reference.wavecrux
     expected: fixtures/expected.json

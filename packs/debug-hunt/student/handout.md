@@ -107,3 +107,29 @@ A screenshot showing:
   corrected line of code.
 
 Plus answers to Parts 1, 2, 3, and the three exercises.
+
+---
+
+## Cross-probing to the structure (NetCrux)
+
+You found the bug's *symptom* in the waveform: `count` advances when `enable` is
+high, the opposite of what it should do. Now see the bug's *shape* in the
+structure.
+
+```
+netcrux fixtures/netlist.json
+```
+
+- The counter is a single **enabled register** (an `$adffe` cell) fed by an
+  **increment adder** (`$add`). Find both.
+- The register only updates when its **enable** is asserted. Trace the fan-in
+  cone of that enable back toward the `enable` input port.
+- What sits between the `enable` input and the register's enable? On a correct
+  counter, nothing — the input drives the enable directly. Here, the enable is
+  driven by the **inverted** input. That inversion is the entire bug, and in the
+  structure it is a single gate you can point at.
+
+> On a full install this is one click: select the misbehaving `count` in WaveCrux
+> and cross-probe to its driver in NetCrux. In this pack you open the netlist by
+> hand — same destination. The waveform told you *which* signal is wrong; the
+> structure tells you *why*.

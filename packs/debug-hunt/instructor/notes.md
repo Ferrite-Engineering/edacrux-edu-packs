@@ -119,3 +119,17 @@ The script produces three VCDs:
 - `fixtures/buggy.vcd`  — counter under debug
 - `fixtures/reference.vcd` — a copy of `buggy.vcd` so the standard
   `reference.vcd` discovery path picks up the buggy version
+
+## Cross-tool upgrade (WaveCrux + NetCrux)
+
+This pack is now a pair. The WaveCrux half is unchanged: find the off-by-one from
+the golden/buggy waveform diff. The NetCrux half closes the loop — the bug
+(`~enable`) shows in the structure as an inversion on the register's enable, so
+students go from "which signal is wrong" (waveform) to "why" (structure).
+
+The NetCrux structural facts are machine-verified against the synthesised netlist
+(the enabled register and the increment adder are present). The cross-probe
+*deep-link* itself — clicking `count` in WaveCrux and landing on its driver in
+NetCrux — is declared but not machine-verified; verifying a live cross-probe
+needs both apps driven under automation, which the suite does not yet expose. In
+this pack the jump is made by hand, and the structure it lands on is real.

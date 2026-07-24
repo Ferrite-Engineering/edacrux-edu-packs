@@ -9,4 +9,11 @@ vvp build/sim.vvp
 if command -v vcd2fst >/dev/null 2>&1; then
     vcd2fst fixtures/reference.vcd fixtures/reference.fst >/dev/null
 fi
-echo "Built fixtures/reference.vcd ($(wc -c < fixtures/reference.vcd) bytes)"
+
+# NetCrux half of the pair: synthesise the CPU so students can cross-probe from a
+# register value in the waveform to the datapath structure — the instruction
+# memory and the register file the top module is assembled from. Run from the
+# pack dir so imem.v's $readmemh finds src/program.hex.
+yosys -q -p "read_verilog src/rv32_cpu.v src/regfile.v src/imem.v; hierarchy -top rv32_cpu; proc; opt; write_json fixtures/netlist.json"
+
+echo "Built fixtures/reference.vcd + fixtures/netlist.json"
