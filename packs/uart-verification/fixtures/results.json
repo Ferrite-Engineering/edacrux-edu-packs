@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "suite": "uart_tx_regression",
+  "tests": [
+    {
+      "name": "tx_0x55",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "tx_0xA3",
+      "outcome": "pass",
+      "detail": null
+    },
+    {
+      "name": "tx_0xFF",
+      "outcome": "fail",
+      "detail": "sent=ff got=ff want=00"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    { "kind": "signal", "ref": "", "path": "tb_uart.dut.state", "name": "state", "format": "unsignedDecimal", "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_uart.data",      "name": "data",  "format": "hexadecimal",    "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_uart.dut.busy",  "name": "busy",  "format": "binary",         "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_uart.dut.tx",    "name": "tx",    "format": "binary",         "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_uart.rx",        "name": "rx",    "format": "hexadecimal",    "height": 30.0 }
+  ],
+  "cursor": { "primary": 1200, "secondary": null },
+  "markers": {},
+  "view": { "ticksPerPixel": 1.0, "panOffsetTicks": 0.0, "scrollOffset": 0.0 },
+  "panels": { "signalTree": true, "valueColumn": true, "transactionView": false, "stageView": false, "statisticsStrip": false, "cocotbLogPanel": false, "rtlSource": false },
+  "translateFilters": {},
+  "stage": { "panels": [] },
+  "activeTheme": "wavecrux-dark"
+}

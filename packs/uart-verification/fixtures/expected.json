@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "pack_id": "uart-verification",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "suite_has_three_tests",
+      "description": "Three transmit tests run: 0x55, 0xA3, 0xFF.",
+      "tool_states": { "simcrux": { "total_tests": 3 } }
+    },
+    {
+      "name": "one_test_fails",
+      "description": "Two tests pass and one — tx_0xFF — fails. A red bar. The instinct is 'the design is broken'; the lab is about checking that instinct.",
+      "tool_states": {
+        "simcrux": {
+          "outcome_counts": { "pass": 2, "fail": 1 },
+          "tests": [
+            { "name": "tx_0x55", "outcome": "pass" },
+            { "name": "tx_0xA3", "outcome": "pass" },
+            { "name": "tx_0xFF", "outcome": "fail" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "line_idles_high",
+      "description": "In the waveform, the serial line idles high between transmissions — the UART resting state. Confirms the waveform loads and the transmit line behaves.",
+      "time_ns": 40,
+      "tool_states": {
+        "wavecrux": { "signal_values": { "tb_uart.dut.tx": "1'b1" } }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": [
+    {
+      "name": "failing_test_to_waveform",
+      "source_tool": "simcrux",
+      "source_action": "open the failing tx_0xFF result and debug it in the waveform",
+      "target_tool": "wavecrux",
+      "expected_target_state": "the transmission for 0xFF is shown; reading the serial line bit by bit reveals the DUT sent 0xFF correctly — so the failure is a wrong expectation in the testbench (it wanted 0x00), not a design bug"
+    }
+  ]
+}
