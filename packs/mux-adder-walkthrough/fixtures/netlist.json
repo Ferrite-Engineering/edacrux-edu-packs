@@ -1,0 +1,178 @@
+{
+  "creator": "Yosys 0.66 (git sha1 7f8fdfd8d7bc08c749a2a969388d3425d4f369d5, clang++ 21.0.0 -fPIC -O3)",
+  "modules": {
+    "adder4": {
+      "attributes": {
+        "src": "src/adder4.v:3.1-9.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2, 3, 4, 5 ]
+        },
+        "b": {
+          "direction": "input",
+          "bits": [ 6, 7, 8, 9 ]
+        },
+        "sum": {
+          "direction": "output",
+          "bits": [ 10, 11, 12, 13, 14 ]
+        }
+      },
+      "cells": {
+        "$add$src/adder4.v:8$1": {
+          "hide_name": 1,
+          "type": "$add",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000000100",
+            "B_SIGNED": "00000000000000000000000000000000",
+            "B_WIDTH": "00000000000000000000000000000100",
+            "Y_WIDTH": "00000000000000000000000000000101"
+          },
+          "attributes": {
+            "src": "src/adder4.v:8.18-8.23"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 2, 3, 4, 5 ],
+            "B": [ 6, 7, 8, 9 ],
+            "Y": [ 10, 11, 12, 13, 14 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2, 3, 4, 5 ],
+          "attributes": {
+            "src": "src/adder4.v:4.18-4.19"
+          }
+        },
+        "b": {
+          "hide_name": 0,
+          "bits": [ 6, 7, 8, 9 ],
+          "attributes": {
+            "src": "src/adder4.v:5.18-5.19"
+          }
+        },
+        "sum": {
+          "hide_name": 0,
+          "bits": [ 10, 11, 12, 13, 14 ],
+          "attributes": {
+            "src": "src/adder4.v:6.18-6.21"
+          }
+        }
+      }
+    },
+    "alu": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "src/alu.v:4.1-20.10"
+      },
+      "ports": {
+        "a": {
+          "direction": "input",
+          "bits": [ 2, 3, 4, 5 ]
+        },
+        "b": {
+          "direction": "input",
+          "bits": [ 6, 7, 8, 9 ]
+        },
+        "op": {
+          "direction": "input",
+          "bits": [ 10 ]
+        },
+        "y": {
+          "direction": "output",
+          "bits": [ 11, 12, 13, 14, 15 ]
+        }
+      },
+      "cells": {
+        "$ternary$src/alu.v:19$2": {
+          "hide_name": 1,
+          "type": "$mux",
+          "parameters": {
+            "WIDTH": "00000000000000000000000000000101"
+          },
+          "attributes": {
+            "src": "src/alu.v:19.16-19.36"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "S": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 2, 3, 4, 5, "0" ],
+            "B": [ 16, 17, 18, 19, 20 ],
+            "S": [ 10 ],
+            "Y": [ 11, 12, 13, 14, 15 ]
+          }
+        },
+        "u_add": {
+          "hide_name": 0,
+          "type": "adder4",
+          "parameters": {
+          },
+          "attributes": {
+            "module_not_derived": "00000000000000000000000000000001",
+            "src": "src/alu.v:12.12-16.6"
+          },
+          "port_directions": {
+            "a": "input",
+            "b": "input",
+            "sum": "output"
+          },
+          "connections": {
+            "a": [ 2, 3, 4, 5 ],
+            "b": [ 6, 7, 8, 9 ],
+            "sum": [ 16, 17, 18, 19, 20 ]
+          }
+        }
+      },
+      "netnames": {
+        "a": {
+          "hide_name": 0,
+          "bits": [ 2, 3, 4, 5 ],
+          "attributes": {
+            "src": "src/alu.v:5.18-5.19"
+          }
+        },
+        "b": {
+          "hide_name": 0,
+          "bits": [ 6, 7, 8, 9 ],
+          "attributes": {
+            "src": "src/alu.v:6.18-6.19"
+          }
+        },
+        "op": {
+          "hide_name": 0,
+          "bits": [ 10 ],
+          "attributes": {
+            "src": "src/alu.v:7.18-7.20"
+          }
+        },
+        "sum": {
+          "hide_name": 0,
+          "bits": [ 16, 17, 18, 19, 20 ],
+          "attributes": {
+            "src": "src/alu.v:10.16-10.19"
+          }
+        },
+        "y": {
+          "hide_name": 0,
+          "bits": [ 11, 12, 13, 14, 15 ],
+          "attributes": {
+            "src": "src/alu.v:8.18-8.19"
+          }
+        }
+      }
+    }
+  }
+}

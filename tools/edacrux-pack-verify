@@ -179,6 +179,71 @@ def vcd_to_int(v: str) -> tuple[int | None, bool]:
         return None, False
 
 
+class Netlist:
+    """Yosys JSON netlist reader — the structure NetCrux loads.
+
+    Exposes exactly what the NetCrux packs assert about: a module's ports
+    (direction + width), the generic cell types inside it, and the submodules
+    it instantiates.
+    """
+
+    def __init__(self, path: pathlib.Path):
+        self.modules = json.loads(path.read_text()).get("modules", {})
+        self._module_names = set(self.modules)
+
+    def has_module(self, name: str) -> bool:
+        return name in self.modules
+
+    def port(self, module: str, port: str) -> dict | None:
+        p = self.modules.get(module, {}).get("ports", {}).get(port)
+        if p is None:
+            return None
+        return {"direction": p.get("direction"), "width": len(p.get("bits", []))}
+
+    def cell_types(self, module: str) -> set[str]:
+        cells = self.modules.get(module, {}).get("cells", {})
+        return {c.get("type") for c in cells.values()}
+
+    def submodules(self, module: str) -> set[str]:
+        # A cell whose type is another module in this netlist is a submodule
+        # instance; Yosys internal cells start with '$'.
+        return {t for t in self.cell_types(module) if t in self._module_names}
+
+
+def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:
+    name = cp.get("name", "<unnamed>")
+    st = (cp.get("tool_states") or {}).get("netcrux") or {}
+    module = st.get("module")
+    if not module:
+        add(f"checkpoint {name}: names a module", False, "no netcrux.module")
+        return
+    if not nl.has_module(module):
+        add(f"checkpoint {name}: module {module} exists", False,
+            "not in the netlist")
+        return
+    add(f"checkpoint {name}: module {module} exists", True)
+
+    for pname, want in (st.get("ports") or {}).items():
+        got = nl.port(module, pname)
+        label = f"checkpoint {name}: {module}.{pname} is {want.get('direction')}[{want.get('width')}]"
+        if got is None:
+            add(label, False, "port absent")
+            continue
+        ok = (got["direction"] == want.get("direction")
+              and got["width"] == want.get("width"))
+        add(label, ok, "" if ok else f"netlist has {got['direction']}[{got['width']}]")
+
+    present = nl.cell_types(module)
+    for ct in st.get("cell_types_present") or []:
+        add(f"checkpoint {name}: {module} contains a {ct} cell", ct in present,
+            "" if ct in present else f"cells present: {sorted(present)}")
+
+    subs = nl.submodules(module)
+    for sm in st.get("submodules_present") or []:
+        add(f"checkpoint {name}: {module} instantiates {sm}", sm in subs,
+            "" if sm in subs else f"submodules present: {sorted(subs)}")
+
+
 class Result:
     def __init__(self, pack: str):
         self.pack = pack
@@ -218,16 +283,28 @@ def verify_pack(pack: pathlib.Path) -> Result:
     r.add("pack.yaml declares schema_version: 1",
           re.search(r"^schema_version:\s*1\b", manifest, re.M) is not None)
 
-    for rel in ("student/handout.md", "instructor/notes.md", "README.md",
-                "fixtures/expected.json", "fixtures/reference.vcd"):
+    # Which product's fixture a pack carries determines how its checkpoints are
+    # verified. A WaveCrux pack replays a VCD; a NetCrux pack reads a Yosys JSON
+    # netlist; and so on. Detect it from the required_tools declaration rather
+    # than guessing from filenames.
+    tools = re.findall(r"product:\s*(\S+)", manifest)
+    primary_tool = tools[0].strip().strip("\"'") if tools else "wavecrux"
+
+    common = ("student/handout.md", "instructor/notes.md", "README.md",
+              "fixtures/expected.json")
+    fixture_by_tool = {
+        "wavecrux": ("fixtures/reference.vcd",),
+        "netcrux": ("fixtures/netlist.json",),
+    }
+    for rel in common + fixture_by_tool.get(primary_tool, ()):
         r.add(f"{rel} present", (pack / rel).exists())
 
-    # ── session ──────────────────────────────────────────────────────────────
+    # ── session (WaveCrux packs only) ────────────────────────────────────────
     sess_path = pack / "fixtures" / "reference.wavecrux"
     vcd_path = pack / "fixtures" / "reference.vcd"
     vcd = Vcd(vcd_path) if vcd_path.exists() else None
 
-    if sess_path.exists():
+    if primary_tool == "wavecrux" and sess_path.exists():
         try:
             sess = json.loads(sess_path.read_text())
         except json.JSONDecodeError as e:
@@ -253,25 +330,43 @@ def verify_pack(pack: pathlib.Path) -> Result:
                 # empty-looking one.
                 r.add("every session signal path exists in the VCD", not missing,
                       f"absent: {missing}" if missing else "")
-    else:
+    elif primary_tool == "wavecrux":
         r.add("reference.wavecrux present", False, "missing")
 
-    # ── the contract: checkpoints vs the waveform ────────────────────────────
+    # ── the contract: checkpoints vs the tool's ground-truth fixture ─────────
     exp_path = pack / "fixtures" / "expected.json"
-    if exp_path.exists() and vcd is not None:
-        try:
-            exp = json.loads(exp_path.read_text())
-        except json.JSONDecodeError as e:
-            r.add("expected.json is valid JSON", False, str(e))
+    if not exp_path.exists():
+        return r
+    try:
+        exp = json.loads(exp_path.read_text())
+    except json.JSONDecodeError as e:
+        r.add("expected.json is valid JSON", False, str(e))
+        return r
+    r.add("expected.json is valid JSON", True)
+    if pack_id:
+        r.add("expected.json pack_id matches", exp.get("pack_id") == pack_id,
+              f"got {exp.get('pack_id')!r}")
+    checkpoints = exp.get("checkpoints") or []
+    r.add("expected.json declares checkpoints", len(checkpoints) > 0)
+
+    # NetCrux: checkpoints assert schematic structure against the Yosys netlist.
+    if primary_tool == "netcrux":
+        nl_path = pack / "fixtures" / "netlist.json"
+        if not nl_path.exists():
+            r.add("fixtures/netlist.json present", False, "missing")
             return r
-        r.add("expected.json is valid JSON", True)
-        if pack_id:
-            r.add("expected.json pack_id matches", exp.get("pack_id") == pack_id,
-                  f"got {exp.get('pack_id')!r}")
+        try:
+            nl = Netlist(nl_path)
+        except (json.JSONDecodeError, KeyError) as e:
+            r.add("netlist.json is a valid Yosys netlist", False, str(e))
+            return r
+        r.add("netlist.json is a valid Yosys netlist", True)
+        for cp in checkpoints:
+            verify_netcrux_checkpoint(nl, cp, r.add)
+        return r
 
-        checkpoints = exp.get("checkpoints") or []
-        r.add("expected.json declares checkpoints", len(checkpoints) > 0)
-
+    # WaveCrux: checkpoints assert signal values against the waveform.
+    if vcd is not None:
         for cp in checkpoints:
             name = cp.get("name", "<unnamed>")
             t = cp.get("time_ns")

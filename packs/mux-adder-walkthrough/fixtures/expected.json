@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "pack_id": "mux-adder-walkthrough",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "top_is_alu",
+      "description": "The top module NetCrux opens is `alu`, with the four ports the RTL declares.",
+      "tool_states": {
+        "netcrux": {
+          "module": "alu",
+          "ports": {
+            "a":  { "direction": "input",  "width": 4 },
+            "b":  { "direction": "input",  "width": 4 },
+            "op": { "direction": "input",  "width": 1 },
+            "y":  { "direction": "output", "width": 5 }
+          }
+        }
+      }
+    },
+    {
+      "name": "output_is_a_mux",
+      "description": "The output `y` is driven by a 2:1 multiplexer — the `op ? sum : a` selector. Students find the $mux cell in the alu module.",
+      "tool_states": {
+        "netcrux": {
+          "module": "alu",
+          "cell_types_present": ["$mux"]
+        }
+      }
+    },
+    {
+      "name": "adder_is_a_submodule",
+      "description": "Addition lives in its own block: `alu` instantiates `adder4`. Pushing into it in NetCrux reveals the $add cell.",
+      "tool_states": {
+        "netcrux": {
+          "module": "alu",
+          "submodules_present": ["adder4"]
+        }
+      }
+    },
+    {
+      "name": "adder_contains_the_add",
+      "description": "Inside adder4, the arithmetic is a single $add cell over the 4-bit inputs.",
+      "tool_states": {
+        "netcrux": {
+          "module": "adder4",
+          "cell_types_present": ["$add"]
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

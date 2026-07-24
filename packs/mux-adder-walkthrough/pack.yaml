@@ -1,0 +1,54 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: mux-adder-walkthrough
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Open a Yosys JSON netlist in NetCrux and identify the top module."
+    - "Read a module's ports and their directions and widths."
+    - "Recognise a 2:1 multiplexer as the structure behind a conditional assignment."
+    - "Push into a submodule instance to see its internal cells, and pop back out."
+    - "Distinguish combinational structure (mux, adder) from the RTL that produced it."
+prerequisites: []
+curriculum_topics:
+  - combinational_logic
+  - schematic_navigation
+  - hierarchy
+estimated_duration_minutes: 45
+difficulty: intro
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    netlist:
+      netcrux: fixtures/netlist.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  A tiny ALU — one adder submodule feeding one output multiplexer — for learning
+  to read RTL as structure in NetCrux: top module, ports, cells, and hierarchy.
