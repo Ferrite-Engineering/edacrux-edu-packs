@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "pack_id": "module-tour",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "top_is_core",
+      "description": "The top module is `core`: a clocked datapath with a data-in bus and a result bus.",
+      "tool_states": {
+        "netcrux": {
+          "module": "core",
+          "ports": {
+            "clk":    { "direction": "input",  "width": 1 },
+            "rst_n":  { "direction": "input",  "width": 1 },
+            "we_a":   { "direction": "input",  "width": 1 },
+            "we_b":   { "direction": "input",  "width": 1 },
+            "op":     { "direction": "input",  "width": 1 },
+            "din":    { "direction": "input",  "width": 8 },
+            "result": { "direction": "output", "width": 8 }
+          }
+        }
+      }
+    },
+    {
+      "name": "two_register_slots",
+      "description": "The core holds two register slots (u_ra, u_rb) — two instances of the same `regslot` module. This is the fan-out lesson: one `regslot` design, reused twice.",
+      "tool_states": {
+        "netcrux": {
+          "module": "core",
+          "instance_counts": { "regslot": 2, "alu8": 1 }
+        }
+      }
+    },
+    {
+      "name": "core_instantiates_the_blocks",
+      "description": "`core` is assembled from two module types: the register slot and the ALU.",
+      "tool_states": {
+        "netcrux": {
+          "module": "core",
+          "submodules_present": ["regslot", "alu8"]
+        }
+      }
+    },
+    {
+      "name": "alu_internals",
+      "description": "Push into u_alu. The ALU computes A+B and A&B and selects between them with a mux on `op` — three cells: $add, $and, $mux.",
+      "tool_states": {
+        "netcrux": {
+          "module": "alu8",
+          "cell_types_present": ["$add", "$and", "$mux"]
+        }
+      }
+    },
+    {
+      "name": "slot_is_a_flop",
+      "description": "Push into a register slot. It is a single enabled, async-reset flip-flop bank — one $adffe cell.",
+      "tool_states": {
+        "netcrux": {
+          "module": "regslot",
+          "cell_types_present": ["$adffe"]
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

@@ -204,6 +204,10 @@ class Netlist:
         cells = self.modules.get(module, {}).get("cells", {})
         return {c.get("type") for c in cells.values()}
 
+    def instance_count(self, module: str, cell_type: str) -> int:
+        cells = self.modules.get(module, {}).get("cells", {})
+        return sum(1 for c in cells.values() if c.get("type") == cell_type)
+
     def submodules(self, module: str) -> set[str]:
         # A cell whose type is another module in this netlist is a submodule
         # instance; Yosys internal cells start with '$'.
@@ -242,6 +246,12 @@ def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:
     for sm in st.get("submodules_present") or []:
         add(f"checkpoint {name}: {module} instantiates {sm}", sm in subs,
             "" if sm in subs else f"submodules present: {sorted(subs)}")
+
+    # Exact instance counts — how a fan-out lesson pins "there are two of these".
+    for ctype, want in (st.get("instance_counts") or {}).items():
+        got = nl.instance_count(module, ctype)
+        add(f"checkpoint {name}: {module} has {want}× {ctype}", got == want,
+            "" if got == want else f"netlist has {got}")
 
 
 class Result:

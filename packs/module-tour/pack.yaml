@@ -1,0 +1,55 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: module-tour
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Navigate a multi-level design hierarchy by pushing into and popping out of module instances."
+    - "Recognise module reuse: two register slots are two instances of one module."
+    - "Trace fan-out — one net driving several sinks — from a driver to its loads."
+    - "Trace fan-in — the several sources that converge on one net — back to its drivers."
+    - "Follow a feedback path where a block's output returns to its own input."
+prerequisites:
+  - mux-adder-walkthrough
+curriculum_topics:
+  - hierarchy
+  - schematic_navigation
+  - fan_in_fan_out
+estimated_duration_minutes: 60
+difficulty: intermediate
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    netlist:
+      netcrux: fixtures/netlist.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  A small clocked datapath — two register slots and an ALU with a feedback path
+  — for practising hierarchy navigation and fan-in / fan-out tracing in NetCrux.
