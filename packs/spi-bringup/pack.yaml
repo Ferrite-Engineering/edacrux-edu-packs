@@ -1,0 +1,59 @@
+schema_version: 1
+pack_id: spi-bringup
+pack_version: 1.0.0
+pack_category: integration
+tier: B
+required_tools:
+  - product: simcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: wavecrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+  - product: netcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+learning_objectives:
+  en:
+    - "Recognise a link that is transmitting but returning wrong data — alive, not working."
+    - "Cross a bring-up problem across three views: the regression, the waveform, and the structure."
+    - "Read SPI mode-0 timing on a waveform: chip-select, SCLK edges, MOSI and MISO."
+    - "Localise a one-bit sampling error to the receive shift register in the structure."
+    - "Form a fix hypothesis grounded in all three views, not one."
+prerequisites:
+  - uart-verification
+  - module-tour
+curriculum_topics:
+  - serial_protocols
+  - cross_tool_debug
+  - bring_up
+estimated_duration_minutes: 120
+difficulty: advanced
+primary_hdl: verilog
+alternates: []
+content:
+  src_dir: src/
+  testbench_dir: tb/
+  fixtures:
+    waveform_vcd: fixtures/reference.vcd
+    netlist:
+      netcrux: fixtures/netlist.json
+    results:
+      simcrux: fixtures/results.json
+    sessions:
+      wavecrux: fixtures/reference.wavecrux
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+verified_against: []
+locales:
+  - en
+maintainers:
+  - Ferrite Engineering
+short_description: >
+  A three-tool SPI bring-up (SimCrux + WaveCrux + NetCrux): a mode-0 master whose
+  loopback returns every byte shifted by one bit. Cross the regression, the
+  waveform and the structure to localise a one-SCLK sampling error.

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "suite": "spi_loopback",
+  "tests": [
+    {
+      "name": "loopback_0x3C",
+      "outcome": "fail",
+      "detail": "sent=3c got=78"
+    },
+    {
+      "name": "loopback_0xA5",
+      "outcome": "fail",
+      "detail": "sent=a5 got=4a"
+    },
+    {
+      "name": "loopback_0xFF",
+      "outcome": "fail",
+      "detail": "sent=ff got=fe"
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 0,
+    "failed": 3
+  }
+}

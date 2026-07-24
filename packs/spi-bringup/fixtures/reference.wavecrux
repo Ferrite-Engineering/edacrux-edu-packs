@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "sourceFilePath": "reference.vcd",
+  "signals": [
+    { "kind": "signal", "ref": "", "path": "tb_spi.cs_n",         "name": "cs_n",    "format": "binary",      "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_spi.sclk",         "name": "sclk",    "format": "binary",      "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_spi.mosi",         "name": "mosi",    "format": "binary",      "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_spi.miso",         "name": "miso",    "format": "binary",      "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_spi.dut.tx_byte",  "name": "tx_byte", "format": "hexadecimal", "height": 30.0 },
+    { "kind": "signal", "ref": "", "path": "tb_spi.dut.rx_byte",  "name": "rx_byte", "format": "hexadecimal", "height": 30.0 }
+  ],
+  "cursor": { "primary": 200, "secondary": null },
+  "markers": {},
+  "view": { "ticksPerPixel": 4.0, "panOffsetTicks": 0.0, "scrollOffset": 0.0 },
+  "panels": { "signalTree": true, "valueColumn": true, "transactionView": false, "stageView": false, "statisticsStrip": false, "cocotbLogPanel": false, "rtlSource": false },
+  "translateFilters": {},
+  "stage": { "panels": [] },
+  "activeTheme": "wavecrux-dark"
+}

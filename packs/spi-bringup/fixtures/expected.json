@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "pack_id": "spi-bringup",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "all_three_transfers_fail",
+      "description": "The loopback should return each byte unchanged, but every transfer fails — the link is alive (data moves) yet the received bytes are wrong. This is a bring-up, not a finished IP.",
+      "tool_states": {
+        "simcrux": {
+          "total_tests": 3,
+          "outcome_counts": { "fail": 3, "pass": 0 },
+          "tests": [
+            { "name": "loopback_0x3C", "outcome": "fail" },
+            { "name": "loopback_0xA5", "outcome": "fail" },
+            { "name": "loopback_0xFF", "outcome": "fail" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "chip_select_idle",
+      "description": "In the waveform, chip-select rests high (inactive) before the first transfer begins. Confirms the waveform loads and the master starts from idle.",
+      "time_ns": 40,
+      "tool_states": {
+        "wavecrux": { "signal_values": { "tb_spi.cs_n": "1'b1" } }
+      }
+    },
+    {
+      "name": "two_shift_registers",
+      "description": "In NetCrux, the SPI master is built from two shift registers — one for MOSI (transmit), one for MISO (receive). The receive shift register is where the bring-up bug lives.",
+      "tool_states": {
+        "netcrux": {
+          "module": "spi_master",
+          "instance_counts": { "shift_reg": 2 }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": [
+    {
+      "name": "failing_test_to_sclk_timing",
+      "source_tool": "simcrux",
+      "source_action": "open a failing loopback result and debug the transfer in the waveform",
+      "target_tool": "wavecrux",
+      "expected_target_state": "SCLK, MOSI and MISO are shown; reading the sampled bits against the SCLK edges reveals the receive path captures one SCLK too late — every byte comes back shifted by a bit"
+    },
+    {
+      "name": "waveform_to_rx_shift_register",
+      "source_tool": "wavecrux",
+      "source_action": "from the mis-sampled MISO, cross-probe to the receive datapath",
+      "target_tool": "netcrux",
+      "expected_target_state": "the receive shift register is shown, where the sample-enable timing that causes the one-bit shift can be traced and fixed"
+    }
+  ]
+}
