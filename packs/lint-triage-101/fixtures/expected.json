@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "pack_id": "lint-triage-101",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "unused_debug_signal",
+      "description": "The linter flags `debug_count` — a register that is declared but never driven or read. A classic dead-signal finding: harmless to simulation, but noise that hides real issues.",
+      "tool_states": {
+        "lintcrux": {
+          "violations_present": [
+            { "rule": "UNUSEDSIGNAL", "symbol": "debug_count", "severity": "warning" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "unused_almost_flag",
+      "description": "`almost` is computed but never used. Same rule as debug_count — students learn a single rule can fire on several signals.",
+      "tool_states": {
+        "lintcrux": {
+          "violations_present": [
+            { "rule": "UNUSEDSIGNAL", "symbol": "almost" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "width_mismatch",
+      "description": "A width mismatch: a 4-bit value compared against a 3-bit constant. This is the kind of finding that IS a latent bug, and the triage lesson is telling it apart from the cosmetic unused-signal warnings.",
+      "tool_states": {
+        "lintcrux": {
+          "rules_present": ["WIDTHEXPAND"]
+        }
+      }
+    },
+    {
+      "name": "at_least_two_unused",
+      "description": "The by-rule breakdown shows UNUSEDSIGNAL firing at least twice. Reading and counting the by-rule view is the core triage skill.",
+      "tool_states": {
+        "lintcrux": {
+          "min_rule_counts": { "UNUSEDSIGNAL": 2 }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

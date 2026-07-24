@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "engine": "verilator",
+  "violations": [
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "sync_fifo.v",
+      "line": 22,
+      "symbol": "debug_count",
+      "message": "Signal is not driven, nor used: 'debug_count'"
+    },
+    {
+      "rule": "UNUSEDSIGNAL",
+      "severity": "warning",
+      "file": "sync_fifo.v",
+      "line": 33,
+      "symbol": "almost",
+      "message": "Signal is not used: 'almost'"
+    },
+    {
+      "rule": "WIDTHEXPAND",
+      "severity": "warning",
+      "file": "sync_fifo.v",
+      "line": 33,
+      "symbol": null,
+      "message": "Operator GT expects 4 bits on the RHS, but RHS's CONST '3'h2' generates 3 bits."
+    }
+  ]
+}

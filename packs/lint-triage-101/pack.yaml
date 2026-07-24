@@ -1,0 +1,55 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: lint-triage-101
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: lintcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Run a lint engine over an RTL design and open the unified report in LintCrux."
+    - "Read the by-rule breakdown and count how often each rule fires."
+    - "Filter the violation table by rule and by severity."
+    - "Tell a cosmetic finding (an unused signal) from a latent bug (a width mismatch)."
+    - "Decide what to fix, what to waive, and what to leave — the triage judgement itself."
+prerequisites: []
+curriculum_topics:
+  - lint_triage
+  - static_analysis
+  - code_quality
+estimated_duration_minutes: 60
+difficulty: intro
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    lint:
+      lintcrux: fixtures/lint.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  Triage a real Verilator lint report in LintCrux: read the by-rule breakdown,
+  filter by rule and severity, and tell a cosmetic unused-signal warning from a
+  latent width-mismatch bug.

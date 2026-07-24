@@ -214,6 +214,59 @@ class Netlist:
         return {t for t in self.cell_types(module) if t in self._module_names}
 
 
+class LintReport:
+    """Normalised lint report — the unified view LintCrux presents after
+    aggregating an engine. Produced by a pack's build.sh from real engine output
+    (e.g. Verilator), so the contract is checked against findings the linter
+    actually emits, not a hand-written list."""
+
+    def __init__(self, path: pathlib.Path):
+        self.data = json.loads(path.read_text())
+        self.violations = self.data.get("violations", [])
+
+    def matches(self, rule=None, symbol=None, severity=None, file=None) -> list[dict]:
+        out = []
+        for v in self.violations:
+            if rule is not None and v.get("rule") != rule:
+                continue
+            if symbol is not None and v.get("symbol") != symbol:
+                continue
+            if severity is not None and v.get("severity") != severity:
+                continue
+            if file is not None and v.get("file") != file:
+                continue
+            out.append(v)
+        return out
+
+
+def verify_lintcrux_checkpoint(rep: LintReport, cp: dict, add) -> None:
+    name = cp.get("name", "<unnamed>")
+    st = (cp.get("tool_states") or {}).get("lintcrux") or {}
+
+    # Specific findings that must be present. Each is a partial match on
+    # rule/symbol/severity/file — a triage lab asserts "there is an UNUSEDSIGNAL
+    # on debug_count", not the entire report.
+    for want in st.get("violations_present") or []:
+        hits = rep.matches(rule=want.get("rule"), symbol=want.get("symbol"),
+                           severity=want.get("severity"), file=want.get("file"))
+        desc = " ".join(f"{k}={v}" for k, v in want.items())
+        add(f"checkpoint {name}: a violation with {desc}", bool(hits),
+            "" if hits else "no matching violation in the report")
+
+    # Per-rule floor. `min_rule_counts` rather than exact, because a newer engine
+    # version may legitimately add findings; a triage lab must not go red for
+    # that. Exact counts would make the pack fragile across linter versions.
+    for rule, want in (st.get("min_rule_counts") or {}).items():
+        got = len(rep.matches(rule=rule))
+        add(f"checkpoint {name}: at least {want}× {rule}", got >= want,
+            "" if got >= want else f"report has {got}")
+
+    for rule in st.get("rules_present") or []:
+        got = len(rep.matches(rule=rule))
+        add(f"checkpoint {name}: {rule} is reported", got > 0,
+            "" if got > 0 else "rule not present")
+
+
 def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:
     name = cp.get("name", "<unnamed>")
     st = (cp.get("tool_states") or {}).get("netcrux") or {}
@@ -305,6 +358,7 @@ def verify_pack(pack: pathlib.Path) -> Result:
     fixture_by_tool = {
         "wavecrux": ("fixtures/reference.vcd",),
         "netcrux": ("fixtures/netlist.json",),
+        "lintcrux": ("fixtures/lint.json",),
     }
     for rel in common + fixture_by_tool.get(primary_tool, ()):
         r.add(f"{rel} present", (pack / rel).exists())
@@ -373,6 +427,23 @@ def verify_pack(pack: pathlib.Path) -> Result:
         r.add("netlist.json is a valid Yosys netlist", True)
         for cp in checkpoints:
             verify_netcrux_checkpoint(nl, cp, r.add)
+        return r
+
+    # LintCrux: checkpoints assert findings against the normalised lint report.
+    if primary_tool == "lintcrux":
+        lint_path = pack / "fixtures" / "lint.json"
+        if not lint_path.exists():
+            r.add("fixtures/lint.json present", False, "missing")
+            return r
+        try:
+            rep = LintReport(lint_path)
+        except json.JSONDecodeError as e:
+            r.add("lint.json is valid JSON", False, str(e))
+            return r
+        r.add("lint.json is valid JSON", True)
+        r.add("lint.json has a violations list", isinstance(rep.violations, list))
+        for cp in checkpoints:
+            verify_lintcrux_checkpoint(rep, cp, r.add)
         return r
 
     # WaveCrux: checkpoints assert signal values against the waveform.
