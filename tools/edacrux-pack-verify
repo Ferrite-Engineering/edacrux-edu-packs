@@ -1,0 +1,358 @@
+#!/usr/bin/env python3
+"""edacrux-pack-verify — check that an EDU pack is internally consistent.
+
+WHAT IT VERIFIES
+
+Every pack ships a machine-readable contract in `fixtures/expected.json`: named
+checkpoints saying "at time T, signal S holds value V". Every pack also ships
+`fixtures/reference.vcd`, produced by an open-source simulator from the pack's
+own RTL. Those two must agree — and until now nothing checked that they did.
+
+This replays the VCD and evaluates every checkpoint against it. That catches the
+failure mode that actually matters for a professor: a handout that says "at
+2575 ns the counter reads 0xFF" while the waveform the student opens says
+something else. It needs no GUI, no WaveCrux install, and no network, so it runs
+on every push.
+
+WHAT IT DOES NOT VERIFY
+
+It does not prove a pack works against a specific WaveCrux *release* — that
+needs the app driven over WCP, replaying each checkpoint through the tool. That
+layer is not built. Until it is, `verified_against` in pack.yaml stays empty and
+nothing here should be described as release-verified. The distinction is the
+whole reason the marketing copy was corrected: this checks the pack against
+itself, which is necessary but not the same claim.
+
+USAGE
+    tools/edacrux-pack-verify                 # every pack
+    tools/edacrux-pack-verify --pack uart-lab # one pack
+    tools/edacrux-pack-verify --output junit  # JUnit XML on stdout
+    tools/edacrux-pack-verify --quiet         # only failures
+
+EXIT CODES
+    0  all checks passed
+    1  one or more checks failed
+    2  usage / structural error (a pack could not be read at all)
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+PACKS = ROOT / "packs"
+
+VALID_FORMATS = {
+    "binary", "hexadecimal", "octal", "unsignedDecimal", "signedDecimal",
+    "ascii", "ieee754Single", "ieee754Double", "fixedPointQ",
+    "signedMagnitude", "grayCode", "namedEnum",
+}
+SESSION_SCHEMA_VERSION = 3
+
+_TIMESCALE = re.compile(r"\$timescale\s+([\d.]+)\s*([munpf]?s)\s*\$end", re.S)
+_UNIT_SECONDS = {"s": 1e0, "ms": 1e-3, "us": 1e-6, "ns": 1e-9, "ps": 1e-12, "fs": 1e-15}
+# 8'h00 / 1'b0 / 2'd1 / 8'b1010_1010 — width, base, digits
+_VERILOG_LIT = re.compile(r"^\s*(\d+)'([bBhHdDoO])([0-9a-fA-FxXzZ_]+)\s*$")
+
+
+class Vcd:
+    """Minimal VCD reader: header map plus value-at-time lookup."""
+
+    def __init__(self, path: pathlib.Path):
+        self.path = path
+        self.id_to_paths: dict[str, list[str]] = {}
+        self.path_to_id: dict[str, str] = {}
+        self.tick_ns = 1.0
+        # signal id -> list of (tick, value string)
+        self._changes: dict[str, list[tuple[int, str]]] = {}
+        self._parse()
+
+    def _parse(self) -> None:
+        text = self.path.read_text(errors="replace")
+
+        m = _TIMESCALE.search(text)
+        if m:
+            mag, unit = float(m.group(1)), m.group(2)
+            self.tick_ns = mag * _UNIT_SECONDS[unit] / 1e-9
+
+        scope: list[str] = []
+        in_header = True
+        tick = 0
+        for raw in text.splitlines():
+            line = raw.strip()
+            if not line:
+                continue
+            if in_header:
+                if line.startswith("$scope"):
+                    p = line.split()
+                    if len(p) >= 3:
+                        scope.append(p[2])
+                    continue
+                if line.startswith("$upscope"):
+                    if scope:
+                        scope.pop()
+                    continue
+                if line.startswith("$var"):
+                    # $var wire 8 # count [7:0] $end
+                    p = line.split()
+                    if len(p) >= 5:
+                        sid, name = p[3], p[4]
+                        # Escaped identifier: VCD writes array words as
+                        # `\regs[1]`. The backslash is a delimiter, not part of
+                        # the name — keeping it makes every array-word path miss.
+                        if name.startswith("\\"):
+                            name = name[1:]
+                        full = ".".join(scope + [name])
+                        self.id_to_paths.setdefault(sid, []).append(full)
+                        self.path_to_id[full] = sid
+                    continue
+                if line.startswith("$enddefinitions"):
+                    in_header = False
+                    continue
+                continue
+
+            if line.startswith("#"):
+                try:
+                    tick = int(line[1:])
+                except ValueError:
+                    pass
+                continue
+            if line[0] in "01xXzZ" and len(line) > 1:
+                # scalar: value then id, no space
+                self._changes.setdefault(line[1:], []).append((tick, line[0]))
+            elif line[0] in "bB":
+                parts = line.split()
+                if len(parts) >= 2:
+                    self._changes.setdefault(parts[1], []).append((tick, parts[0][1:]))
+            elif line[0] in "rR":
+                parts = line.split()
+                if len(parts) >= 2:
+                    self._changes.setdefault(parts[1], []).append((tick, parts[0][1:]))
+
+    def value_at(self, path: str, time_ns: float) -> str | None:
+        """Value of `path` at `time_ns` — the last change at or before it."""
+        sid = self.path_to_id.get(path)
+        if sid is None:
+            return None
+        tick = time_ns / self.tick_ns
+        last = None
+        for t, v in self._changes.get(sid, []):
+            if t <= tick + 1e-9:
+                last = v
+            else:
+                break
+        return last
+
+
+def parse_expected(lit: str) -> tuple[int | None, int | None, bool]:
+    """(width, value, is_unknown) from a Verilog literal like 8'hFF.
+
+    is_unknown is True when the literal contains x/z, which must match a VCD
+    value that is also unknown rather than comparing numerically.
+    """
+    m = _VERILOG_LIT.match(lit)
+    if not m:
+        return None, None, False
+    width = int(m.group(1))
+    base = m.group(2).lower()
+    digits = m.group(3).replace("_", "")
+    if re.search(r"[xXzZ]", digits):
+        return width, None, True
+    radix = {"b": 2, "h": 16, "d": 10, "o": 8}[base]
+    try:
+        return width, int(digits, radix), False
+    except ValueError:
+        return width, None, False
+
+
+def vcd_to_int(v: str) -> tuple[int | None, bool]:
+    """(value, is_unknown) for a VCD scalar/vector payload."""
+    if re.search(r"[xXzZ]", v):
+        return None, True
+    try:
+        return int(v, 2), False
+    except ValueError:
+        return None, False
+
+
+class Result:
+    def __init__(self, pack: str):
+        self.pack = pack
+        self.checks: list[tuple[str, bool, str]] = []
+
+    def add(self, name: str, ok: bool, detail: str = "") -> None:
+        self.checks.append((name, ok, detail))
+
+    @property
+    def failures(self):
+        return [c for c in self.checks if not c[1]]
+
+    @property
+    def ok(self) -> bool:
+        return not self.failures
+
+
+def verify_pack(pack: pathlib.Path) -> Result:
+    r = Result(pack.name)
+
+    # ── structure ────────────────────────────────────────────────────────────
+    manifest_path = pack / "pack.yaml"
+    if not manifest_path.exists():
+        r.add("pack.yaml exists", False, "missing")
+        return r
+    r.add("pack.yaml exists", True)
+
+    manifest = manifest_path.read_text()
+    pack_id = None
+    m = re.search(r"^pack_id:\s*(\S+)", manifest, re.M)
+    if m:
+        pack_id = m.group(1).strip().strip("\"'")
+    r.add("pack.yaml declares pack_id", pack_id is not None)
+    if pack_id is not None:
+        r.add("pack_id matches directory name", pack_id == pack.name,
+              f"pack_id={pack_id!r} dir={pack.name!r}")
+    r.add("pack.yaml declares schema_version: 1",
+          re.search(r"^schema_version:\s*1\b", manifest, re.M) is not None)
+
+    for rel in ("student/handout.md", "instructor/notes.md", "README.md",
+                "fixtures/expected.json", "fixtures/reference.vcd"):
+        r.add(f"{rel} present", (pack / rel).exists())
+
+    # ── session ──────────────────────────────────────────────────────────────
+    sess_path = pack / "fixtures" / "reference.wavecrux"
+    vcd_path = pack / "fixtures" / "reference.vcd"
+    vcd = Vcd(vcd_path) if vcd_path.exists() else None
+
+    if sess_path.exists():
+        try:
+            sess = json.loads(sess_path.read_text())
+        except json.JSONDecodeError as e:
+            r.add("reference.wavecrux is valid JSON", False, str(e))
+            sess = None
+        else:
+            r.add("reference.wavecrux is valid JSON", True)
+            r.add("session is not a _TODO placeholder", "_TODO" not in sess)
+            r.add(f"session schema version is {SESSION_SCHEMA_VERSION}",
+                  sess.get("version") == SESSION_SCHEMA_VERSION,
+                  f"got {sess.get('version')!r}")
+            rows = sess.get("signals") or []
+            r.add("session has at least one signal row", len(rows) > 0)
+            bad_fmt = [s.get("format") for s in rows
+                       if s.get("format") and s["format"] not in VALID_FORMATS]
+            r.add("every session row uses a real DisplayFormat", not bad_fmt,
+                  f"invalid: {sorted(set(bad_fmt))}" if bad_fmt else "")
+            if vcd is not None:
+                missing = [s.get("path") for s in rows
+                           if s.get("path") and s["path"] not in vcd.path_to_id]
+                # A row whose path is absent is dropped silently on load, so
+                # this is the difference between a working session and an
+                # empty-looking one.
+                r.add("every session signal path exists in the VCD", not missing,
+                      f"absent: {missing}" if missing else "")
+    else:
+        r.add("reference.wavecrux present", False, "missing")
+
+    # ── the contract: checkpoints vs the waveform ────────────────────────────
+    exp_path = pack / "fixtures" / "expected.json"
+    if exp_path.exists() and vcd is not None:
+        try:
+            exp = json.loads(exp_path.read_text())
+        except json.JSONDecodeError as e:
+            r.add("expected.json is valid JSON", False, str(e))
+            return r
+        r.add("expected.json is valid JSON", True)
+        if pack_id:
+            r.add("expected.json pack_id matches", exp.get("pack_id") == pack_id,
+                  f"got {exp.get('pack_id')!r}")
+
+        checkpoints = exp.get("checkpoints") or []
+        r.add("expected.json declares checkpoints", len(checkpoints) > 0)
+
+        for cp in checkpoints:
+            name = cp.get("name", "<unnamed>")
+            t = cp.get("time_ns")
+            if t is None:
+                r.add(f"checkpoint {name}: has time_ns", False)
+                continue
+            sv = ((cp.get("tool_states") or {}).get("wavecrux") or {}).get("signal_values") or {}
+            for path, lit in sv.items():
+                label = f"checkpoint {name} @ {t}ns: {path} == {lit}"
+                actual_raw = vcd.value_at(path, float(t))
+                if actual_raw is None:
+                    r.add(label, False, "signal absent from VCD or no value at that time")
+                    continue
+                width, want, want_unknown = parse_expected(str(lit))
+                if width is None:
+                    r.add(label, False, f"cannot parse expected literal {lit!r}")
+                    continue
+                got, got_unknown = vcd_to_int(actual_raw)
+                if want_unknown or got_unknown:
+                    r.add(label, want_unknown and got_unknown,
+                          f"waveform has {actual_raw!r}")
+                    continue
+                r.add(label, got == want,
+                      "" if got == want else
+                      f"waveform has {actual_raw!r} (={got}), contract wants {want}")
+    return r
+
+
+def to_junit(results: list[Result]) -> str:
+    suites = ET.Element("testsuites")
+    for r in results:
+        s = ET.SubElement(suites, "testsuite", name=r.pack,
+                          tests=str(len(r.checks)), failures=str(len(r.failures)))
+        for name, ok, detail in r.checks:
+            c = ET.SubElement(s, "testcase", classname=r.pack, name=name)
+            if not ok:
+                f = ET.SubElement(c, "failure", message=detail or "failed")
+                f.text = detail
+    return ET.tostring(suites, encoding="unicode")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(prog="edacrux-pack-verify", add_help=True)
+    ap.add_argument("--pack", help="verify one pack by id")
+    ap.add_argument("--output", choices=["text", "junit"], default="text")
+    ap.add_argument("--quiet", action="store_true", help="only show failures")
+    a = ap.parse_args()
+
+    if not PACKS.is_dir():
+        print(f"error: no packs/ directory at {PACKS}", file=sys.stderr)
+        return 2
+
+    targets = sorted(p for p in PACKS.iterdir() if p.is_dir())
+    if a.pack:
+        targets = [p for p in targets if p.name == a.pack]
+        if not targets:
+            print(f"error: no pack named {a.pack!r}", file=sys.stderr)
+            return 2
+
+    results = [verify_pack(p) for p in targets]
+
+    if a.output == "junit":
+        print(to_junit(results))
+    else:
+        for r in results:
+            total, failed = len(r.checks), len(r.failures)
+            if r.ok:
+                if not a.quiet:
+                    print(f"  PASS  {r.pack:28s} {total} checks")
+            else:
+                print(f"  FAIL  {r.pack:28s} {total - failed}/{total} passed")
+                for name, ok, detail in r.failures:
+                    print(f"          ✗ {name}")
+                    if detail:
+                        print(f"              {detail}")
+        n_ok = sum(1 for r in results if r.ok)
+        n_checks = sum(len(r.checks) for r in results)
+        print(f"\n  {n_ok}/{len(results)} packs passed, {n_checks} checks total")
+
+    return 0 if all(r.ok for r in results) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

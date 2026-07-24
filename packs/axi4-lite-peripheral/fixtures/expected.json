@@ -51,14 +51,26 @@
     },
     {
       "name": "third_write_slverr",
-      "description": "Third write targets unmapped address 0xFC. Slave returns SLVERR (BRESP=0b10).",
+      "description": "Third write targets unmapped address 0xFC. The slave drives SLVERR on the write-response channel: BVALID is high with BRESP=0b10 for one cycle (100-110 ns), sampled here mid-handshake.",
       "time_ns": 105,
       "tool_states": {
         "wavecrux": {
           "signal_values": {
             "tb_axil.awaddr": "32'h000000FC",
             "tb_axil.bvalid": "1'b1",
-            "tb_axil.bresp": "2'b10",
+            "tb_axil.bresp": "2'b10"
+          }
+        }
+      }
+    },
+    {
+      "name": "third_write_slverr_latched",
+      "description": "One cycle later the master has registered the response. BVALID has fallen, and last_bresp now holds SLVERR \u2014 the distinction between the live channel and the captured value.",
+      "time_ns": 115,
+      "tool_states": {
+        "wavecrux": {
+          "signal_values": {
+            "tb_axil.bvalid": "1'b0",
             "tb_axil.u_master.last_bresp": "2'b10"
           }
         }
@@ -113,11 +125,36 @@
       "decoder": "axi4lite",
       "binding_file": "decoders/axi4lite_binding.json",
       "expected_transactions": [
-        { "type": "WRITE", "addr": "0x00000000", "data": "0xA0A00000", "resp": "OKAY" },
-        { "type": "WRITE", "addr": "0x00000004", "data": "0xB1B11111", "resp": "OKAY" },
-        { "type": "WRITE", "addr": "0x000000FC", "data": "0xDEADC0DE", "resp": "SLVERR" },
-        { "type": "READ",  "addr": "0x00000000", "data": "0xA0A00000", "resp": "OKAY" },
-        { "type": "READ",  "addr": "0x00000080", "data": "0xDEADBEEF", "resp": "SLVERR" }
+        {
+          "type": "WRITE",
+          "addr": "0x00000000",
+          "data": "0xA0A00000",
+          "resp": "OKAY"
+        },
+        {
+          "type": "WRITE",
+          "addr": "0x00000004",
+          "data": "0xB1B11111",
+          "resp": "OKAY"
+        },
+        {
+          "type": "WRITE",
+          "addr": "0x000000FC",
+          "data": "0xDEADC0DE",
+          "resp": "SLVERR"
+        },
+        {
+          "type": "READ",
+          "addr": "0x00000000",
+          "data": "0xA0A00000",
+          "resp": "OKAY"
+        },
+        {
+          "type": "READ",
+          "addr": "0x00000080",
+          "data": "0xDEADBEEF",
+          "resp": "SLVERR"
+        }
       ]
     }
   ],

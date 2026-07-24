@@ -49,6 +49,10 @@ def vcd_paths(vcd: pathlib.Path) -> set[str]:
             parts = line.split()
             if len(parts) >= 5:
                 name = parts[4]
+                # Escaped identifier (`\regs[1]`): the backslash is a VCD
+                # delimiter, not part of the signal name.
+                if name.startswith("\\"):
+                    name = name[1:]
                 paths.add(".".join(stack + [name]))
         elif line.startswith("$enddefinitions"):
             break

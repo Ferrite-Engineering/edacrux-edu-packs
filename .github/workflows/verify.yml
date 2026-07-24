@@ -1,0 +1,89 @@
+name: Verify packs
+
+# Runs on every push and PR. The point is that a pack's handout, its contract
+# and its waveform cannot drift apart silently: the checkpoints in
+# fixtures/expected.json are replayed against the pack's own reference.vcd, so
+# a claim like "at 2575 ns the counter reads 0xFF" is checked rather than
+# trusted. No GUI and no WaveCrux install is needed for that, which is why it
+# can run on every commit.
+#
+# It does NOT establish that a pack works against a given WaveCrux release —
+# that needs the app driven over WCP. Until that layer exists, nothing here
+# should be reported as release-verified and `verified_against` stays empty.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Contract, structure and fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify every pack
+        run: ./tools/edacrux-pack-verify
+
+      - name: Emit JUnit for the run summary
+        if: always()
+        run: ./tools/edacrux-pack-verify --output junit > pack-verify.xml || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pack-verify-results
+          path: pack-verify.xml
+
+  rebuild:
+    name: Fixtures regenerate from source
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # The committed VCDs are the artifact students actually open, so they must
+      # be reproducible from the RTL beside them. Rebuilding with the same
+      # simulator and diffing catches a fixture that was hand-edited, or RTL
+      # that changed without its waveform being regenerated — which is exactly
+      # how a handout starts describing something the waveform no longer does.
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Rebuild every pack's fixtures
+        run: |
+          set -euo pipefail
+          for pack in packs/*/; do
+            [ -x "$pack/build.sh" ] || continue
+            echo "── $(basename "$pack")"
+            ( cd "$pack" && ./build.sh >/dev/null )
+          done
+
+      # A rebuilt VCD differs from the committed one only in ways that matter:
+      # iverilog writes a $date header, so compare everything after the header.
+      - name: Fixtures match what is committed
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in packs/*/fixtures/reference.vcd; do
+            if ! diff -q <(sed -n '/\$enddefinitions/,$p' "$f") \
+                         <(git show "HEAD:$f" | sed -n '/\$enddefinitions/,$p') >/dev/null; then
+              echo "::error file=$f::rebuilt fixture differs from the committed one"
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: Sessions still match their specs
+        run: python3 tools/generate-sessions.py --check

@@ -21,12 +21,24 @@ module tb_rv32_cpu;
         .instr(instr)
     );
 
+    integer dump_i;
+
     initial clk = 1'b1;
     always #5 clk = ~clk;
 
     initial begin
         $dumpfile("fixtures/reference.vcd");
         $dumpvars(0, tb_rv32_cpu);
+        // Array elements are NOT covered by $dumpvars(0, ...) — the VCD format
+        // has no array type, so Icarus only emits a memory word when it is
+        // named explicitly. The lab's checkpoints inspect architectural
+        // register and data-memory state, so every word the handout refers to
+        // has to be listed here or it simply will not be in the waveform the
+        // student opens.
+        for (dump_i = 1; dump_i <= 11; dump_i = dump_i + 1)
+            $dumpvars(0, dut.u_regfile.regs[dump_i]);
+        $dumpvars(0, dut.dmem[0]);
+        $dumpvars(0, dut.dmem[1]);
 
         rst = 1'b1;
         #22;
