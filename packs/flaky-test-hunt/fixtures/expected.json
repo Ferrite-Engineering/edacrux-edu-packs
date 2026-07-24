@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "pack_id": "flaky-test-hunt",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "suite_has_three_tests",
+      "description": "Three tests run across eight seeds. Two are directed; one draws random operands.",
+      "tool_states": { "simcrux": { "total_tests": 3 } }
+    },
+    {
+      "name": "directed_tests_are_stable",
+      "description": "The two directed tests pass on every seed — deterministic, not flaky. This is the contrast the lab needs.",
+      "tool_states": {
+        "simcrux": {
+          "tests": [
+            { "name": "add_small",        "outcome": "pass", "min_pass_seeds": 8 },
+            { "name": "pos_overflow_sat", "outcome": "pass", "min_pass_seeds": 8 }
+          ]
+        }
+      }
+    },
+    {
+      "name": "random_stress_is_flaky",
+      "description": "The random test passes on some seeds and fails on others — the definition of flaky. It is not a bad test: it is a real bug (negative-overflow saturation) surfacing only on inputs some seeds happen to generate.",
+      "tool_states": {
+        "simcrux": {
+          "tests": [
+            { "name": "random_stress", "outcome": "flaky", "min_pass_seeds": 1, "min_fail_seeds": 1 }
+          ],
+          "outcome_counts": { "flaky": 1 }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

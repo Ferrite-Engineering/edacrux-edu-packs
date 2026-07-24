@@ -300,15 +300,28 @@ def verify_simcrux_checkpoint(res: TestResults, cp: dict, add) -> None:
         add(f"checkpoint {name}: {want} test(s) {outcome}", got == want,
             "" if got == want else f"results have {got}")
 
-    # Named tests with an expected outcome — "the add_carry test passes".
+    # Named tests with an expected outcome — "the add_carry test passes",
+    # "random_stress is flaky". Optional seed floors keep a flaky classification
+    # honest without pinning the exact (RNG-stable but noisy) seed split.
     for want in st.get("tests") or []:
         tn, outcome = want.get("name"), want.get("outcome")
         t = res.by_name(tn)
         if t is None:
             add(f"checkpoint {name}: test {tn} is in the suite", False, "not found")
             continue
-        add(f"checkpoint {name}: test {tn} is {outcome}", t.get("outcome") == outcome,
-            "" if t.get("outcome") == outcome else f"it is {t.get('outcome')}")
+        if outcome is not None:
+            add(f"checkpoint {name}: test {tn} is {outcome}", t.get("outcome") == outcome,
+                "" if t.get("outcome") == outcome else f"it is {t.get('outcome')}")
+        mp = want.get("min_pass_seeds")
+        if mp is not None:
+            got = len(t.get("pass_seeds") or [])
+            add(f"checkpoint {name}: {tn} passes on ≥{mp} seed(s)", got >= mp,
+                "" if got >= mp else f"passes on {got}")
+        mf = want.get("min_fail_seeds")
+        if mf is not None:
+            got = len(t.get("fail_seeds") or [])
+            add(f"checkpoint {name}: {tn} fails on ≥{mf} seed(s)", got >= mf,
+                "" if got >= mf else f"fails on {got}")
 
 
 def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:

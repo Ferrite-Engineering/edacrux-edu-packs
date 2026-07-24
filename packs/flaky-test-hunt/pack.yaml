@@ -1,0 +1,56 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: flaky-test-hunt
+pack_version: 1.0.0
+pack_category: foundational
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: simcrux
+    min_version: "0.1.0"
+    max_version: "1.0.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Run one test suite across many seeds and read the per-seed outcome grid."
+    - "Classify a test as stable, failing, or flaky from its seed results."
+    - "Distinguish a flaky test caused by a real design bug from one caused by a bad testbench."
+    - "Reproduce a flaky failure by pinning the seed that triggered it."
+    - "Decide whether to fix, quarantine, or waive a flaky test — and why quarantine is not a fix."
+prerequisites:
+  - regression-hello-world
+curriculum_topics:
+  - flaky_tests
+  - seed_management
+  - verification_methodology
+estimated_duration_minutes: 60
+difficulty: intermediate
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    results:
+      simcrux: fixtures/results.json
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  Hunt a flaky test across seeds in SimCrux: a random regression that passes on
+  some seeds and fails on others because of a real negative-overflow bug — learn
+  to classify, reproduce, and decide what to do about it.
