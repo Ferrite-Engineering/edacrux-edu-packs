@@ -1,0 +1,87 @@
+name: Release packs
+
+# Cuts a release from a tag and uploads every pack archive.
+#
+# Why this exists: until 2026-08-17 releases were cut by hand. `dist/` is
+# gitignored, so the archives existed only on whichever machine last ran
+# `tools/build-zips.sh`, and the published release happened to be complete only
+# because every pack landed on one day and the assets were uploaded that
+# evening. The failure mode that leaves behind is silent and lands on a
+# student: a pack merges, its page goes live on edacrux.app/edu/packs/, and its
+# download 404s until someone remembers to re-cut.
+#
+# The companion guard is the `assets` job in verify.yml, which fails this repo
+# when a pack directory has no matching asset in the latest release — so the
+# gap surfaces here rather than on the website.
+on:
+  push:
+    tags:
+      - '[0-9][0-9][0-9][0-9].[0-9][0-9]'   # calendar versioning, e.g. 2026.07
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to (re-)publish assets for'
+        required: true
+        type: string
+
+permissions:
+  contents: write   # required to create a release and upload assets
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false   # never cancel a half-finished asset upload
+
+jobs:
+  release:
+    name: Build and publish pack archives
+    runs-on: ubuntu-latest
+    # Cost guardrail: no job may run unbounded.
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Publishing a pack that fails its own contract would ship a handout
+      # whose stated signal values do not match its waveform.
+      - name: Verify every pack before publishing
+        run: ./tools/edacrux-pack-verify
+
+      - name: Build archives
+        run: ./tools/build-zips.sh
+
+      - name: Confirm every pack produced an archive
+        run: |
+          missing=0
+          for pack in packs/*/; do
+            name="$(basename "$pack")"
+            [ -f "$pack/pack.yaml" ] || continue
+            for suffix in "" "-student"; do
+              if [ ! -f "dist/${name}${suffix}.zip" ]; then
+                echo "::error::no archive built for ${name}${suffix}"
+                missing=1
+              fi
+            done
+          done
+          [ -f dist/edacrux-edu-packs-all.zip ] || {
+            echo "::error::the combined archive was not built"; missing=1; }
+          [ -f dist/SHA256SUMS ] || {
+            echo "::error::SHA256SUMS was not written"; missing=1; }
+          exit "$missing"
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* \
+              --title "EDU Learning Packs — $TAG" \
+              --generate-notes
+          fi

@@ -45,6 +45,51 @@ jobs:
           name: pack-verify-results
           path: pack-verify.xml
 
+  assets:
+    name: Every pack has a published archive
+    runs-on: ubuntu-latest
+    # Cost guardrail: no job may run unbounded.
+    timeout-minutes: 15
+    # Only meaningful once a release exists to compare against, and a PR that
+    # adds a pack is *expected* to fail this until the next tag is cut — so it
+    # gates `main`, where the answer is actionable, not every PR.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      # A pack whose page is live on edacrux.app but whose download 404s is a
+      # failure a student hits, not one we hit. This makes it surface here
+      # instead. It reports every missing archive rather than stopping at the
+      # first, so one re-cut fixes the whole set.
+      - name: Compare packs/ against the latest release's assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view --json tagName >/dev/null 2>&1; then
+            echo "::notice::no release published yet — nothing to compare"
+            exit 0
+          fi
+          tag="$(gh release view --json tagName -q .tagName)"
+          gh release view "$tag" --json assets -q '.assets[].name' | sort > /tmp/published
+          missing=0
+          for pack in packs/*/; do
+            name="$(basename "$pack")"
+            [ -f "$pack/pack.yaml" ] || continue
+            for suffix in "" "-student"; do
+              grep -qx "${name}${suffix}.zip" /tmp/published || {
+                echo "::error::${name}${suffix}.zip is not in release $tag"
+                missing=1
+              }
+            done
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::re-cut the release: push a new calendar tag, or run the Release workflow against $tag"
+            exit 1
+          fi
+          echo "all packs have published archives in $tag"
+
   rebuild:
     name: Fixtures regenerate from source
     runs-on: ubuntu-latest
