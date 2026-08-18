@@ -1,6 +1,6 @@
 # verification-methodology-capstone
 
-A **Tier-C capstone** using all four EDA Crux tools. Unlike the labs, this is a
+A **Tier-C capstone** using all four EDACrux tools. Unlike the labs, this is a
 multi-week **project**: you are given a small integrated design — a register-mapped
 ALU peripheral — and a starting point in each tool, and you take it through a
 complete verification-methodology pass, ending in a written report.
