@@ -59,6 +59,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Trace a tiny RISC-V single-cycle CPU executing a known program. Use the RISC-V instruction decoder and register file viewer."

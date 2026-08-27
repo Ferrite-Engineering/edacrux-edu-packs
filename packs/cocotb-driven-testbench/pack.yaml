@@ -51,6 +51,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Modern Python-driven verification with cocotb. Correlate cocotb log messages with waveform events using WaveCrux's cocotb log correlation."

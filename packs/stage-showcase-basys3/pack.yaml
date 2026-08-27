@@ -52,6 +52,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "See your design come alive. Bind a Basys 3 design to WaveCrux's Stage panel and watch LEDs and 7-segments animate as you scrub the cursor."

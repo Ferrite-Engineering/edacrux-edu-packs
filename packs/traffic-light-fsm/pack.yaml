@@ -51,6 +51,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Visualize a 3-state traffic-light FSM. Apply translate filters and use the FSM Visualizer to see state transitions."

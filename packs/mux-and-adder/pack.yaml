@@ -50,6 +50,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Combinational hierarchy walkthrough. Learn the signal-tree browser, signal search, and hierarchical navigation in WaveCrux."

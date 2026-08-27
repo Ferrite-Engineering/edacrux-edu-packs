@@ -53,6 +53,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "AXI4-Lite peripheral debug -- including protocol violation detection on an unmapped address access."

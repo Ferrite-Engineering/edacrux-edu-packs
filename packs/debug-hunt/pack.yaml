@@ -53,6 +53,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Find an intentional bug using WaveCrux's waveform diff and X-trace features. Real debugging in a known-answer scenario."

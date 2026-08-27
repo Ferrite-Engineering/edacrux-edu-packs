@@ -49,6 +49,6 @@ locales:
   - en
 maintainers:
   - name: "EDACrux Core Team"
-    email: "edu@edacrux.com"
+    email: "info@ferriteengineering.com"
 short_description:
   en: "Two shift registers side by side — deterministic and pseudo-random. Learn transition counting and frequency estimation."
