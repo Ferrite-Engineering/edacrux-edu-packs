@@ -1,0 +1,53 @@
+# Line endings: LF in the repository, LF in every working tree.
+#
+# Git on Windows defaults to core.autocrlf=true, which hands the working tree
+# CRLF. Any test that asserts on a `\n`-anchored line of a file it read from
+# disk then fails on Windows and nowhere else. That class of failure reached
+# CI repeatedly and was only visible in the weekly cross-platform sweep, up to
+# a week after the commit that caused it.
+#
+# The index already stores LF, so this governs checkout only: no
+# re-normalisation, no diff churn.
+* text=auto eol=lf
+
+# Batch files are the one text format that requires CRLF to be correct.
+*.bat text eol=crlf
+
+# Byte-exact, never normalised. Git's content heuristic gets most of these
+# right on its own, but not all of them — a PDF whose streams are uncompressed
+# carries no early NUL and is detected as text — so the intent is stated here
+# rather than left to the heuristic.
+*.a     -text
+*.bin   -text
+*.dll   -text
+*.dmg   -text
+*.docx  -text
+*.dylib -text
+*.exe   -text
+*.fst   -text
+*.ghw   -text
+*.gif   -text
+*.gz    -text
+*.icns  -text
+*.ico   -text
+*.jar   -text
+*.jpeg  -text
+*.jpg   -text
+*.lxt   -text
+*.lxt2  -text
+*.mov   -text
+*.mp4   -text
+*.otf   -text
+*.pdf   -text
+*.png   -text
+*.pyc   -text
+*.riv   -text
+*.so    -text
+*.ttf   -text
+*.vvp   -text
+*.wasm  -text
+*.webm  -text
+*.webp  -text
+*.woff  -text
+*.woff2 -text
+*.zip   -text
