@@ -79,10 +79,37 @@ jobs:
           chmod +x gitleaks
           ./gitleaks version
 
+      # `--log-level error` is deliberately ABSENT. gitleaks logs its findings
+      # at WARN, so suppressing WARN makes a failing job print no finding at
+      # all — just `Process completed with exit code 1`. That shipped here
+      # once and cost two agents a local re-run each to discover what had
+      # tripped, and briefly produced two "clean" reports for repositories
+      # that were actually failing. A gate that fails without saying why is
+      # the exact defect this campaign exists to remove.
+      #
+      # `--redact` still means the secret's VALUE is never printed; the file,
+      # line, rule and fingerprint are, which is what a human needs.
       - name: Scan every commit in the history
-        run: $RUNNER_TEMP/gitleaks git . --redact --no-banner --log-level error
+        run: '"$RUNNER_TEMP/gitleaks" git . --redact --no-banner --report-format json --report-path "$RUNNER_TEMP/gitleaks-history.json"'
 
       - name: Scan the working tree, tracked or not
         # `--follow-symlinks` is deliberately off: a symlink out of the
         # checkout is not this repository's content.
-        run: $RUNNER_TEMP/gitleaks dir . --redact --no-banner --log-level error
+        #
+        # One path argument only. `gitleaks dir a b c` silently ignores the
+        # paths and scans `.` — measured, after it produced 71 phantom
+        # findings out of a stale browser profile under `.dart_tool`.
+        run: '"$RUNNER_TEMP/gitleaks" dir . --redact --no-banner --report-format json --report-path "$RUNNER_TEMP/gitleaks-worktree.json"'
+
+      # Belt and braces: the log carries the findings, and the report survives
+      # as an artifact even when the log is long or truncated.
+      - name: Keep the reports when something tripped
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: gitleaks-reports
+          path: |
+            ${{ runner.temp }}/gitleaks-history.json
+            ${{ runner.temp }}/gitleaks-worktree.json
+          if-no-files-found: ignore
+          retention-days: 14
