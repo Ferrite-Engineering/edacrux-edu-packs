@@ -1,0 +1,88 @@
+name: gitleaks
+
+# Secret scanning that does not depend on a GitHub plan or a paid wrapper.
+#
+# WHY NOT `gitleaks/gitleaks-action`
+# From v2 that Action refuses to run against any repository owned by an
+# ORGANIZATION without a paid `GITLEAKS_LICENSE`, and this repository is
+# organization-owned. The gitleaks binary itself is MIT-licensed and free;
+# only the Action wrapper is not. So this job fetches a pinned release, checks
+# its SHA-256 against the value recorded below, and runs the binary directly.
+#
+# WHY TWO SCANS
+#   `gitleaks git` — every commit reachable from the checkout. This is the
+#     scan that matters before a repository goes public, and it is why the
+#     checkout is not shallow.
+#   `gitleaks dir` — the files on disk, whether git tracks them or not.
+#     Measured: a `.dev.vars` listed in `.gitignore` is still scanned by `dir`.
+#     That is the point — ignoring a credential file stops it being committed,
+#     it does not stop it existing, and this is the scan that says so.
+#
+# GitHub's own secret scanning and push protection are the other half, enabled
+# per repository in its settings. They catch a live provider token at push
+# time; this job catches shapes the partner patterns do not cover, and it
+# works while the repository is still private.
+#
+# A false positive is suppressed with a `gitleaks:allow` trailing comment on
+# the offending line, or with a `.gitleaksignore` entry keyed by fingerprint —
+# never by deleting this job. Repo-specific rules go in a `.gitleaks.toml` at
+# the repository root, which gitleaks picks up on its own.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Monday 06:00 UTC. A weekly run means a pattern added upstream finds an
+    # old commit without waiting for someone to touch the repository.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Pinned deliberately. `latest` here would mean a third party choosing what
+  # runs in CI, and a new gitleaks rule landing as a red build on a repository
+  # nobody changed. Bump this and the checksum together; the checksum comes
+  # from that release's own `gitleaks_<version>_checksums.txt`.
+  GITLEAKS_VERSION: '8.30.1'
+  GITLEAKS_SHA256: '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb'
+
+jobs:
+  gitleaks:
+    name: Secrets (history + working tree)
+    runs-on: ubuntu-latest
+    # Cost guardrail: every job carries a cap, no exceptions — a hung job has
+    # drained a month's Actions budget before. This one runs in well under a
+    # minute on every repository here.
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # `gitleaks git` scans what it can reach. A shallow checkout would
+          # scan one commit and report success, which is worse than not
+          # running at all.
+          fetch-depth: 0
+
+      - name: Install gitleaks (pinned, checksum-verified)
+        # Installed outside the checkout on purpose: the working-tree scan
+        # below would otherwise spend its time on a 21 MB binary this job
+        # just downloaded.
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          url="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -fsSL --retry 3 "$url" -o gitleaks.tar.gz
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          chmod +x gitleaks
+          ./gitleaks version
+
+      - name: Scan every commit in the history
+        run: $RUNNER_TEMP/gitleaks git . --redact --no-banner --log-level error
+
+      - name: Scan the working tree, tracked or not
+        # `--follow-symlinks` is deliberately off: a symlink out of the
+        # checkout is not this repository's content.
+        run: $RUNNER_TEMP/gitleaks dir . --redact --no-banner --log-level error

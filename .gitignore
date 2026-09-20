@@ -6,3 +6,14 @@ packs/*/build/
 .DS_Store
 ._*
 dist/
+
+# Local credentials, in every spelling the suite's tooling uses. Never
+# committed. `.dev.vars` is wrangler's local-secrets file; `.envrc` is
+# direnv's. The gitleaks job scans the working tree as well as the history
+# (`gitleaks dir` ignores .gitignore), so these lines stop a credential being
+# committed without hiding it from the scan.
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+.envrc

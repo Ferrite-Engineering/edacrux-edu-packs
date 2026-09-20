@@ -92,7 +92,7 @@ Engineering, licensed under CC-BY-4.0.*
 
 ## Where this lives
 
-This catalog staged in the closed-source `wavecrux-pro` repo through pre-beta
+This catalog was developed privately alongside WaveCrux through pre-beta
 development and now lives here, public, at
 **[`Ferrite-Engineering/edacrux-edu-packs`](https://github.com/Ferrite-Engineering/edacrux-edu-packs)**.
 The full commit history came across with it. The CC-BY-4.0 licence and the

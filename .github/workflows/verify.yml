@@ -32,6 +32,15 @@ jobs:
         with:
           python-version: '3.12'
 
+      # This repository is public and its readers — professors, TAs, students
+      # — have the open-core products, edacrux.app and nothing else. A handout
+      # or comment that cites an unpublished plan or names a closed repository
+      # is a dead end for all of them. Checked first, because it is the
+      # cheapest step and the one whose failure is embarrassing rather than
+      # merely wrong. The script carries its own rule self-tests.
+      - name: No references to anything a reader cannot open
+        run: ./tools/check-no-private-references.py
+
       - name: Verify every pack
         run: ./tools/edacrux-pack-verify
 
