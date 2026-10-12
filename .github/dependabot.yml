@@ -1,0 +1,29 @@
+# Keeps the SHA-pinned GitHub Actions in .github/workflows current. Dependabot
+# understands full-SHA pins and rewrites the trailing `# vX.Y.Z` comment.
+#
+# Merge policy: this repository works direct-to-main, so a bot PR is the one
+# place a change waits for review. Updates arrive as ONE grouped PR a week;
+# merge it by hand once CI is green on it. The bot only edits `uses:` lines,
+# so `timeout-minutes` and `permissions:` are untouched.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # Let a release settle before it is proposed.
+    cooldown:
+      default-days: 14
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: ci
+    ignore:
+      # Pinned to a commit on its `stable` branch, not to a release tag. The
+      # default branch's action requires a `toolchain` input, so moving the
+      # pin there would break every Rust build. Refresh it by hand.
+      - dependency-name: dtolnay/rust-toolchain
