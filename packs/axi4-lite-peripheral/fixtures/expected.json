@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "pack_id": "axi4-lite-peripheral",
-  "pack_version": "1.0.0",
+  "pack_version": "1.1.0",
   "checkpoints": [
     {
       "name": "pre_transaction_reset",
@@ -28,8 +28,10 @@
         "wavecrux": {
           "signal_values": {
             "tb_axil.awvalid": "1'b1",
+            "tb_axil.awready": "1'b1",
             "tb_axil.awaddr": "32'h00000000",
             "tb_axil.wvalid": "1'b1",
+            "tb_axil.wready": "1'b1",
             "tb_axil.wdata": "32'hA0A00000",
             "tb_axil.wstrb": "4'hF"
           }
@@ -38,12 +40,14 @@
     },
     {
       "name": "first_write_response_okay",
-      "description": "Slave returns OKAY (BRESP=0b00) for the first write.",
+      "description": "Slave returns OKAY (BRESP=0b00) for the first write. While BVALID is high the slave holds AWREADY and WREADY low, so no new write can be accepted before this response is taken.",
       "time_ns": 45,
       "tool_states": {
         "wavecrux": {
           "signal_values": {
             "tb_axil.bvalid": "1'b1",
+            "tb_axil.awready": "1'b0",
+            "tb_axil.wready": "1'b0",
             "tb_axil.bresp": "2'b00"
           }
         }

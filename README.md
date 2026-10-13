@@ -28,7 +28,7 @@ applicable.
 | [uart-lab](packs/uart-lab/) | protocol | intermediate | 75 min | UART transmitter with decoder + transaction table |
 | [spi-lab](packs/spi-lab/) | protocol | intermediate | 75 min | SPI master in mode 0, decoder, CPOL/CPHA reasoning |
 | [memory-controller](packs/memory-controller/) | protocol | intermediate | 90 min | Wishbone B4 master + slave with decoder + switching-activity heatmap |
-| [axi4-lite-peripheral](packs/axi4-lite-peripheral/) | protocol | advanced | 90 min | AXI4-Lite 5-channel decode + intentional protocol violation |
+| [axi4-lite-peripheral](packs/axi4-lite-peripheral/) | protocol | advanced | 90 min | AXI4-Lite 5-channel decode + SLVERR error responses |
 | [single-cycle-cpu](packs/single-cycle-cpu/) | soc | intermediate | 90 min | Tiny RV32I CPU trace with RISC-V instruction decoder |
 | [debug-hunt](packs/debug-hunt/) | debugging | intermediate | 90 min | Find an intentional bug using waveform diff |
 | [stage-showcase-basys3](packs/stage-showcase-basys3/) | foundational | intermediate | 75 min | Bind a Basys 3 design to the WaveCrux Stage board widget |

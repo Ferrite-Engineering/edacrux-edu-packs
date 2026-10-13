@@ -47,15 +47,21 @@ The master walks through five operations:
 > **A:** `awvalid = __`, `awready = __`, `wvalid = __`, `wready = __`,
 > `awaddr = 0x________`, `wdata = 0x________`.
 
-The address phase and data phase fire simultaneously here (slave's
-AWREADY and WREADY are both tied high). This is the *fastest*
-possible AXI4-Lite write — one clock cycle per channel.
+The address phase and data phase fire simultaneously here: the master
+presents both together and the slave's AWREADY and WREADY are both
+high. This is the *fastest* possible AXI4-Lite write, one clock cycle
+per channel. AXI does not require AW and W to arrive together, though;
+this slave registers whichever comes first and completes the write
+when it holds both.
 
 2. Move the cursor to **t = 45 ns**. Read `bvalid` and `bresp`.
 
 > **A:** `bvalid = __`, `bresp = 0b__`.
 
-The slave is acknowledging the write with `BRESP = OKAY`.
+The slave is acknowledging the write with `BRESP = OKAY`. Notice that
+`awready` and `wready` are now low: while a write response is waiting
+for the master, the slave refuses new writes. Lowering READY is how a
+slave applies backpressure.
 
 ## Part 2 — apply the AXI4-Lite decoder
 
@@ -75,8 +81,10 @@ The slave is acknowledging the write with `BRESP = OKAY`.
 
 ## Part 3 — locate the SLVERR
 
-The third write (to address 0xFC) is the protocol violation. Find it
-in the waveform:
+The third write (to address 0xFC) targets an unmapped address, so the
+slave reports an error. The handshake itself is legal: SLVERR is a
+normal response code that tells the master the slave could not complete
+the access. Find it in the waveform:
 
 1. Press **Home**. Focus the `bresp` row.
 2. Press **E** until `bresp` takes the value `2'b10` (the SLVERR
@@ -133,7 +141,7 @@ next begins.
 A screenshot showing:
 - The AXI4-Lite decoder applied with all five transactions in the
   table.
-- Markers `slverr_write` and `slverr_read` on the two violation
+- Markers `slverr_write` and `slverr_read` on the two SLVERR
   responses.
 - The `last_bresp` / `last_rresp` / `last_rdata` lanes visible.
 

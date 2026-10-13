@@ -6,15 +6,23 @@
    handshakes.
 2. Apply the AXI4-Lite decoder with a complete 19-signal binding.
 3. Read decoded WRITE / READ transactions including response codes.
-4. Identify protocol-violation (SLVERR) markers on the B and R
-   channels.
+4. Identify the SLVERR error responses on the B and R channels.
+   SLVERR is a legal response that reports a slave error, not a
+   protocol violation; the handshake around it is correct.
 
 ## Timing summary
 
 - 100 MHz `aclk`, posedges at multiples of 10 ns starting at t = 10.
 - Active-low `aresetn` released at t = 22; first valid posedge t = 30.
 - Per-channel handshake characteristics in this design:
-  - AWREADY and WREADY are tied high — slave accepts AW + W in 1 cycle.
+  - AW and W are independent. The slave registers whichever arrives
+    first and commits the write once it holds both. AWREADY / WREADY
+    are high while that channel is empty and no B response is pending,
+    and drop while BVALID is high (backpressure). This master presents
+    AW and W together, so each write still completes in 1 cycle.
+  - `tb/tb_axil_protocol.v` (run by `build.sh`) is a self-checking
+    bench for the orderings this trace does not show: AW before W,
+    W before AW, and back-to-back writes with BREADY held low.
   - BVALID asserts the cycle *after* a write commits and is held
     until BREADY pulses (the master holds BREADY high during
     `S_*_RESP`).
@@ -41,7 +49,8 @@ Per-transaction timing (machine-verified in
 `wready=1`, `awaddr=0x00000000`, `wdata=0xA0A00000`. The address and
 data channels fire simultaneously.
 
-**Part 1 (t = 45 ns).** `bvalid=1`, `bresp=2'b00` (OKAY).
+**Part 1 (t = 45 ns).** `bvalid=1`, `bresp=2'b00` (OKAY). `awready`
+and `wready` are 0 while the response is pending.
 
 **Part 2 transaction table.** Exactly as listed in
 `decoder_expectations` in [`../fixtures/expected.json`](../fixtures/expected.json):

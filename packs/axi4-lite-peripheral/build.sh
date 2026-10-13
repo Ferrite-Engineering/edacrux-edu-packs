@@ -5,6 +5,10 @@ cd "$PACK_DIR"
 mkdir -p fixtures build
 iverilog -g2012 -o build/sim.vvp tb/tb_axil.v src/axil_master.v src/axil_register_peripheral.v
 vvp build/sim.vvp
+# Handshake gate: AW/W in either order or together, and back-to-back writes
+# with BREADY held low. Self-checking; vvp exits non-zero on any failure.
+iverilog -g2012 -o build/protocol.vvp tb/tb_axil_protocol.v src/axil_register_peripheral.v
+vvp -n build/protocol.vvp
 [ -f fixtures/reference.vcd ] || { echo "reference.vcd missing"; exit 1; }
 if command -v vcd2fst >/dev/null 2>&1; then
     vcd2fst fixtures/reference.vcd fixtures/reference.fst >/dev/null

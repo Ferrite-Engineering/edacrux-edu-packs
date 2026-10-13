@@ -1,7 +1,7 @@
 schema_version: 1
 
 pack_id: axi4-lite-peripheral
-pack_version: 1.0.0
+pack_version: 1.1.0
 pack_category: protocol
 
 tier: A
@@ -55,4 +55,4 @@ maintainers:
   - name: "EDACrux Core Team"
     email: "info@ferriteengineering.com"
 short_description:
-  en: "AXI4-Lite peripheral debug -- including protocol violation detection on an unmapped address access."
+  en: "AXI4-Lite peripheral debug -- including the SLVERR error response to an unmapped address access."
