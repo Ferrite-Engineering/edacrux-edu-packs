@@ -1,7 +1,7 @@
 schema_version: 1
 
 pack_id: debug-hunt
-pack_version: 1.0.0
+pack_version: 1.0.1
 pack_category: debugging
 
 tier: B

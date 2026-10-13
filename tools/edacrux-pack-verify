@@ -11,7 +11,8 @@ own RTL. Those two must agree — and until now nothing checked that they did.
 This replays the VCD and evaluates every checkpoint against it. That catches the
 failure mode that actually matters for a professor: a handout that says "at
 2575 ns the counter reads 0xFF" while the waveform the student opens says
-something else. It needs no GUI, no WaveCrux install, and no network, so it runs
+something else. The same holds for source line numbers: a handout, note or
+solution that cites `src/x.v` line N is checked against line N of that file. It needs no GUI, no WaveCrux install, and no network, so it runs
 on every push.
 
 WHAT IT DOES NOT VERIFY
@@ -391,6 +392,71 @@ def verify_netcrux_checkpoint(nl: Netlist, cp: dict, add) -> None:
             "" if got == want else f"netlist has {got}")
 
 
+# `src/counter_buggy.v` line 21   or   [`../src/x.v`](../src/x.v) line 21
+_LINE_REF = re.compile(
+    r"`((?:\.\./)*[\w./-]+\.(?:v|sv|vh|svh|vhd|vhdl|py))`"
+    r"(?:\]\([^)]*\))?\s+line\s+(\d+)")
+_BUG_MARKER = re.compile(r"<--\s*BUG")
+# How far below a reference a quoted code block may start and still be taken
+# as a quotation of the referenced line.
+_QUOTE_WINDOW = 6
+
+
+def _norm(code: str) -> str:
+    return " ".join(code.split())
+
+
+def verify_source_line_refs(pack: pathlib.Path, add) -> None:
+    """A handout or solution that says "the bug is on line 21" must point at
+    the line that holds it. Nothing tied those numbers to the source, so an
+    edit above the bug (or a miscount) left the answer key wrong. For every
+    `file` line N reference in the pack's Markdown:
+
+    - the file exists and has a non-blank line N;
+    - if the file marks lines with `<-- BUG`, line N is one of them;
+    - if a fenced code block starts within a few lines below the reference,
+      its first line is what line N actually says.
+    """
+    for md in sorted(pack.rglob("*.md")):
+        lines = md.read_text().splitlines()
+        for i, text in enumerate(lines):
+            for m in _LINE_REF.finditer(text):
+                rel, n = m.group(1), int(m.group(2))
+                where = f"{md.relative_to(pack)}:{i + 1}"
+                label = f"{where} cites {rel.lstrip('./')} line {n}"
+                src = (md.parent / rel).resolve()
+                if not src.is_file():
+                    src = (pack / rel.lstrip("./")).resolve()
+                if not src.is_file():
+                    add(label, False, "file not found")
+                    continue
+                src_lines = src.read_text().splitlines()
+                if not 1 <= n <= len(src_lines) or not src_lines[n - 1].strip():
+                    add(label, False, f"line {n} is blank or past the end "
+                                      f"({len(src_lines)} lines)")
+                    continue
+                cited = src_lines[n - 1]
+                marked = [k + 1 for k, s in enumerate(src_lines) if _BUG_MARKER.search(s)]
+                if marked and n not in marked:
+                    add(label, False, f"the BUG marker is on line(s) {marked}; "
+                                      f"line {n} is {cited.strip()!r}")
+                    continue
+                quote = None
+                for j in range(i + 1, min(i + 1 + _QUOTE_WINDOW, len(lines))):
+                    if lines[j].lstrip().startswith("```"):
+                        body = [b for b in lines[j + 1:] if b.strip()]
+                        if body and not body[0].lstrip().startswith("```"):
+                            quote = body[0]
+                        break
+                if quote is not None:
+                    q = _norm(quote)
+                    ok = q in _norm(cited)
+                    add(label, ok, "" if ok else
+                        f"quoted {q!r} but line {n} is {cited.strip()!r}")
+                    continue
+                add(label, True)
+
+
 class Result:
     def __init__(self, pack: str):
         self.pack = pack
@@ -454,6 +520,9 @@ def verify_pack(pack: pathlib.Path) -> Result:
                               if t in fixture_by_tool)
     for rel in common + required_fixtures:
         r.add(f"{rel} present", (pack / rel).exists())
+
+    # ── answer keys that cite source line numbers ────────────────────────────
+    verify_source_line_refs(pack, r.add)
 
     # ── session (WaveCrux packs only) ────────────────────────────────────────
     sess_path = pack / "fixtures" / "reference.wavecrux"

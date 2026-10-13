@@ -1,6 +1,6 @@
 # debug-hunt — solution
 
-**Bug location:** [`../src/counter_buggy.v`](../src/counter_buggy.v) line 22.
+**Bug location:** [`../src/counter_buggy.v`](../src/counter_buggy.v) line 21.
 
 **The bug:**
 

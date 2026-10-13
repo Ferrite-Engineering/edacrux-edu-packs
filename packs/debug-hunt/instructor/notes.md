@@ -10,7 +10,7 @@
 
 ## The bug
 
-`src/counter_buggy.v` line 22:
+`src/counter_buggy.v` line 21:
 
 ```verilog
 else if (~enable)  count <= count + 8'd1;   // <-- BUG
