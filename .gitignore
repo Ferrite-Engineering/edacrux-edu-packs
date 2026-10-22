@@ -7,6 +7,9 @@ packs/*/build/
 ._*
 dist/
 
+# Python bytecode from running the verifier's unit tests.
+__pycache__/
+
 # Local credentials, in every spelling the suite's tooling uses. Never
 # committed. `.dev.vars` is wrangler's local-secrets file; `.envrc` is
 # direnv's. The gitleaks job scans the working tree as well as the history

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "pack_id": "fpga-timing-slow-path",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "violated_run_verdict",
+      "description": "At 1000 MHz the run completes and reports that its one clock falls short: a finding about the design, not a failed run. The achieved frequency is about 60.9 MHz.",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/violated-1000mhz",
+            "kind": "nextpnr",
+            "verdict": "violated",
+            "metrics": [
+              { "key": "fmax__achieved__mhz", "min": 60.0, "max": 62.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "met_run_verdict",
+      "description": "The same design at 12 MHz meets its clock: the achieved frequency is the same, only the constraint moved.",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/met-12mhz",
+            "kind": "nextpnr",
+            "verdict": "met",
+            "metrics": [
+              { "key": "fmax__achieved__mhz", "min": 60.0, "max": 62.0 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "worst_path_register_and_statement",
+      "description": "The worst path of the violated run starts at src_a (or src_b) and ends at sum_q, and sum_q is computed on line 16 of src/path_adder.v by the 24-bit add.",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/violated-1000mhz",
+            "mapped_register": {
+              "source": "src/path_adder.v",
+              "rank": 1,
+              "start_registers": ["src_a", "src_b"],
+              "end_register": "sum_q",
+              "statement_line": 16,
+              "declaration_lines": { "src_a": 10, "src_b": 11, "sum_q": 12 }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

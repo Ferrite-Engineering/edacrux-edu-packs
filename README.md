@@ -33,6 +33,7 @@ applicable.
 | [debug-hunt](packs/debug-hunt/) | debugging | intermediate | 90 min | Find an intentional bug using waveform diff |
 | [stage-showcase-basys3](packs/stage-showcase-basys3/) | foundational | intermediate | 75 min | Bind a Basys 3 design to the WaveCrux Stage board widget |
 | [cocotb-driven-testbench](packs/cocotb-driven-testbench/) | verification | advanced | 90 min | Cocotb log correlation with waveform events |
+| [fpga-timing-slow-path](packs/fpga-timing-slow-path/) | debugging | intermediate | 45 min | First SimCrux Flow lab (1.2 or later): read an open-FPGA-toolchain run's verdict, find the worst path, follow it to the RTL line |
 
 ## Directory shape
 

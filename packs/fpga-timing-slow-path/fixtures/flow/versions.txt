@@ -1,0 +1,4 @@
+yosys: Yosys 0.70+186 (git sha1 3718f7f13, Release, Clang /usr/local/osxcross/target/bin/aarch64-apple-darwin25.5-clang++ 21.1.8)
+nextpnr-ice40: "nextpnr-ice40" -- Next Generation Place and Route (Version nextpnr-0.11.1-77-g6b438a1c)
+nextpnr-ecp5: "nextpnr-ecp5" -- Next Generation Place and Route (Version nextpnr-0.11.1-77-g6b438a1c)
+nextpnr-himbaechel: "nextpnr-himbaechel" -- Next Generation Place and Route (Version nextpnr-0.11.1-77-g6b438a1c)

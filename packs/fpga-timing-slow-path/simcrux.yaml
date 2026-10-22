@@ -1,0 +1,28 @@
+version: "1"
+
+# The project SimCrux opens for this lab (File > Open Config...).
+#
+# The two runs under fixtures/flow/runs/path_adder/ were captured from real
+# nextpnr runs and are listed in `ingest:`, so the Flow Runs panel shows them as
+# soon as the project opens. They sit in a directory named for the entry
+# (runs/<entry>/<run>) because that is how SimCrux files a run under its design:
+# the entry name is what lets "Open statement in editor" find src/path_adder.v.
+#
+# The `path_adder` entry also exists because a project must declare at least one
+# suite or flow entry to load. If nextpnr is installed it lets you re-run the
+# design yourself (Tools > Run Flow Entry). A re-run writes under
+# runs/path_adder/ and never touches fixtures/.
+flow:
+  entries:
+    - name: path_adder
+      kind: nextpnr
+      family: ice40
+      device: up5k
+      package: sg48
+      top: path_adder
+      sources:
+        - src/path_adder.v
+      freq_mhz: 1000
+      detailed_timing: true
+  ingest:
+    - fixtures/flow/runs/path_adder

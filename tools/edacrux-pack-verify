@@ -15,6 +15,11 @@ something else. The same holds for source line numbers: a handout, note or
 solution that cites `src/x.v` line N is checked against line N of that file. It needs no GUI, no WaveCrux install, and no network, so it runs
 on every push.
 
+A SimCrux Flow pack ships flow run directories instead of a waveform. Its
+checkpoints state a verdict, step statuses, metrics, a worst path and a mapped
+register, and each is recomputed here from the run's own report, log, metrics,
+step directories and RTL, never from anything SimCrux shows.
+
 WHAT IT DOES NOT VERIFY
 
 It does not prove a pack works against a specific WaveCrux *release* — that
@@ -277,6 +282,13 @@ class TestResults:
         self.data = json.loads(path.read_text())
         self.tests = self.data.get("tests", [])
 
+    @classmethod
+    def empty(cls) -> "TestResults":
+        """No regression results: a Flow pack's checkpoints read run directories."""
+        self = cls.__new__(cls)
+        self.data, self.tests = {}, []
+        return self
+
     def by_name(self, name: str) -> dict | None:
         for t in self.tests:
             if t.get("name") == name:
@@ -323,6 +335,500 @@ def verify_simcrux_checkpoint(res: TestResults, cp: dict, add) -> None:
             got = len(t.get("fail_seeds") or [])
             add(f"checkpoint {name}: {tn} fails on ≥{mf} seed(s)", got >= mf,
                 "" if got >= mf else f"fails on {got}")
+
+
+# ── SimCrux Flow state ───────────────────────────────────────────────────────
+#
+# A Flow pack's ground truth is a flow RUN DIRECTORY committed under
+# fixtures/flow/, the directory SimCrux's Flow Runs panel ingests. Every
+# expectation is recomputed here from the run's own files (the tool's report,
+# its log, its metrics, its step directories, the RTL), never from anything
+# SimCrux displays. The vocabulary is edu-pack-spec.md section 4.4.
+
+FLOW_VERDICTS = ("met", "violated", "stopped", "not_run", "unrecognised")
+FLOW_STEP_STATUSES = ("completed", "failed", "skipped", "running", "not_started")
+# Statuses a directory listing can establish. skipped and running are written
+# by a run's own error and process records, which a committed fixture has no
+# reliable copy of, so an expectation of either is reported as declared only.
+_FLOW_STEP_DERIVABLE = ("completed", "failed", "not_started")
+_FLOW_KEYS = {"run", "kind", "verdict", "steps", "metrics", "worst_path",
+              "mapped_register"}
+
+_MAX_FREQ = re.compile(
+    r"Max frequency for clock '([^']*)': ([\d.]+) MHz "
+    r"\((PASS|FAIL) at ([\d.]+) MHz\)")
+_LL_STEP_DIR = re.compile(r"^(\d+)-([A-Za-z0-9_.-]+)$")
+_STA_START = re.compile(r"^\s*Startpoint:\s*(\S+)", re.M)
+_STA_END = re.compile(r"^\s*Endpoint:\s*(\S+)", re.M)
+_STA_SLACK = re.compile(r"^\s*(-?[\d.]+)\s+slack \((MET|VIOLATED)\)", re.M)
+
+# The LibreLane metrics whose value decides a completed run, as a reader of the
+# run reads them: a worst slack below zero, or a violation count above zero.
+LL_VERDICT_SLACK_KEYS = ("timing__setup__ws", "timing__hold__ws")
+LL_VERDICT_COUNT_KEYS = (
+    "timing__setup_vio__count", "timing__hold_vio__count", "route__drc_errors",
+    "magic__drc_error__count", "design__lvs_error__count",
+    "route__antenna_violation__count", "antenna__violating__nets",
+    "design__xor_difference__count")
+
+
+class FlowRunDir:
+    """A flow run directory read straight from its files.
+
+    kind is `nextpnr` (a report.json and/or pnr.log) or `librelane`
+    (resolved.json, final/, or numbered step directories); None when the
+    directory is neither.
+    """
+
+    def __init__(self, root: pathlib.Path):
+        self.root = root
+        self.problem: str | None = None
+        self.report: dict | None = None
+        self.log_clocks: dict[str, tuple[float, str, float]] = {}
+        self.metrics: dict | None = None
+        if (root / "report.json").is_file() or (root / "pnr.log").is_file():
+            self.kind = "nextpnr"
+            self._read_nextpnr()
+        elif self._looks_like_librelane():
+            self.kind = "librelane"
+            self._read_librelane()
+        else:
+            self.kind = None
+
+    # -- nextpnr ---------------------------------------------------------------
+
+    def _read_nextpnr(self) -> None:
+        rp = self.root / "report.json"
+        if rp.is_file():
+            try:
+                self.report = json.loads(rp.read_text())
+            except json.JSONDecodeError as e:
+                self.problem = f"report.json is not valid JSON: {e}"
+        lp = self.root / "pnr.log"
+        if lp.is_file():
+            # The LAST line per clock is the final, post-route figure; earlier
+            # lines are pre-route estimates.
+            for m in _MAX_FREQ.finditer(lp.read_text(errors="replace")):
+                self.log_clocks[m.group(1)] = (
+                    float(m.group(2)), m.group(3), float(m.group(4)))
+
+    def report_clocks(self) -> dict[str, tuple[float, float]] | None:
+        """clock -> (achieved MHz, constraint MHz) from report.json `fmax`."""
+        if not isinstance(self.report, dict):
+            return None
+        fmax = self.report.get("fmax")
+        if not isinstance(fmax, dict):
+            return None
+        out = {}
+        for name, v in fmax.items():
+            try:
+                out[name] = (float(v["achieved"]), float(v["constraint"]))
+            except (KeyError, TypeError, ValueError):
+                return None
+        return out
+
+    def nextpnr_verdict(self) -> str:
+        """met iff every clock reaches its constraint, from the report; the log
+        when there is no report. Never the exit status."""
+        clocks = self.report_clocks()
+        if clocks is not None:
+            if not clocks:
+                return "unrecognised"
+            return "met" if all(a >= c for a, c in clocks.values()) else "violated"
+        if self.report is None and self.log_clocks:
+            return ("met" if all(t == "PASS" for _, t, _ in self.log_clocks.values())
+                    else "violated")
+        if self.report is None and not (self.root / "pnr.log").is_file():
+            return "not_run"
+        return "unrecognised"
+
+    def nextpnr_metric(self, key: str) -> float | None:
+        clocks = self.report_clocks()
+        if clocks is None:
+            return None
+        if key == "fmax__achieved__mhz":
+            return min(a for a, _ in clocks.values()) if clocks else None
+        if key == "timing__setup__wns":
+            # period slack per clock: 1000/constraint - 1000/achieved ns
+            return min(1000 / c - 1000 / a for a, c in clocks.values()) if clocks else None
+        m = re.fullmatch(r"utilization__(used|available)__bel:(.+)", key)
+        if m and isinstance(self.report, dict):
+            u = (self.report.get("utilization") or {}).get(m.group(2))
+            if isinstance(u, dict) and isinstance(u.get(m.group(1)), (int, float)):
+                return float(u[m.group(1)])
+        return None
+
+    def nextpnr_path(self, rank: int) -> dict | None:
+        paths = (self.report or {}).get("critical_paths") if isinstance(self.report, dict) else None
+        if not isinstance(paths, list) or not 1 <= rank <= len(paths):
+            return None
+        return paths[rank - 1]
+
+    # -- LibreLane -------------------------------------------------------------
+
+    def _looks_like_librelane(self) -> bool:
+        r = self.root
+        if (r / "resolved.json").is_file() or (r / "final").is_dir():
+            return True
+        return any(c.is_dir() and _LL_STEP_DIR.match(c.name) for c in r.iterdir()) \
+            if r.is_dir() else False
+
+    def _read_librelane(self) -> None:
+        mp = self.root / "final" / "metrics.json"
+        if mp.is_file():
+            try:
+                data = json.loads(mp.read_text())
+                if isinstance(data, dict):
+                    self.metrics = data
+                else:
+                    self.problem = "final/metrics.json is not a JSON object"
+            except json.JSONDecodeError as e:
+                self.problem = f"final/metrics.json is not valid JSON: {e}"
+
+    def steps(self) -> list[tuple[int, str, str]]:
+        """(ordinal, id, status) for each numbered step directory. The id is the
+        directory name without its number (`06-yosys-synthesis` is
+        `yosys-synthesis`). A step is completed when it wrote state_out.json.
+        When the run has no final metrics, the newest incomplete step is the one
+        it stopped at, and is failed."""
+        found = []
+        for c in self.root.iterdir():
+            m = _LL_STEP_DIR.match(c.name) if c.is_dir() else None
+            if m:
+                done = (c / "state_out.json").is_file()
+                found.append([int(m.group(1)), m.group(2),
+                              "completed" if done else "not_started"])
+        found.sort(key=lambda s: s[0])
+        if self.metrics is None:
+            for s in reversed(found):
+                if s[2] != "completed":
+                    s[2] = "failed"
+                    break
+        return [tuple(s) for s in found]
+
+    def librelane_metric(self, key: str) -> float | None:
+        """The exact key; else the fold of its corner-qualified keys: the minimum
+        for worst slacks, the sum for counts. Anything else is ambiguous and a
+        pack must name the exact key."""
+        if not isinstance(self.metrics, dict):
+            return None
+        v = self.metrics.get(key)
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            return float(v)
+        folded = [float(x) for k, x in self.metrics.items()
+                  if k.startswith(key + "__") and isinstance(x, (int, float))
+                  and not isinstance(x, bool)]
+        if not folded:
+            return None
+        if key.endswith(("__ws", "__wns")):
+            return min(folded)
+        if "count" in key or key.endswith("errors"):
+            return float(sum(folded))
+        return None
+
+    def librelane_verdict(self) -> str:
+        if self.metrics is None:
+            return "unrecognised" if self.problem else "stopped"
+        seen = False
+        for k in LL_VERDICT_SLACK_KEYS:
+            v = self.librelane_metric(k)
+            if v is None:
+                continue
+            seen = True
+            if v < 0:
+                return "violated"
+        for k in LL_VERDICT_COUNT_KEYS:
+            v = self.librelane_metric(k)
+            if v is None:
+                continue
+            seen = True
+            if v > 0:
+                return "violated"
+        return "met" if seen else "unrecognised"
+
+    # -- either kind -----------------------------------------------------------
+
+    def verdict(self) -> str:
+        if self.kind == "nextpnr":
+            return self.nextpnr_verdict()
+        if self.kind == "librelane":
+            return self.librelane_verdict()
+        return "unrecognised"
+
+    def metric(self, key: str) -> float | None:
+        if self.kind == "nextpnr":
+            return self.nextpnr_metric(key)
+        if self.kind == "librelane":
+            return self.librelane_metric(key)
+        return None
+
+
+def _contained(pack: pathlib.Path, rel: str) -> pathlib.Path | None:
+    """`rel` resolved inside the pack, or None when it escapes (absolute, a `..`
+    segment, or a symlink out)."""
+    if not isinstance(rel, str) or not rel or pathlib.PurePath(rel).is_absolute():
+        return None
+    p = (pack / rel).resolve()
+    try:
+        p.relative_to(pack.resolve())
+    except ValueError:
+        return None
+    return p
+
+
+def verify_flow_state(pack: pathlib.Path, name: str, flow: dict, add) -> None:
+    """Verify one checkpoint's `tool_states.simcrux.flow` against its run."""
+    unknown = sorted(set(flow) - _FLOW_KEYS)
+    if unknown:
+        add(f"checkpoint {name}: flow fields are known", False,
+            f"unknown: {unknown}; known: {sorted(_FLOW_KEYS)}")
+    rel = flow.get("run")
+    run_dir = _contained(pack, rel) if rel is not None else None
+    label = f"checkpoint {name}: flow run {rel}"
+    if rel is None:
+        add(f"checkpoint {name}: flow names its run directory", False, "no flow.run")
+        return
+    if run_dir is None:
+        add(f"{label} is inside the pack", False, "absolute path, `..` or a symlink out")
+        return
+    if not run_dir.is_dir():
+        add(f"{label} exists", False, "no such directory")
+        return
+    run = FlowRunDir(run_dir)
+    if run.kind is None:
+        add(f"{label} is a flow run", False,
+            "neither a nextpnr report/log nor a LibreLane run layout")
+        return
+    add(f"{label} is a {run.kind} run", True)
+    if run.problem:
+        add(f"{label} is readable", False, run.problem)
+        return
+
+    want_kind = flow.get("kind")
+    if want_kind is not None:
+        add(f"checkpoint {name}: run kind is {want_kind}", run.kind == want_kind,
+            "" if run.kind == want_kind else f"the run is {run.kind}")
+
+    if "verdict" in flow:
+        want = flow["verdict"]
+        if want not in FLOW_VERDICTS:
+            add(f"checkpoint {name}: verdict {want!r} is a verdict token", False,
+                f"one of {FLOW_VERDICTS}")
+        else:
+            got = run.verdict()
+            add(f"checkpoint {name}: verdict is {want}", got == want,
+                "" if got == want else f"the run's own files say {got}")
+            if run.kind == "nextpnr":
+                _check_nextpnr_log_agrees(name, run, want, add)
+
+    if "steps" in flow:
+        _check_steps(name, run, flow["steps"], add)
+    for m in flow.get("metrics") or []:
+        _check_metric(name, run, m, add)
+    if "worst_path" in flow:
+        _check_worst_path(name, run, flow["worst_path"], add)
+    if "mapped_register" in flow:
+        _check_mapped_register(pack, name, run, flow["mapped_register"], add)
+
+
+def _check_nextpnr_log_agrees(name: str, run: FlowRunDir, want: str, add) -> None:
+    """The report and the log are two witnesses of one run: the final
+    `Max frequency` line must say what the report says."""
+    if not run.log_clocks or run.report_clocks() is None:
+        return
+    log_says = ("met" if all(t == "PASS" for _, t, _ in run.log_clocks.values())
+                else "violated")
+    add(f"checkpoint {name}: the log's final Max frequency lines agree "
+        f"({want})", log_says == want,
+        "" if log_says == want else f"the log says {log_says}")
+
+
+def _check_steps(name: str, run: FlowRunDir, want_steps, add) -> None:
+    if run.kind != "librelane":
+        add(f"checkpoint {name}: steps apply to a LibreLane run", False,
+            "a nextpnr run has no step directories")
+        return
+    have = {sid: st for _, sid, st in run.steps()}
+    for w in want_steps or []:
+        sid, st = w.get("id"), w.get("status")
+        label = f"checkpoint {name}: step {sid} is {st}"
+        if st not in FLOW_STEP_STATUSES:
+            add(label, False, f"status must be one of {FLOW_STEP_STATUSES}")
+        elif sid not in have:
+            add(label, False, f"steps present: {sorted(have)}")
+        elif st not in _FLOW_STEP_DERIVABLE:
+            add(label + " (declared only)", True,
+                "skipped and running are not derivable from a committed run")
+        else:
+            add(label, have[sid] == st,
+                "" if have[sid] == st else f"the step directory says {have[sid]}")
+
+
+def _check_metric(name: str, run: FlowRunDir, m: dict, add) -> None:
+    key = m.get("key")
+    got = run.metric(key) if isinstance(key, str) else None
+    bounds = [f"{k}={m[k]}" for k in ("min", "max", "equals") if k in m]
+    label = f"checkpoint {name}: metric {key} within {' '.join(bounds) or 'nothing'}"
+    if got is None:
+        add(label, False, "the run's own files give no value for this key")
+        return
+    ok = True
+    if "min" in m:
+        ok = ok and got >= float(m["min"])
+    if "max" in m:
+        ok = ok and got <= float(m["max"])
+    if "equals" in m:
+        ok = ok and got == float(m["equals"])
+    add(label, ok and bool(bounds), f"the run says {got}")
+
+
+def _check_worst_path(name: str, run: FlowRunDir, wp: dict, add) -> None:
+    label = f"checkpoint {name}: worst path"
+    report_rel = wp.get("report")
+    if report_rel is not None:
+        # An OpenSTA-format text report inside the run: the first path block.
+        p = _contained(run.root, report_rel)
+        if p is None or not p.is_file():
+            add(f"{label} report {report_rel} exists in the run", False, "missing")
+            return
+        text = p.read_text(errors="replace")
+        start, end = _STA_START.search(text), _STA_END.search(text)
+        slack = _STA_SLACK.search(text)
+        if not (start and end):
+            add(f"{label} report names a Startpoint and an Endpoint", False,
+                "no Startpoint: / Endpoint: lines")
+            return
+        for field, m in (("startpoint", start), ("endpoint", end)):
+            if field in wp:
+                add(f"{label} {field} is {wp[field]}", m.group(1) == wp[field],
+                    "" if m.group(1) == wp[field] else f"the report says {m.group(1)}")
+        if "slack" in wp:
+            got = slack.group(2).lower() if slack else None
+            add(f"{label} slack is {wp['slack']}", got == wp["slack"],
+                f"the report says {got}")
+        return
+    if run.kind != "nextpnr":
+        add(f"{label} names a report file", False,
+            "a LibreLane run needs worst_path.report (a run-relative path report)")
+        return
+    path = run.nextpnr_path(int(wp.get("rank", 1)))
+    if path is None:
+        add(f"{label} rank {wp.get('rank', 1)} exists", False, "report lists fewer paths")
+        return
+    steps = path.get("path") or []
+    cells = [(s.get("from") or {}).get("cell") for s in steps if s.get("type") != "source"]
+    ends = [(s.get("to") or {}).get("cell") for s in steps]
+    got_start, got_end = (cells[0] if cells else None), (ends[-1] if ends else None)
+    for field, got in (("startpoint", got_start), ("endpoint", got_end)):
+        if field in wp:
+            add(f"{label} {field} is {wp[field]}", got == wp[field],
+                "" if got == wp[field] else f"the report says {got}")
+    if "slack" in wp:
+        add(f"{label} slack is stated", False,
+            "nextpnr's report states no per-path slack; use metrics")
+    if "delay_ns" in wp:
+        total = sum(float(s.get("delay", 0)) for s in steps)
+        lo, hi = wp["delay_ns"].get("min"), wp["delay_ns"].get("max")
+        ok = (lo is None or total >= lo) and (hi is None or total <= hi)
+        add(f"{label} delay_ns within [{lo}, {hi}]", ok, f"the segments sum to {total:.3f}")
+    for st in wp.get("segment_types") or []:
+        present = any(s.get("type") == st for s in steps)
+        add(f"{label} has a {st} segment", present,
+            "" if present else f"types present: {sorted({s.get('type') for s in steps})}")
+
+
+def _span_hits(strings, source_name: str, line: int) -> bool:
+    """Whether any Yosys `file:line.col-line.col` span (with `|`-joined lists)
+    in `strings` starts on `line` of the file named `source_name`."""
+    want = re.compile(rf"(?:^|[|/]){re.escape(source_name)}:{line}\.")
+    return any(want.search(s) for s in strings if isinstance(s, str))
+
+
+def _check_mapped_register(pack: pathlib.Path, name: str, run: FlowRunDir,
+                           mr: dict, add) -> None:
+    """The register behind a worst path's ends, and the RTL line that computes
+    it. Expectations come from the RTL's meaning (which register a statement
+    assigns); the run's files are only asked whether they agree."""
+    label = f"checkpoint {name}: mapped register"
+    if run.kind != "nextpnr":
+        add(f"{label} applies to a nextpnr run", False,
+            "SimCrux maps worst paths of nextpnr runs only")
+        return
+    src_rel = mr.get("source")
+    src = _contained(pack, src_rel) if src_rel else None
+    if src is None or not src.is_file():
+        add(f"{label} source {src_rel} exists in the pack", False, "missing")
+        return
+    lines = src.read_text().splitlines()
+    starts = mr.get("start_registers") or []
+    end = mr.get("end_register")
+    stmt = mr.get("statement_line")
+    decls = mr.get("declaration_lines") or {}
+
+    for reg, n in decls.items():
+        ok = 1 <= n <= len(lines) and re.search(rf"\b{re.escape(reg)}\b", lines[n - 1]) \
+            and re.search(r"\b(reg|logic)\b", lines[n - 1]) is not None
+        add(f"{label} {reg} is declared on {src_rel} line {n}", bool(ok),
+            "" if ok else f"line {n} is {lines[n - 1].strip() if 1 <= n <= len(lines) else 'past the end'!r}")
+    if stmt is not None:
+        ok = (1 <= stmt <= len(lines)
+              and re.search(rf"\b{re.escape(end or '')}\b\s*<=", lines[stmt - 1]) is not None)
+        add(f"{label} {end} is assigned on {src_rel} line {stmt}", ok,
+            "" if ok else "that line does not assign it with <=")
+
+    path = run.nextpnr_path(int(mr.get("rank", 1)))
+    if path is None:
+        add(f"{label} the run lists a path to map", False, "no critical path")
+        return
+    steps = path.get("path") or []
+    cells = [(s.get("from") or {}).get("cell") for s in steps if s.get("type") != "source"]
+    got_start = cells[0] if cells else ""
+    got_end = (steps[-1].get("to") or {}).get("cell") if steps else ""
+    spans = [x for s in steps for x in (s.get("sources") or [])]
+
+    def descends(cell: str, reg: str) -> bool:
+        # iCE40, ECP5 and Gowin cell names carry the RTL register name.
+        return isinstance(cell, str) and cell.startswith(reg + "_")
+
+    start_hit = next((r for r in starts if descends(got_start, r)), None)
+    start_how = "cell name"
+    if start_hit is None:
+        # GateMate-style opaque cell names: the routing step's source spans
+        # carry the declaration line.
+        start_hit = next((r for r in starts if r in decls
+                          and _span_hits(spans, src.name, decls[r])), None)
+        start_how = "source span"
+    add(f"{label} the worst path starts at one of {starts}", start_hit is not None,
+        f"start cell is {got_start!r}" if start_hit is None
+        else f"{start_hit} via {start_how}")
+
+    end_ok = descends(got_end, end or "")
+    end_how = "cell name"
+    if not end_ok and stmt is not None:
+        end_ok = _span_hits(spans, src.name, stmt)
+        end_how = "source span"
+    add(f"{label} the worst path ends at {end}", end_ok,
+        f"end cell is {got_end!r}" if not end_ok else f"via {end_how}")
+
+    # SimCrux maps a path only against the run's synthesised netlist, named
+    # synth.json. Without it the same run lists its worst path unmapped.
+    synth = run.root / "synth.json"
+    if not synth.is_file():
+        add(f"{label} the run holds synth.json for SimCrux to map against", False,
+            "without synth.json the Flow Runs panel lists the path unmapped")
+        return
+    add(f"{label} the run holds synth.json for SimCrux to map against", True)
+    if stmt is not None:
+        try:
+            net = json.loads(synth.read_text())
+        except json.JSONDecodeError as e:
+            add(f"{label} synth.json is valid JSON", False, str(e))
+            return
+        srcs = [c.get("attributes", {}).get("src") for m in net.get("modules", {}).values()
+                for c in m.get("cells", {}).values()]
+        add(f"{label} synth.json has a cell from {src.name} line {stmt}",
+            _span_hits(srcs, src.name, stmt),
+            "no cell attribute `src` starts on that line")
 
 
 def verify_wavecrux_checkpoint(vcd: "Vcd", cp: dict, add) -> None:
@@ -516,6 +1022,11 @@ def verify_pack(pack: pathlib.Path) -> Result:
         "lintcrux": "fixtures/lint.json",
         "simcrux": "fixtures/results.json",
     }
+    # A SimCrux pack carries either a regression's results.json or, for a Flow
+    # pack, a fixtures/flow/ directory of run directories.
+    flow_pack = "simcrux" in all_tools and (pack / "fixtures" / "flow").is_dir()
+    if flow_pack:
+        fixture_by_tool = dict(fixture_by_tool, simcrux="fixtures/flow")
     required_fixtures = tuple(fixture_by_tool[t] for t in all_tools
                               if t in fixture_by_tool)
     for rel in common + required_fixtures:
@@ -601,14 +1112,23 @@ def verify_pack(pack: pathlib.Path) -> Result:
                 r.add("results.json is valid JSON", isinstance(loaders["simcrux"].tests, list))
             except json.JSONDecodeError as e:
                 r.add("results.json is valid JSON", False, str(e))
+        elif flow_pack:
+            # No regression results; the Flow state checks read the runs.
+            loaders["simcrux"] = TestResults.empty()
     if "wavecrux" in all_tools and vcd is not None:
         loaders["wavecrux"] = vcd
+
+    def verify_simcrux(res, cp, add):
+        verify_simcrux_checkpoint(res, cp, add)
+        flow = ((cp.get("tool_states") or {}).get("simcrux") or {}).get("flow")
+        if flow is not None:
+            verify_flow_state(pack, cp.get("name", "<unnamed>"), flow, add)
 
     dispatch = {
         "wavecrux": verify_wavecrux_checkpoint,
         "netcrux": verify_netcrux_checkpoint,
         "lintcrux": verify_lintcrux_checkpoint,
-        "simcrux": verify_simcrux_checkpoint,
+        "simcrux": verify_simcrux,
     }
 
     # Each checkpoint's tool_states is verified against every tool it names, so a

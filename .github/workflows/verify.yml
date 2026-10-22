@@ -41,6 +41,13 @@ jobs:
       - name: No references to anything a reader cannot open
         run: ./tools/check-no-private-references.py
 
+      # The Flow state checks (a flow run directory's verdict, steps, metrics,
+      # worst path and mapped register) are tested against the committed pack,
+      # damaged copies of it, and hand-written synthetic runs, so a check that
+      # cannot fail is caught here rather than trusted.
+      - name: Unit-test the verifier
+        run: python3 -m unittest discover -s tools/tests
+
       - name: Verify every pack
         run: ./tools/edacrux-pack-verify
 

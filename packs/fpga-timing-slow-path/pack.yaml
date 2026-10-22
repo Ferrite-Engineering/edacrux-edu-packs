@@ -1,0 +1,55 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: fpga-timing-slow-path
+pack_version: 1.0.0
+pack_category: debugging
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: simcrux
+    min_version: "1.2.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Read a place-and-route verdict from the report instead of the exit status."
+    - "Tell a timing finding about the design from a run that did not finish."
+    - "Find the worst path of a run and name the registers at its two ends."
+    - "Follow a worst path back to the RTL statement that computes its end register."
+    - "Explain why the same design meets 12 MHz and misses 1000 MHz."
+prerequisites: []
+curriculum_topics:
+  - timing_analysis
+  - fpga_flow
+  - arithmetic
+estimated_duration_minutes: 45
+difficulty: intermediate
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    flow:
+      simcrux: fixtures/flow
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+    solution: instructor/solution.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  Open two captured open-FPGA-toolchain runs of one adder design in SimCrux's
+  Flow Runs panel, read the timing verdict, and follow the slowest path back to
+  the line of RTL that makes it slow.
