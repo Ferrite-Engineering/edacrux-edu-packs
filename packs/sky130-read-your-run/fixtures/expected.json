@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "pack_id": "sky130-read-your-run",
+  "pack_version": "1.0.0",
+  "checkpoints": [
+    {
+      "name": "setup_checker_failed_and_the_flow_went_on",
+      "description": "The run's setup-violation checker wrote no state_out.json (a failed step) and the steps after it still ran and wrote theirs: LibreLane defers a checker's error to the end of the flow, so the run is a finding about the design, not a flow that stopped. Synthesis and the post-route timing analysis completed, and the run as a whole reads as violated.",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/timing-2ns",
+            "kind": "librelane",
+            "verdict": "violated",
+            "steps": [
+              { "id": "yosys-synthesis", "status": "completed" },
+              { "id": "openroad-stapostpnr", "status": "completed" },
+              { "id": "checker-setupviolations", "status": "failed" },
+              { "id": "checker-holdviolations", "status": "completed" },
+              { "id": "misc-reportmanufacturability", "status": "completed" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "worst_setup_slack_and_the_other_checks",
+      "description": "The worst setup slack over every timing corner is a few nanoseconds negative and many endpoints violate; hold, routing DRC, Magic DRC and LVS report no errors; the design has 73 flip-flops (24 + 24 + 25, from the RTL). The slack is a range because it moves with every tool build.",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/timing-2ns",
+            "metrics": [
+              { "key": "timing__setup__ws", "min": -6.0, "max": -1.0 },
+              { "key": "timing__setup_vio__count", "min": 1 },
+              { "key": "timing__hold_vio__count", "equals": 0 },
+              { "key": "route__drc_errors", "equals": 0 },
+              { "key": "magic__drc_error__count", "equals": 0 },
+              { "key": "design__lvs_error__count", "equals": 0 },
+              { "key": "design__instance__count__class:sequential_cell", "equals": 73 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "worst_path_start_and_end",
+      "description": "The first path of the nominal typical corner's setup report starts at flip-flop _354_ and ends at flip-flop _400_, and violates. The netlist names those instances, not the RTL: _354_ outputs src_b[1] and _400_ outputs sum_q[23] (the test suite pins both from the final netlist).",
+      "tool_states": {
+        "simcrux": {
+          "flow": {
+            "run": "fixtures/flow/runs/path_adder/timing-2ns",
+            "worst_path": {
+              "report": "55-openroad-stapostpnr/nom_tt_025C_1v80/max.rpt",
+              "startpoint": "_354_",
+              "endpoint": "_400_",
+              "slack": "violated"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "decoder_expectations": [],
+  "cross_tool_deep_links": []
+}

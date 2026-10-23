@@ -1,0 +1,33 @@
+
+===========================================================================
+Violator List
+============================================================================
+[hold in-reg] d -> _329_/D : -0.504537
+[hold in-reg] d -> _353_/D : -0.436545
+[setup reg-reg] _361_/Q -> _401_/D : -1.492212
+[setup reg-reg] _361_/Q -> _400_/D : -1.489031
+[setup reg-reg] _361_/Q -> _399_/D : -1.448471
+[setup reg-reg] _361_/Q -> _398_/D : -1.438311
+[setup reg-reg] _361_/Q -> _397_/D : -1.174480
+[setup reg-reg] _361_/Q -> _396_/D : -1.079950
+[setup reg-reg] _361_/Q -> _394_/D : -1.024461
+[setup reg-reg] _361_/Q -> _395_/D : -0.945671
+[setup reg-reg] _361_/Q -> _392_/D : -0.882786
+[setup reg-out] _388_/Q -> q : -0.845771
+[setup reg-reg] _330_/Q -> _388_/D : -0.770938
+[setup reg-reg] _361_/Q -> _393_/D : -0.758983
+[setup reg-reg] _361_/Q -> _391_/D : -0.736875
+[setup reg-reg] _361_/Q -> _389_/D : -0.658514
+[setup reg-reg] _361_/Q -> _390_/D : -0.629394
+[setup reg-reg] _330_/Q -> _387_/D : -0.547413
+[setup reg-reg] _330_/Q -> _386_/D : -0.515645
+[setup reg-reg] _330_/Q -> _384_/D : -0.329938
+[setup reg-reg] _330_/Q -> _385_/D : -0.312862
+[setup reg-reg] _330_/Q -> _383_/D : -0.109113
+[setup reg-reg] _330_/Q -> _382_/D : -0.073730
+Writing metric timing__hold_vio__count__corner:nom_tt_025C_1v80: 2
+Writing metric timing__hold_r2r__ws__corner:nom_tt_025C_1v80: 0.052137
+Writing metric timing__hold_r2r_vio__count__corner:nom_tt_025C_1v80: 0
+Writing metric timing__setup_vio__count__corner:nom_tt_025C_1v80: 21
+Writing metric timing__setup_r2r__ws__corner:nom_tt_025C_1v80: -1.492212
+Writing metric timing__setup_r2r_vio__count__corner:nom_tt_025C_1v80: 20

@@ -1,0 +1,104 @@
+Reading timing models for corner nom_tt_025C_1v80…
+Reading timing library for the 'nom_tt_025C_1v80' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'…
+Reading technology LEF file at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__nom.tlef'…
+[INFO ODB-0227] LEF file: <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__nom.tlef, created 14 layers, 25 vias
+Reading cell LEF file at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_ef_sc_hd.lef'…
+[WARNING ODB-0220] WARNING (LEFPARS-2008): NOWIREEXTENSIONATPIN statement is obsolete in version 5.6 or later.
+The NOWIREEXTENSIONATPIN statement will be ignored. See file <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_ef_sc_hd.lef at line 2.
+
+[INFO ODB-0227] LEF file: <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_ef_sc_hd.lef, created 8 library cells
+Reading cell LEF file at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef'…
+[WARNING ODB-0220] WARNING (LEFPARS-2008): NOWIREEXTENSIONATPIN statement is obsolete in version 5.6 or later.
+The NOWIREEXTENSIONATPIN statement will be ignored. See file <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef at line 2.
+
+[INFO ODB-0227] LEF file: <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef, created 437 library cells
+[INFO ODB-0127] Reading DEF file: <run>/13-openroad-floorplan/path_adder.def
+[INFO ODB-0128] Design: path_adder
+[INFO ODB-0130]     Created 3 pins.
+[INFO ODB-0131]     Created 238 components and 1728 component-terminals.
+[INFO ODB-0132]     Created 2 special nets and 952 connections.
+[INFO ODB-0133]     Created 240 nets and 776 connections.
+[INFO ODB-0134] Finished DEF file: <run>/13-openroad-floorplan/path_adder.def
+%OL_CREATE_REPORT tlef_values.rpt
+ time 1ns
+ capacitance 1pF
+ resistance 1kohm
+ voltage 1v
+ current 1mA
+ power 1nW
+ distance 1um
+== Technology LEF Values ==
+=== Routing Layers ===
+Name                Direction           Res/Unit Distance   Cap/Unit Distance   
+li1                 VERTICAL            7.529412e-02        8.768172e-05        
+met1                HORIZONTAL          8.928571e-04        8.474298e-05        
+met2                VERTICAL            8.928571e-04        7.788992e-05        
+met3                HORIZONTAL          1.566667e-04        8.568987e-05        
+met4                VERTICAL            1.566667e-04        7.587661e-05        
+met5                HORIZONTAL          1.781250e-05        8.781501e-05        
+=== Vias ===
+Name                Cut Resistance      
+licon               0.000000e+00        
+mcon                9.300000e-03        
+via                 4.500000e-03        
+via2                3.410000e-03        
+via3                3.410000e-03        
+via4                3.800000e-04        
+%OL_END_REPORT
+%OL_CREATE_REPORT layer_values_after.rpt
+ time 1ns
+ capacitance 1pF
+ resistance 1kohm
+ voltage 1v
+ current 1mA
+ power 1nW
+ distance 1um
+== Layer Values (After Set RC) ==
+=== Routing Layers ===
+Name                Direction           Res/Unit Distance   Cap/Unit Distance   
+li1                 VERTICAL            7.529412e-02        8.768172e-05        
+met1                HORIZONTAL          8.928571e-04        8.474298e-05        
+met2                VERTICAL            8.928571e-04        7.788992e-05        
+met3                HORIZONTAL          1.566667e-04        8.568987e-05        
+met4                VERTICAL            1.566667e-04        7.587661e-05        
+met5                HORIZONTAL          1.781250e-05        8.781501e-05        
+=== Vias ===
+Name                Cut Resistance      
+licon               0.000000e+00        
+mcon                9.300000e-03        
+via                 4.500000e-03        
+via2                3.410000e-03        
+via3                3.410000e-03        
+via4                3.800000e-04        
+%OL_END_REPORT
+%OL_CREATE_REPORT resizer_values_after.rpt
+ time 1ns
+ capacitance 1pF
+ resistance 1kohm
+ voltage 1v
+ current 1mA
+ power 1nW
+ distance 1um
+== Resizer RC Values (After Set RC) ==
+=== Corner nom_tt_025C_1v80 ===
+==== Estimation RC Values ====
+Name                Direction           Res/Unit Distance   Cap/Unit Distance   
+Signal              Avg                 4.402703e-04        8.148294e-05        
+Clock               Avg                 4.402703e-04        8.148294e-05        
+==== Rt. Layer RC Values ====
+Name                Direction           Res/Unit Distance   Cap/Unit Distance   
+li1                 VERTICAL            0.000000e+00        0.000000e+00        
+met1                HORIZONTAL          0.000000e+00        0.000000e+00        
+met2                VERTICAL            0.000000e+00        0.000000e+00        
+met3                HORIZONTAL          0.000000e+00        0.000000e+00        
+met4                VERTICAL            0.000000e+00        0.000000e+00        
+met5                HORIZONTAL          0.000000e+00        0.000000e+00        
+==== Via R Values ====
+Name                Res/Unit Distance   
+licon               0.000000e+00        
+mcon                0.000000e+00        
+via                 0.000000e+00        
+via2                0.000000e+00        
+via3                0.000000e+00        
+via4                0.000000e+00        
+%OL_END_REPORT

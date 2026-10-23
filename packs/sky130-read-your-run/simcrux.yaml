@@ -1,0 +1,23 @@
+version: "1"
+
+# The project SimCrux opens for this lab (File > Open Config...).
+#
+# The run under fixtures/flow/runs/path_adder/ was captured from a real
+# LibreLane 3.0.16 run on sky130A and is listed in `ingest:`, so the Flow Runs
+# panel shows it as soon as the project opens. It sits in a directory named for
+# the entry (runs/<entry>/<run>) because that is how SimCrux files an ingested
+# run under its design.
+#
+# The `path_adder` entry also exists because a project must declare at least one
+# suite or flow entry to load. If LibreLane 3.0.16 and the sky130A PDK are
+# installed it lets you re-run the design yourself (Tools > Run Flow Entry).
+# LibreLane writes a re-run to runs/<tag>/ beside config.yaml and never touches
+# fixtures/.
+flow:
+  entries:
+    - name: path_adder
+      kind: librelane
+      config: config.yaml
+      pdk: sky130A
+  ingest:
+    - fixtures/flow/runs/path_adder

@@ -17,6 +17,7 @@ import importlib.machinery
 import importlib.util
 import json
 import pathlib
+import re
 import shutil
 import tempfile
 import unittest
@@ -323,6 +324,121 @@ class SyntheticLibreLaneRun(unittest.TestCase):
         self.assertTrue(failed(wrong))
         self.assertTrue(failed(self.flow(worst_path={"report": "reports/none.rpt"})))
         self.assertTrue(failed(self.flow(worst_path={"rank": 1})))
+
+    def test_a_checker_without_output_state_is_failed_even_when_the_flow_went_on(self):
+        # LibreLane defers a checker's error to the end of the flow: the step
+        # has no state_out.json, later steps ran, and final metrics exist.
+        self.step("01-yosys-synthesis")
+        self.step("02-checker-setupviolations", done=False)
+        self.step("03-checker-holdviolations")
+        self.metrics({"timing__setup__ws": -0.4})
+        ok = self.flow(verdict="violated", steps=[
+            {"id": "yosys-synthesis", "status": "completed"},
+            {"id": "checker-setupviolations", "status": "failed"},
+            {"id": "checker-holdviolations", "status": "completed"}])
+        self.assertEqual(failed(ok), [])
+        self.assertTrue(failed(self.flow(steps=[
+            {"id": "checker-setupviolations", "status": "completed"}])))
+
+    def test_not_started_is_never_read_from_a_step_directory(self):
+        self.step("01-yosys-synthesis")
+        self.step("02-checker-setupviolations", done=False)
+        self.metrics({"timing__setup__ws": -0.4})
+        self.assertTrue(failed(self.flow(steps=[
+            {"id": "checker-setupviolations", "status": "not_started"}])))
+
+
+SKY130 = REPO / "packs" / "sky130-read-your-run"
+SKY130_RUN = "fixtures/flow/runs/path_adder/timing-2ns"
+
+
+class Sky130Pack(unittest.TestCase):
+    """The open-PDK pack: one committed LibreLane run, trimmed."""
+
+    def test_the_pack_verifies(self):
+        r = pv.verify_pack(SKY130)
+        self.assertEqual(r.failures, [])
+        self.assertGreaterEqual(len(r.checks), 30)
+
+    def test_the_run_is_under_five_megabytes(self):
+        total = sum(f.stat().st_size for f in (SKY130 / SKY130_RUN).rglob("*")
+                    if f.is_file())
+        self.assertLess(total, 5_000_000)
+
+    def test_the_run_is_a_violated_librelane_run_that_went_on_past_its_checker(self):
+        run = pv.FlowRunDir(SKY130 / SKY130_RUN)
+        self.assertEqual(run.kind, "librelane")
+        self.assertEqual(run.verdict(), "violated")
+        steps = {sid: st for _, sid, st in run.steps()}
+        self.assertEqual(steps["checker-setupviolations"], "failed")
+        self.assertEqual(steps["checker-holdviolations"], "completed")
+        self.assertEqual([sid for sid, st in steps.items() if st == "failed"],
+                         ["checker-setupviolations"])
+
+    def test_the_worst_slack_is_read_over_corners_and_the_typical_corner_is_less_bad(self):
+        run = pv.FlowRunDir(SKY130 / SKY130_RUN)
+        worst = run.metric("timing__setup__ws")
+        typical = run.metric("timing__setup__ws__corner:nom_tt_025C_1v80")
+        self.assertLess(worst, typical)
+        self.assertLess(typical, 0)
+
+    def test_the_worst_path_ends_name_the_registers_in_the_final_netlist(self):
+        # The lab teaches that _354_ and _400_ are Yosys names and that the
+        # registers behind them are src_b and sum_q. The verifier cannot map a
+        # LibreLane path, so the netlist is read here, by pattern, not by any
+        # SimCrux code.
+        text = (SKY130 / SKY130_RUN / "06-yosys-synthesis" / "path_adder.nl.v"
+                ).read_text()
+
+        def q_net(instance):
+            m = re.search(rf"\b{instance}\s*\((.*?)\);", text, re.S)
+            self.assertIsNotNone(m, instance)
+            q = re.search(r"\.Q\(\s*\\?([^\s)]+)\s*\)", m.group(1))
+            self.assertIsNotNone(q, instance)
+            return q.group(1)
+
+        self.assertEqual(q_net("_354_"), "src_b[1]")
+        self.assertEqual(q_net("_400_"), "sum_q[23]")
+
+    def test_the_project_files_agree_with_the_run_layout(self):
+        text = (SKY130 / "simcrux.yaml").read_text()
+        self.assertIn("name: path_adder", text)
+        self.assertIn("kind: librelane", text)
+        self.assertIn("fixtures/flow/runs/path_adder", text)
+        self.assertIn("config: config.yaml", text)
+        self.assertTrue((SKY130 / "config.yaml").is_file())
+        self.assertIn("DESIGN_NAME: path_adder",
+                      (SKY130 / "config.yaml").read_text())
+
+
+class Sky130Damaged(unittest.TestCase):
+    def setUp(self):
+        self.tmp = pathlib.Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.pack = self.tmp / "sky130-read-your-run"
+        shutil.copytree(SKY130, self.pack)
+
+    def test_a_checker_given_an_output_state_is_no_longer_failed(self):
+        (self.pack / SKY130_RUN / "72-checker-setupviolations"
+         / "state_out.json").write_text("{}")
+        self.assertFalse(pv.verify_pack(self.pack).ok)
+
+    def test_a_worst_path_report_with_another_start_fails(self):
+        rpt = (self.pack / SKY130_RUN / "55-openroad-stapostpnr"
+               / "nom_tt_025C_1v80" / "max.rpt")
+        rpt.write_text(rpt.read_text().replace("Startpoint: _354_",
+                                               "Startpoint: _999_", 1))
+        self.assertFalse(pv.verify_pack(self.pack).ok)
+
+    def test_a_metrics_file_edited_to_meet_makes_the_verdict_fail(self):
+        mp = self.pack / SKY130_RUN / "final" / "metrics.json"
+        data = json.loads(mp.read_text())
+        for k in list(data):
+            if k.startswith(("timing__setup__ws", "timing__setup__wns",
+                             "timing__setup_vio__count")):
+                data[k] = 1 if "count" not in k else 0
+        mp.write_text(json.dumps(data))
+        self.assertFalse(pv.verify_pack(self.pack).ok)
 
 
 if __name__ == "__main__":

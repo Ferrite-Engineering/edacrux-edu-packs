@@ -1,0 +1,9 @@
+{
+    "json_h": "<run>/05-yosys-jsonheader/path_adder.h.json",
+    "metrics": {
+        "design__lint_error__count": 0,
+        "design__lint_timing_construct__count": 0,
+        "design__lint_warning__count": 0,
+        "design__inferred_latch__count": 0
+    }
+}

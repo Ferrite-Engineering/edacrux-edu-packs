@@ -1,0 +1,7 @@
+DESIGN_NAME: path_adder
+VERILOG_FILES: dir::src/path_adder.v
+CLOCK_PORT: clk
+CLOCK_PERIOD: 2
+FP_SIZING: relative
+FP_CORE_UTIL: 40
+PL_TARGET_DENSITY_PCT: 55

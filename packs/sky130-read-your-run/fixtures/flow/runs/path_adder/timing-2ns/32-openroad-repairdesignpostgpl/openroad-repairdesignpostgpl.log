@@ -1,0 +1,99 @@
+Reading timing models for corner max_tt_025C_1v80…
+Reading timing library for the 'max_tt_025C_1v80' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'…
+Reading timing models for corner min_ss_100C_1v60…
+Reading timing library for the 'min_ss_100C_1v60' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib'…
+Reading timing models for corner nom_tt_025C_1v80…
+Reading timing library for the 'nom_tt_025C_1v80' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exists.
+Reading timing models for corner max_ff_n40C_1v95…
+Reading timing library for the 'max_ff_n40C_1v95' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib'…
+Reading timing models for corner nom_ff_n40C_1v95…
+Reading timing library for the 'nom_ff_n40C_1v95' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exists.
+Reading timing models for corner max_ss_100C_1v60…
+Reading timing library for the 'max_ss_100C_1v60' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exists.
+Reading timing models for corner min_tt_025C_1v80…
+Reading timing library for the 'min_tt_025C_1v80' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib line 1, library sky130_fd_sc_hd__tt_025C_1v80 already exists.
+Reading timing models for corner nom_ss_100C_1v60…
+Reading timing library for the 'nom_ss_100C_1v60' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib line 1, library sky130_fd_sc_hd__ss_100C_1v60 already exists.
+Reading timing models for corner min_ff_n40C_1v95…
+Reading timing library for the 'min_ff_n40C_1v95' corner at '<home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib'…
+[WARNING STA-1140] <home>/.ciel/ciel/sky130/versions/8afc8346a57fe1ab7934ba5a6056ea8b43078e71/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib line 1, library sky130_fd_sc_hd__ff_n40C_1v95 already exists.
+Reading OpenROAD database at '<run>/28-openroad-globalplacement/path_adder.odb'…
+Reading design constraints file at '/nix/store/gaqvv85phz5jxhkxv1sk482aa46sgij3-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/base.sdc'…
+[INFO] Using clock clk…
+[INFO] Setting output delay to: 0.4
+[INFO] Setting input delay to: 0.4
+[INFO] Setting load to: 0.033442
+[INFO] Setting clock uncertainty to: 0.25
+[INFO] Setting clock transition to: 0.1499999999999999944488848768742172978818416595458984375
+[INFO] Setting timing derate to: 5.0%
+[INFO RSZ-0027] Inserted 1 sky130_fd_sc_hd__clkdlybuf4s25_1 input buffers.
+[INFO RSZ-0028] Inserted 1 sky130_fd_sc_hd__clkdlybuf4s25_1 output buffers.
++ repair_design -verbose -max_wire_length 0.0 -slew_margin 20.0 -cap_margin 20.0
+Iteration |   Area    | Resized | Buffers | Nets repaired | Remaining
+---------------------------------------------------------------------
+        0 |     +0.0% |       0 |       0 |             0 |       242
+       10 |     +0.0% |       0 |       0 |             0 |       232
+       20 |     +0.0% |       0 |       0 |             0 |       222
+       30 |     +0.0% |       0 |       0 |             0 |       212
+       40 |     +0.0% |       0 |       0 |             0 |       202
+       50 |     +0.0% |       0 |       0 |             0 |       192
+       60 |     +0.0% |       0 |       0 |             0 |       182
+       70 |     +0.0% |       0 |       0 |             0 |       172
+       80 |     +0.0% |       0 |       0 |             0 |       162
+       90 |     +0.0% |       0 |       0 |             0 |       152
+      100 |     +0.0% |       0 |       0 |             0 |       142
+      110 |     +0.0% |       0 |       0 |             0 |       132
+      120 |     +0.0% |       0 |       0 |             0 |       122
+      130 |     +0.0% |       0 |       0 |             0 |       112
+      140 |     +0.0% |       0 |       0 |             0 |       102
+      150 |     +0.0% |       0 |       0 |             0 |        92
+      160 |     +0.0% |       0 |       0 |             0 |        82
+      170 |     +0.0% |       0 |       0 |             0 |        72
+      180 |     +0.0% |       0 |       0 |             0 |        62
+      190 |     +0.0% |       0 |       0 |             0 |        52
+      200 |     +0.0% |       0 |       0 |             0 |        42
+      210 |     +0.0% |       0 |       0 |             0 |        32
+      220 |     +0.0% |       0 |       0 |             0 |        22
+      230 |     +0.0% |       0 |       0 |             0 |        12
+      240 |     +0.0% |       0 |       0 |             0 |         2
+    final |     +0.0% |       0 |       0 |             0 |         0
+---------------------------------------------------------------------
+[WARNING RSZ-0020] found 2 floating nets.
+ VGND
+ VPWR
++ detailed_placement -max_displacement  500 100 
+Placement Analysis
+---------------------------------
+total displacement        515.1 u
+average displacement        1.3 u
+max displacement           13.4 u
+original HPWL            2550.0 u
+legalized HPWL           2905.4 u
+delta HPWL                   14 %
+
+[INFO DPL-0020] Mirrored 57 instances
+[INFO DPL-0021] HPWL before            2905.4 u
+[INFO DPL-0022] HPWL after             2749.3 u
+[INFO DPL-0023] HPWL delta               -5.4 %
+Setting global connections for newly added cells…
+[INFO] Setting global connections...
+[INFO ODB-0403] 8 connections made, 0 conflicts skipped.
+Updating metrics…
+Cell type report:                       Count       Area
+  Fill cell                                66     247.74
+  Tap cell                                105     131.38
+  Timing Repair Buffer                      2      20.02
+  Inverter                                  2       7.51
+  Sequential cell                          73    1552.74
+  Multi-Input combinational cell          163    1765.44
+  Total                                   411    3724.82
+Writing OpenROAD database to '<run>/32-openroad-repairdesignpostgpl/path_adder.odb'…
+Writing netlist to '<run>/32-openroad-repairdesignpostgpl/path_adder.nl.v'…
+Writing powered netlist to '<run>/32-openroad-repairdesignpostgpl/path_adder.pnl.v'…
+Writing layout to '<run>/32-openroad-repairdesignpostgpl/path_adder.def'…
+Writing timing constraints to '<run>/32-openroad-repairdesignpostgpl/path_adder.sdc'…

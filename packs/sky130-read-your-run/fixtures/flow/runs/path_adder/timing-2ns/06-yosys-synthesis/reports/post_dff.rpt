@@ -1,0 +1,36 @@
+92. Printing statistics.
+
+=== path_adder ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      179        - wires
+      344        - wire bits
+        6        - public wires
+       76        - public wire bits
+        3        - ports
+        3        - port bits
+      269 1.55E+03 cells
+       33        -   $_ANDNOT_
+       12        -   $_AND_
+       12        -   $_NAND_
+       25        -   $_NOR_
+        2        -   $_ORNOT_
+       40        -   $_OR_
+       35        -   $_XNOR_
+       37        -   $_XOR_
+       73 1.55E+03   sky130_fd_sc_hd__dfxtp_2
+
+   Area for cell type $_ANDNOT_ is unknown!
+   Area for cell type $_AND_ is unknown!
+   Area for cell type $_NAND_ is unknown!
+   Area for cell type $_NOR_ is unknown!
+   Area for cell type $_ORNOT_ is unknown!
+   Area for cell type $_OR_ is unknown!
+   Area for cell type $_XNOR_ is unknown!
+   Area for cell type $_XOR_ is unknown!
+
+   Chip area for module '\path_adder': 1552.739200
+     of which used for sequential elements: 1552.739200 (100.00%)
+

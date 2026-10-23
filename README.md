@@ -34,6 +34,7 @@ applicable.
 | [stage-showcase-basys3](packs/stage-showcase-basys3/) | foundational | intermediate | 75 min | Bind a Basys 3 design to the WaveCrux Stage board widget |
 | [cocotb-driven-testbench](packs/cocotb-driven-testbench/) | verification | advanced | 90 min | Cocotb log correlation with waveform events |
 | [fpga-timing-slow-path](packs/fpga-timing-slow-path/) | debugging | intermediate | 45 min | First SimCrux Flow lab (1.2 or later): read an open-FPGA-toolchain run's verdict, find the worst path, follow it to the RTL line |
+| [sky130-read-your-run](packs/sky130-read-your-run/) | debugging | intermediate | 60 min | Open-PDK hardening: read your run. A captured LibreLane sky130A run in SimCrux (1.2 or later): the step that failed, the worst setup slack, the worst path and the registers at its ends. Findings, not signoff |
 
 ## Directory shape
 

@@ -1,0 +1,47 @@
+100. Printing statistics.
+
+=== path_adder ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      240        - wires
+      240        - wire bits
+       76        - public wires
+       76        - public wire bits
+        3        - ports
+        3        - port bits
+      238  3325.69 cells
+        1   12.512   sky130_fd_sc_hd__a211oi_2
+        4   35.034   sky130_fd_sc_hd__a21o_2
+        5   43.792   sky130_fd_sc_hd__a21oi_2
+        1   15.014   sky130_fd_sc_hd__a221oi_2
+        1    10.01   sky130_fd_sc_hd__a22o_2
+        1   15.014   sky130_fd_sc_hd__a311oi_2
+        3   26.275   sky130_fd_sc_hd__a31o_2
+        1   12.512   sky130_fd_sc_hd__a31oi_2
+       13   97.594   sky130_fd_sc_hd__and2_2
+        2   17.517   sky130_fd_sc_hd__and2b_2
+        1    10.01   sky130_fd_sc_hd__and3b_2
+       73 1.55E+03   sky130_fd_sc_hd__dfxtp_2
+        2    7.507   sky130_fd_sc_hd__inv_2
+       14   87.584   sky130_fd_sc_hd__nand2_2
+        2   17.517   sky130_fd_sc_hd__nand2b_2
+        1   11.261   sky130_fd_sc_hd__nand3b_2
+       20   125.12   sky130_fd_sc_hd__nor2_2
+        2   20.019   sky130_fd_sc_hd__o211a_2
+        8   70.067   sky130_fd_sc_hd__o21a_2
+        1    8.758   sky130_fd_sc_hd__o21ai_2
+        3   30.029   sky130_fd_sc_hd__o21ba_2
+        2   22.522   sky130_fd_sc_hd__o2bb2a_2
+        1   11.261   sky130_fd_sc_hd__o311a_2
+        3   30.029   sky130_fd_sc_hd__o31a_2
+       11   68.816   sky130_fd_sc_hd__or2_2
+        4   30.029   sky130_fd_sc_hd__or3_2
+        1    10.01   sky130_fd_sc_hd__or4b_2
+       39  634.358   sky130_fd_sc_hd__xnor2_2
+       18  292.781   sky130_fd_sc_hd__xor2_2
+
+   Chip area for module '\path_adder': 3325.689600
+     of which used for sequential elements: 1552.739200 (46.69%)
+

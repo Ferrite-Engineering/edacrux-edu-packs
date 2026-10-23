@@ -1,0 +1,1 @@
+openroad -exit -no_splash -metrics <run>/52-openroad-fillinsertion/or_metrics_out.json /nix/store/gaqvv85phz5jxhkxv1sk482aa46sgij3-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/openroad/fill.tcl

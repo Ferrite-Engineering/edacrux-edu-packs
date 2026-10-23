@@ -1,0 +1,56 @@
+schema_version: 1
+
+# === Pack identity ===
+pack_id: sky130-read-your-run
+pack_version: 1.0.0
+pack_category: debugging
+
+# === Tier and tool dependency ===
+tier: A
+required_tools:
+  - product: simcrux
+    min_version: "1.2.0"
+optional_tools: []
+
+# === Pedagogical metadata ===
+learning_objectives:
+  en:
+    - "Read the result of an open-PDK run from its own records instead of its exit status."
+    - "Tell a step that stopped the flow from a checker whose error was deferred to the end."
+    - "Find the worst setup slack and the violation counts of a run in its metrics."
+    - "Find the worst setup path of a run and name the registers at its two ends."
+    - "Explain why the same design can close at one clock period and miss at another."
+prerequisites: []
+curriculum_topics:
+  - timing_analysis
+  - pdk_flow
+  - arithmetic
+estimated_duration_minutes: 60
+difficulty: intermediate
+primary_hdl: verilog
+alternates: []
+
+content:
+  fixtures:
+    flow:
+      simcrux: fixtures/flow
+    expected: fixtures/expected.json
+  student_handouts:
+    en: student/handout.md
+  instructor:
+    notes: instructor/notes.md
+    solution: instructor/solution.md
+
+verified_against: []
+
+locales:
+  - en
+
+maintainers:
+  - Ferrite Engineering
+
+short_description: >
+  Open one captured open-PDK (sky130) run of a small adder in SimCrux's Flow
+  Runs panel, read which step failed and which did not, the worst setup slack
+  and the worst path, and follow the path back to the registers in the RTL.
+  The run is a finding about one design on an open PDK.
