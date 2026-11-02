@@ -1,4 +1,4 @@
-# counter-lab — student handout
+# counter-lab: student handout
 
 In this lab you will inspect the waveform of an 8-bit synchronous
 counter to learn the cursor, value column, and transition-navigation
@@ -21,7 +21,7 @@ period).
    tree on the left and add `clk`, `rst_n`, `enable`, `count`, and
    `overflow` to the lane panel by double-clicking or by drag-and-drop.
 
-## Part 1 — read the cursor
+## Part 1: read the cursor
 
 1. Click anywhere on the waveform canvas to place the primary cursor.
 2. The value column on the right shows what each signal reads at the
@@ -33,7 +33,7 @@ period).
 4. Move the cursor to **t = 35 ns**: the counter has now incremented
    once. Confirm `count = 01`.
 
-## Part 2 — change display format
+## Part 2: change display format
 
 By default `count` displays in hexadecimal. Right-click (or long-press
 on touch) the `count` row and switch the format to **Decimal**, then
@@ -44,21 +44,21 @@ on touch) the `count` row and switch the format to **Decimal**, then
 >
 > ___________________________________________________________________
 
-## Part 3 — navigate transitions
+## Part 3: navigate transitions
 
 The keyboard shortcuts **Q** and **E** jump the primary cursor to the
 *previous* and *next* transition of the currently-focused signal.
 
 1. Click on the `count` row to focus it.
-2. Press **E** repeatedly. The cursor lands on every count update — one
+2. Press **E** repeatedly. The cursor lands on every count update, one
    click per 10 ns.
 3. Click on the `overflow` row to focus it instead, then press **E**.
    This time the cursor jumps a much larger distance, because `overflow`
    only transitions twice in the whole simulation.
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — locate the rollover
+### Exercise 1: locate the rollover
 
 The counter eventually rolls over from `0xFF` back to `0x00`. Find that
 moment.
@@ -73,7 +73,7 @@ moment.
 >
 > ___________________________________________________________________
 
-### Exercise 2 — count clock cycles
+### Exercise 2: count clock cycles
 
 How many clock cycles elapse between reset release and the moment
 `count` first reaches `0x80` (128 decimal)?
@@ -85,7 +85,7 @@ How many clock cycles elapse between reset release and the moment
 
 > **A:** Cycles from `count = 1` to `count = 128`: __________
 
-### Exercise 3 — explain the overflow design
+### Exercise 3: explain the overflow design
 
 Read [`../src/counter.v`](../src/counter.v). The `overflow` signal is
 combinational:

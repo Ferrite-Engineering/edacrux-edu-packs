@@ -36,7 +36,7 @@ Open `tb/tb_alu.v` and read the `check` calls. Each one:
 - and the testbench compares and records PASS or FAIL automatically.
 
 That is a *directed* test: you, the engineer, chose the case and the answer. Pick
-one — say `add_carry` — and confirm you can see, in the RTL, why 15 + 1 should be
+one, say `add_carry`, and confirm you can see, in the RTL, why 15 + 1 should be
 16 and why the result needs five bits.
 
 ## 3. Read a single test
@@ -49,7 +49,7 @@ On the dashboard, find the test named **`sub_zero`**.
 Being able to go from "the dashboard shows this test" to "here is the case it
 covers" is the everyday move of a verification engineer.
 
-## 4. Make it fail — on purpose
+## 4. Make it fail: on purpose
 
 The best way to understand green is to break it. In `src/alu4.v`, change the
 subtract case (`op == 2'd1`) to `a + b`. Rebuild and reopen.
@@ -63,5 +63,5 @@ it, a fix, green.
 ## What you should be able to do now
 
 Run a regression, read its summary and per-test status, connect a test on the
-dashboard to the case it covers, and recognise — and deliberately break — a clean
+dashboard to the case it covers, and recognise, and break on purpose, a clean
 run. Every SimCrux lab from here is a harder version of this loop.

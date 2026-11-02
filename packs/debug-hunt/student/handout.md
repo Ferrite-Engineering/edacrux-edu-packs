@@ -1,10 +1,10 @@
-# debug-hunt — student handout
+# debug-hunt: student handout
 
 You are handed two VCDs from what should be the *same* design:
 
-- **`fixtures/buggy.vcd`** — captured from a counter that
+- **`fixtures/buggy.vcd`**: captured from a counter that
   someone wrote that *almost* works.
-- **`fixtures/golden.vcd`** — captured from a known-good
+- **`fixtures/golden.vcd`**: captured from a known-good
   reference implementation of the same counter.
 
 Stimulus is identical in both runs: 100 MHz clock, reset held until
@@ -16,7 +16,7 @@ golden source. Propose a one-line fix.
 
 ⚠️ **Do NOT open [`../src/counter_golden.v`](../src/counter_golden.v)
 or your instructor's solution before finishing.** You can read
-[`../src/counter_buggy.v`](../src/counter_buggy.v) freely — that
+[`../src/counter_buggy.v`](../src/counter_buggy.v) freely, that
 *is* the design under debug.
 
 ## Setup
@@ -34,7 +34,7 @@ or your instructor's solution before finishing.** You can read
 5. Click **Configure Diff**. A new visual style highlights the regions
    where the two `count` traces disagree.
 
-## Part 1 — locate the first divergence
+## Part 1: locate the first divergence
 
 1. Press **Home** then **Ctrl + ]** (jump to next diff).
 2. The cursor lands on the first cycle where buggy `count` ≠ golden
@@ -45,7 +45,7 @@ or your instructor's solution before finishing.** You can read
 > - buggy count = 0x__
 > - golden count = 0x__
 
-## Part 2 — locate the second-most-suspicious moment
+## Part 2: locate the second-most-suspicious moment
 
 Press **Ctrl + ]** to step to the next diff. Repeat until you have
 observed at least three divergence regions.
@@ -56,7 +56,7 @@ observed at least three divergence regions.
 >
 > ___________________________________________________________________
 
-## Part 3 — propose a fix
+## Part 3: propose a fix
 
 Read [`../src/counter_buggy.v`](../src/counter_buggy.v).
 
@@ -67,9 +67,9 @@ Read [`../src/counter_buggy.v`](../src/counter_buggy.v).
 >
 > Corrected line: ________________________________________________
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — what makes the buggy counter look so similar?
+### Exercise 1: what makes the buggy counter look so similar?
 
 Cross-correlate the buggy `count` with the golden `count` over the
 whole 500 ns window.
@@ -79,7 +79,7 @@ whole 500 ns window.
 >
 > ___________________________________________________________________
 
-### Exercise 2 — X-trace from the symptom
+### Exercise 2: X-trace from the symptom
 
 WaveCrux's **X-trace** feature walks backward from a signal of
 interest through its fan-in cone. Right-click on `count` in the
@@ -90,7 +90,7 @@ buggy trace and choose **X-trace from here**.
 >
 > ___________________________________________________________________
 
-### Exercise 3 — why the bug is subtle
+### Exercise 3: why the bug is subtle
 
 A reviewer skimming `counter_buggy.v` might miss the bug entirely.
 What was the *cognitive trap* that lets this kind of typo slip past
@@ -125,11 +125,11 @@ netcrux fixtures/netlist.json
 - The register only updates when its **enable** is asserted. Trace the fan-in
   cone of that enable back toward the `enable` input port.
 - What sits between the `enable` input and the register's enable? On a correct
-  counter, nothing — the input drives the enable directly. Here, the enable is
+  counter, nothing, the input drives the enable directly. Here, the enable is
   driven by the **inverted** input. That inversion is the entire bug, and in the
   structure it is a single gate you can point at.
 
 > On a full install this is one click: select the misbehaving `count` in WaveCrux
 > and cross-probe to its driver in NetCrux. In this pack you open the netlist by
-> hand — same destination. The waveform told you *which* signal is wrong; the
+> hand, same destination. The waveform told you *which* signal is wrong; the
 > structure tells you *why*.

@@ -1,9 +1,9 @@
-# stage-showcase-basys3 — student handout
+# stage-showcase-basys3: student handout
 
 The WaveCrux **Stage** panel is an animated, signal-bound visualization
 surface. Where the waveform view shows you raw signal traces over
 time, the Stage shows you what the signals *mean* in their physical
-context — for FPGA boards, that means LEDs lighting up, switches
+context, for FPGA boards, that means LEDs lighting up, switches
 flipping, and 7-segment digits changing as you scrub the cursor.
 
 This lab's design is a minimal Basys 3 demo:
@@ -23,7 +23,7 @@ educational Basys 3 board widget that ships with WaveCrux Open Core.
 2. The default lane panel shows your signals. Add `sw`, `btn`, `led`,
    `count`, `seg`, and `an` if not already present.
 
-## Part 1 — open the Stage panel
+## Part 1: open the Stage panel
 
 1. Press **F4** (or **View → Stage**) to open the Stage panel.
 2. Click **➕ Insert Widget** at the top of the Stage panel.
@@ -33,7 +33,7 @@ educational Basys 3 board widget that ships with WaveCrux Open Core.
    of the board's switches, LEDs, buttons, and 7-segment display.
    None of them are yet wired to your design.
 
-## Part 2 — bind I/O
+## Part 2: bind I/O
 
 WaveCrux's Stage binding dialog lets you map design signals to board
 pins one at a time. The pre-saved binding file
@@ -50,7 +50,7 @@ applied automatically. Otherwise:
    - `SEG[a..g]` ← `tb_basys3.dut.seg[0..6]`
    - `AN[3:0]`  ← `tb_basys3.dut.an`
 
-## Part 3 — scrub and observe
+## Part 3: scrub and observe
 
 1. Press **Home** to return the cursor to t = 0.
 2. Click on the waveform canvas and drag the cursor slowly to the
@@ -67,9 +67,9 @@ applied automatically. Otherwise:
    - t = 1500 ns: digit reads "5"
    - t = 2700 ns: all four switches lit; digit reads "6"
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — find a specific digit display
+### Exercise 1: find a specific digit display
 
 > **Q:** At what cursor time does the 7-segment first display the
 > digit `3`? *(Hint: focus the `count` lane, press **E** until it
@@ -77,7 +77,7 @@ applied automatically. Otherwise:
 >
 > ___________________________________________________________________
 
-### Exercise 2 — active-low segments
+### Exercise 2: active-low segments
 
 The Basys 3 7-segment display is **active-low**: a segment lights
 when its bit is `0`. Look at the `seg` lane when `count = 4`.
@@ -88,13 +88,13 @@ when its bit is `0`. Look at the `seg` lane when `count = 4`.
 >
 > ___________________________________________________________________
 
-### Exercise 3 — when does the waveform view help more than Stage?
+### Exercise 3: when does the waveform view help more than Stage?
 
 The Stage panel shows physical-world animation. The waveform panel
 shows signal timing.
 
 > **Q:** Give one example where the *waveform* view is the better
-> debugging surface — i.e. a question that Stage cannot help you
+> debugging surface, i.e. a question that Stage cannot help you
 > answer.
 >
 > ___________________________________________________________________

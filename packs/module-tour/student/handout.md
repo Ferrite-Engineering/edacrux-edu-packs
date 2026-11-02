@@ -1,4 +1,4 @@
-# Touring a design — hierarchy, fan-out and fan-in
+# Touring a design: hierarchy, fan-out and fan-in
 
 **Tool:** NetCrux · **Time:** ~60 minutes · **Files:** `src/core.v`
 
@@ -14,7 +14,7 @@ several places) and **fan-in** (several signals converging on one).
 netcrux fixtures/netlist.json
 ```
 
-The top module is **`core`** — a tiny clocked datapath.
+The top module is **`core`**, a tiny clocked datapath.
 
 ## 1. The lay of the land
 
@@ -31,16 +31,16 @@ same module definition.
 - Confirm in `src/core.v`: find the two `regslot` instantiations and the one
   `alu8`.
 
-## 2. Fan-out — follow `din`
+## 2. Fan-out: follow `din`
 
 `din` is the data input. Trace it forward (fan-out): which blocks does it reach?
 
-- `din` drives `u_ra`'s data input. Does it reach `u_rb`? Look carefully — the
+- `din` drives `u_ra`'s data input. Does it reach `u_rb`? Look carefully, the
   second slot's data comes from somewhere else.
 - A single net reaching several sinks is fan-out. Here `din` fans out to… how
   many loads?
 
-## 3. Fan-in — what drives `u_alu`?
+## 3. Fan-in: what drives `u_alu`?
 
 Now trace backward (fan-in) from the ALU. The ALU has two data inputs, `a` and
 `b`. Where does each come from?
@@ -55,7 +55,7 @@ are the fan-in point of the datapath.
 
 Here is the subtle one. Where does `u_rb`'s *input* come from?
 
-- Not from `din`. It comes from `alu_y` — the ALU's **output**.
+- Not from `din`. It comes from `alu_y`: the ALU's **output**.
 - So: ALU output → `u_rb` input → (next cycle) `u_rb` output → ALU `b` input.
   The result feeds back into the computation. Trace that loop by eye in NetCrux.
 
@@ -71,5 +71,5 @@ able to *see* the loop in the structure is the point of the lab.
 ## What you should be able to do now
 
 Move fluently up and down a hierarchy, tell reuse from distinct blocks, and
-trace both fan-out and fan-in — including a feedback loop — by following nets
+trace both fan-out and fan-in, including a feedback loop, by following nets
 through the schematic. Every structural-debug lab from here uses these moves.

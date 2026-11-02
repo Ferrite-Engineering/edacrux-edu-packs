@@ -62,5 +62,5 @@ maintainers:
   - Ferrite Engineering
 short_description: >
   A four-tool CDC capstone: a two-clock SoC with one safely-synchronized crossing
-  and one unsynchronized multi-bit hazard. It passes simulation and lint — so the
+  and one unsynchronized multi-bit hazard. It passes simulation and lint, so the
   CDC bug must be found by analysing the structure and waveform by hand.

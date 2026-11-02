@@ -20,7 +20,7 @@ learning_objectives:
     - "Classify a test as stable, failing, or flaky from its seed results."
     - "Distinguish a flaky test caused by a real design bug from one caused by a bad testbench."
     - "Reproduce a flaky failure by pinning the seed that triggered it."
-    - "Decide whether to fix, quarantine, or waive a flaky test — and why quarantine is not a fix."
+    - "Decide whether to fix, quarantine, or waive a flaky test, and why quarantine is not a fix."
 prerequisites:
   - regression-hello-world
 curriculum_topics:
@@ -52,5 +52,5 @@ maintainers:
 
 short_description: >
   Hunt a flaky test across seeds in SimCrux: a random regression that passes on
-  some seeds and fails on others because of a real negative-overflow bug — learn
+  some seeds and fails on others because of a real negative-overflow bug, learn
   to classify, reproduce, and decide what to do about it.

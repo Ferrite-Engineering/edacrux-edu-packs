@@ -1,4 +1,4 @@
-# shift-register-patterns — student handout
+# shift-register-patterns: student handout
 
 This lab contrasts two shift-register designs:
 
@@ -18,12 +18,12 @@ frequency from a cursor delta, and recognize an LFSR's period.
    `fixtures/reference.vcd` and add `clk`, `sin`, `u_shift.q`,
    `u_shift.sout`, and `u_lfsr.state` to the lane panel.)
 
-## Part 1 — deterministic shift
+## Part 1: deterministic shift
 
 1. Move the cursor to **t = 35 ns**. The first pattern bit (`1`) has
    shifted into `q[0]`; `q = 0x01`.
 2. Press **E** with `u_shift.q` focused. Step through:
-   - t = 45 → `q = 0x02` (binary `00000010` — the `1` migrated to
+   - t = 45 → `q = 0x02` (binary `00000010`: the `1` migrated to
      bit 1, and a `0` shifted into bit 0).
    - t = 55 → `q = 0x05`.
    - t = 65 → `q = 0x0B` (four bits in: `1011`).
@@ -35,7 +35,7 @@ frequency from a cursor delta, and recognize an LFSR's period.
 >
 > ___________________________________________________________________
 
-## Part 2 — switching activity
+## Part 2: switching activity
 
 WaveCrux's status bar shows the *transition count* for the focused
 signal across a time range.
@@ -46,13 +46,13 @@ signal across a time range.
 
 > **A:** Transition count on `sout` over [30, 1030] ns: ______
 
-## Part 3 — LFSR period
+## Part 3: LFSR period
 
 The LFSR is initialized to `5'b00001` on reset. Its state evolves on
 every clock until it returns to `5'b00001` after a full period.
 
 1. Focus the `u_lfsr.state` lane. Place marker `m0` at the first time
-   `state = 5'b00001` after reset releases — this should be at
+   `state = 5'b00001` after reset releases, this should be at
    t = 22 ns (still the reset value, since the next posedge has not
    fired yet).
 2. Press **E** until `state` returns to `5'b00001`. Place marker `m1`
@@ -65,9 +65,9 @@ every clock until it returns to `5'b00001` after a full period.
 > Does this match the formula for a maximum-length LFSR of length n?
 > (Hint: 2ⁿ − 1 for n = 5.) Yes / No
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — frequency estimation
+### Exercise 1: frequency estimation
 
 The LFSR `state[0]` bit is pseudo-random. Focus it.
 
@@ -77,14 +77,14 @@ The LFSR `state[0]` bit is pseudo-random. Focus it.
 >
 > ___________________________________________________________________
 
-### Exercise 2 — predict q[5] at t = 75 ns
+### Exercise 2: predict q[5] at t = 75 ns
 
 Without looking at the value column:
 
 > **Q:** What is `q[5]` at t = 75 ns? Verify by adding `q[5]` to the
 > lane panel (drag from the signal tree).
 
-### Exercise 3 — what changes if we start LFSR with 5'b00000?
+### Exercise 3: what changes if we start LFSR with 5'b00000?
 
 The 5-bit LFSR has 32 possible states but visits only 31. Read
 [`../src/lfsr5.v`](../src/lfsr5.v).

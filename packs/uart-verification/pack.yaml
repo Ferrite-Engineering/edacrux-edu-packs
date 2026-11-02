@@ -17,7 +17,7 @@ learning_objectives:
     - "Cross-probe from a failing test straight to the waveform of that transmission."
     - "Read a UART serial line bit by bit and decode the byte actually sent."
     - "Determine whether a red test is a design bug or a wrong test expectation."
-    - "Fix the right thing — here, the testbench, not the DUT."
+    - "Fix the right thing: here, the testbench, not the DUT."
 prerequisites:
   - regression-hello-world
   - counter-lab
@@ -49,6 +49,6 @@ locales:
 maintainers:
   - Ferrite Engineering
 short_description: >
-  A SimCrux + WaveCrux pair: a UART regression where one test fails — but the
+  A SimCrux + WaveCrux pair: a UART regression where one test fails, but the
   waveform shows the DUT sent the byte correctly, so the bug is in the test's
   expectation, not the design. The failing-test-to-waveform loop, end to end.

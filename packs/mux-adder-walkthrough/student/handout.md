@@ -1,4 +1,4 @@
-# Reading a design as structure — a tiny ALU
+# Reading a design as structure: a tiny ALU
 
 **Tool:** NetCrux · **Time:** ~45 minutes · **Files:** `src/alu.v`, `src/adder4.v`
 
@@ -26,7 +26,7 @@ NetCrux opens on the top module, **`alu`**. Look at its border: the ports.
 
 ## 2. The output multiplexer
 
-Find the block driving `y`. It is a **2:1 multiplexer** — a selector that picks
+Find the block driving `y`. It is a **2:1 multiplexer**, a selector that picks
 one of two inputs based on a control line.
 
 - What is the control line, and where does it come from?
@@ -38,7 +38,7 @@ multiplexer in structure. They are the same thing seen two ways.
 
 ## 3. Pushing into the adder
 
-`sum` comes from a block named **`u_add`** — an instance of the `adder4`
+`sum` comes from a block named **`u_add`**, an instance of the `adder4`
 module. In NetCrux, **push into it** (double-click, or the push-in control).
 
 - Inside `adder4`, what single cell does the addition?

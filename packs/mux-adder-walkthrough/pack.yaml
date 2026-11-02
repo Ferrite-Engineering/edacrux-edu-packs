@@ -50,5 +50,5 @@ maintainers:
   - Ferrite Engineering
 
 short_description: >
-  A tiny ALU — one adder submodule feeding one output multiplexer — for learning
+  A tiny ALU, one adder submodule feeding one output multiplexer, for learning
   to read RTL as structure in NetCrux: top module, ports, cells, and hierarchy.

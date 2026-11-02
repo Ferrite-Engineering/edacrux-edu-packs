@@ -1,4 +1,4 @@
-# memory-controller — student handout
+# memory-controller: student handout
 
 Wishbone is an open-source SoC bus standard widely used in the
 RISC-V / OpenCores / LiteX ecosystem. This lab uses the **B4 classic**
@@ -7,15 +7,15 @@ time.
 
 The five-signal core (master view):
 
-- `wb_adr` — address.
-- `wb_dat_o` — data from master to slave (write data).
-- `wb_dat_i` — data from slave to master (read data).
-- `wb_we` — write enable. 1 = write, 0 = read.
-- `wb_cyc + wb_stb` — *cycle in progress* + *strobe valid*.
+- `wb_adr`: address.
+- `wb_dat_o`: data from master to slave (write data).
+- `wb_dat_i`: data from slave to master (read data).
+- `wb_we`: write enable. 1 = write, 0 = read.
+- `wb_cyc + wb_stb`: *cycle in progress* + *strobe valid*.
 
 Plus the slave's response:
 
-- `wb_ack` — acknowledge. Pulses high for exactly one cycle when the
+- `wb_ack`: acknowledge. Pulses high for exactly one cycle when the
   slave has finished the transaction.
 
 In this lab the master writes 8 known values to memory at byte
@@ -32,7 +32,7 @@ tear down).
    `wb_we`, `wb_ack`), "address_data" (`wb_adr`, `dat_master_to_slave`,
    `dat_slave_to_master`), and "master_state" (`last_read`, `done`).
 
-## Part 1 — observe the handshake
+## Part 1: observe the handshake
 
 1. Move the cursor to **t = 35 ns**. Read `wb_cyc`, `wb_stb`, `wb_we`,
    `wb_ack`, and `wb_adr`.
@@ -49,7 +49,7 @@ tear down).
 3. Move the cursor to **t = 55 ns**. The first transaction is fully
    complete and the master is preparing the second write.
 
-## Part 2 — apply the Wishbone decoder
+## Part 2: apply the Wishbone decoder
 
 1. Right-click on any of the Wishbone control signals and choose
    **Add Decoder → Wishbone**.
@@ -64,9 +64,9 @@ tear down).
 >   0xCAFE0000–0xCAFE0007.
 > - 8 READs to the same addresses with the same data.
 
-## Part 3 — verify the readback
+## Part 3: verify the readback
 
-1. Add `last_read` to the lane panel (drag from the signal tree —
+1. Add `last_read` to the lane panel (drag from the signal tree,
    path: `tb_mem.u_master.last_read`).
 2. Display in **Hexadecimal** format.
 3. Press **E** with `last_read` focused. The cursor jumps to every
@@ -75,9 +75,9 @@ tear down).
 > **A:** Confirm `last_read` takes values 0xCAFE0000, 0xCAFE0001, …,
 > 0xCAFE0007 at successive ACKs in the read phase.
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — switching-activity heatmap
+### Exercise 1: switching-activity heatmap
 
 Open the **Switching Activity** panel (View menu or **Ctrl+H**).
 
@@ -86,7 +86,7 @@ Open the **Switching Activity** panel (View menu or **Ctrl+H**).
 >
 > ___________________________________________________________________
 
-### Exercise 2 — count transaction cycles
+### Exercise 2: count transaction cycles
 
 > **Q:** How many clock cycles does *one* Wishbone B4 transaction take
 > in this design (from `wb_cyc` rising to the next rise)? Use the
@@ -94,7 +94,7 @@ Open the **Switching Activity** panel (View menu or **Ctrl+H**).
 >
 > ___________________________________________________________________
 
-### Exercise 3 — what if ack never arrives?
+### Exercise 3: what if ack never arrives?
 
 (*Conceptual.*) Suppose the memory slave has a bug and never asserts
 `wb_ack` for some address.

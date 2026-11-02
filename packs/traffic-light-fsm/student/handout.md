@@ -1,7 +1,7 @@
-# traffic-light-fsm — student handout
+# traffic-light-fsm: student handout
 
-A traffic light cycles through three states — **RED → GREEN → YELLOW
-→ RED → …** — spending 30 clock cycles in each state. At 100 MHz that
+A traffic light cycles through three states, **RED → GREEN → YELLOW
+→ RED → …**, spending 30 clock cycles in each state. At 100 MHz that
 is 300 ns per state and 900 ns per full RED-GREEN-YELLOW period.
 
 The design lives in [`../src/traffic_light.v`](../src/traffic_light.v).
@@ -16,7 +16,7 @@ that fires the state transition on the cycle dwell reaches 29.
    `clk`, `rst_n`, `state`, `red_light`, `green_light`, and
    `yellow_light` to the lane panel.)
 
-## Part 1 — observe the raw state
+## Part 1: observe the raw state
 
 Move the cursor to **t = 25 ns** and confirm `state = 2'b00`,
 `red_light = 1`, others 0. The FSM is in RED.
@@ -30,7 +30,7 @@ t = 320 ns where `state` changes to `2'b01` (GREEN).
 >
 > ___________________________________________________________________
 
-## Part 2 — apply a translate filter
+## Part 2: apply a translate filter
 
 Reading `0b00`, `0b01`, `0b10` from the value column gets old quickly.
 WaveCrux supports GTKWave-compatible *translate filters* that map raw
@@ -54,7 +54,7 @@ signal values to friendly labels.
 Move the cursor to t = 325 ns again. The value column now reads
 `GREEN`. Much better.
 
-## Part 3 — FSM Visualizer
+## Part 3: FSM Visualizer
 
 WaveCrux can render an FSM-state graph from a translated state signal.
 
@@ -66,9 +66,9 @@ WaveCrux can render an FSM-state graph from a translated state signal.
    FSM through its cycle. Take a moment to convince yourself that the
    graph matches the case statement in `traffic_light.v`.
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — measure the FSM period with markers
+### Exercise 1: measure the FSM period with markers
 
 Three RED → GREEN transitions are visible in the 3 µs trace.
 
@@ -86,7 +86,7 @@ Three RED → GREEN transitions are visible in the 3 µs trace.
 > The delta between `b` and `c` is _______ ns. The FSM period is
 > _______ ns and the period in clock cycles is _______.
 
-### Exercise 2 — encoding type
+### Exercise 2: encoding type
 
 The states use values `2'b00`, `2'b01`, `2'b10`. Only one bit changes
 per transition for RED → GREEN (bit 0) and for GREEN → YELLOW (bit 1
@@ -96,9 +96,9 @@ flips, bit 0 also flips). For YELLOW → RED both bits change.
 >
 > ___________________________________________________________________
 
-### Exercise 3 — what would happen if reset is asserted mid-cycle?
+### Exercise 3: what would happen if reset is asserted mid-cycle?
 
-(*Conceptual — no need to modify the testbench.*)
+(*Conceptual, no need to modify the testbench.*)
 
 > **Q:** Suppose `rst_n` goes low for a single cycle while the FSM is
 > in GREEN. What state will the FSM be in one cycle after `rst_n`

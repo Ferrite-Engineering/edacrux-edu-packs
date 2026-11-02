@@ -16,7 +16,7 @@ required_tools:
 optional_tools: []
 learning_objectives:
   en:
-    - "Recognise a link that is transmitting but returning wrong data — alive, not working."
+    - "Recognise a link that is transmitting but returning wrong data, alive, not working."
     - "Cross a bring-up problem across three views: the regression, the waveform, and the structure."
     - "Read SPI mode-0 timing on a waveform: chip-select, SCLK edges, MOSI and MISO."
     - "Localise a one-bit sampling error to the receive shift register in the structure."

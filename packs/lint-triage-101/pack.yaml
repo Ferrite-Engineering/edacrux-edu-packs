@@ -20,7 +20,7 @@ learning_objectives:
     - "Read the by-rule breakdown and count how often each rule fires."
     - "Filter the violation table by rule and by severity."
     - "Tell a cosmetic finding (an unused signal) from a latent bug (a width mismatch)."
-    - "Decide what to fix, what to waive, and what to leave — the triage judgement itself."
+    - "Decide what to fix, what to waive, and what to leave, the triage judgement itself."
 prerequisites: []
 curriculum_topics:
   - lint_triage

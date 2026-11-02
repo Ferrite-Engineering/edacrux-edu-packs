@@ -1,4 +1,4 @@
-# axi4-lite-peripheral — student handout
+# axi4-lite-peripheral: student handout
 
 AXI4-Lite is a five-channel subset of the ARM AXI4 bus. Each channel
 uses a simple **VALID / READY handshake**:
@@ -28,9 +28,9 @@ The master walks through five operations:
 |---|-----------|----------|------------|----------------|
 | 1 | WRITE     | 0x00     | 0xA0A00000 | OKAY (`2'b00`) |
 | 2 | WRITE     | 0x04     | 0xB1B11111 | OKAY |
-| 3 | WRITE     | 0xFC     | 0xDEADC0DE | **SLVERR** (`2'b10`) — unmapped |
+| 3 | WRITE     | 0xFC     | 0xDEADC0DE | **SLVERR** (`2'b10`), unmapped |
 | 4 | READ      | 0x00     | (= 0xA0A00000) | OKAY |
-| 5 | READ      | 0x80     | (sentinel 0xDEADBEEF) | **SLVERR** — unmapped |
+| 5 | READ      | 0x80     | (sentinel 0xDEADBEEF) | **SLVERR**, unmapped |
 
 ## Setup
 
@@ -39,7 +39,7 @@ The master walks through five operations:
    and add the channel signals grouped under aw_channel, w_channel,
    b_channel, ar_channel, r_channel.)
 
-## Part 1 — handshake by hand
+## Part 1: handshake by hand
 
 1. Move the cursor to **t = 35 ns**. Read `awvalid`, `awready`,
    `wvalid`, `wready`, `awaddr`, `wdata`.
@@ -63,7 +63,7 @@ The slave is acknowledging the write with `BRESP = OKAY`. Notice that
 for the master, the slave refuses new writes. Lowering READY is how a
 slave applies backpressure.
 
-## Part 2 — apply the AXI4-Lite decoder
+## Part 2: apply the AXI4-Lite decoder
 
 1. Right-click on any channel signal and choose **Add Decoder →
    AXI4-Lite**.
@@ -79,7 +79,7 @@ slave applies backpressure.
 > 4. READ  0x00 → 0x________ ; resp=______
 > 5. READ  0x80 → 0x________ ; resp=______
 
-## Part 3 — locate the SLVERR
+## Part 3: locate the SLVERR
 
 The third write (to address 0xFC) targets an unmapped address, so the
 slave reports an error. The handshake itself is legal: SLVERR is a
@@ -101,9 +101,9 @@ Similarly, find the SLVERR *read*:
 
 > **A:** SLVERR read returned at t = ______ ns; channel = __.
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — what does the master see?
+### Exercise 1: what does the master see?
 
 Add `last_bresp`, `last_rresp`, and `last_rdata` from
 `tb_axil.u_master` to the lane panel.
@@ -114,7 +114,7 @@ Add `last_bresp`, `last_rresp`, and `last_rdata` from
 >
 > ___________________________________________________________________
 
-### Exercise 2 — why a sentinel?
+### Exercise 2: why a sentinel?
 
 The slave returns `0xDEADBEEF` for unmapped reads (instead of, say,
 zero).
@@ -124,7 +124,7 @@ zero).
 >
 > ___________________________________________________________________
 
-### Exercise 3 — channel independence
+### Exercise 3: channel independence
 
 AXI explicitly allows write and read channels to operate
 *independently*. In this trace, every operation completes before the

@@ -63,5 +63,5 @@ maintainers:
   - Ferrite Engineering
 short_description: >
   A four-tool capstone project: take a register-mapped ALU peripheral through a
-  full verification-methodology pass — document its structure, triage its lint,
+  full verification-methodology pass, document its structure, triage its lint,
   extend its regression to coverage, and justify it all from the waveform.

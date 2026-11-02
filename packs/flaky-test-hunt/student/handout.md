@@ -3,7 +3,7 @@
 **Tool:** SimCrux · **Time:** ~60 minutes · **Files:** `src/sat_add.v`, `tb/tb_sat.v`
 
 A **flaky** test is one that passes sometimes and fails sometimes on the *same
-code*. It is the worst kind of failure because "run it again" makes it go away —
+code*. It is the worst kind of failure because "run it again" makes it go away,
 which is exactly why it must never be ignored. This lab is a flaky test with a
 real cause, and the discipline for dealing with it.
 
@@ -30,7 +30,7 @@ A test with a mixed row is **flaky**. Here it is `random_stress`.
 
 A flaky test has one of two causes, and telling them apart is the whole skill:
 
-- **A bad testbench** — a race, an uninitialised value, a timing assumption.
+- **A bad testbench**: a race, an uninitialised value, a timing assumption.
   The design is fine; the test lies.
 - **A real design bug** that only some inputs trigger. The test is fine; the
   design is broken, and the flakiness is just the bug being rare.
@@ -45,7 +45,7 @@ generate. **This is cause two: a real bug.**
 A flaky failure you cannot reproduce, you cannot fix. Pin a failing seed:
 
 - From the grid, note a seed where `random_stress` failed.
-- Run `./build.sh` — or `vvp build/sim.vvp +seed=<N>` — and confirm the failure
+- Run `./build.sh`, or `vvp build/sim.vvp +seed=<N>`, and confirm the failure
   is there every time for that seed. Deterministic reproduction is the difference
   between "flaky, ignore it" and "found it."
 
@@ -57,12 +57,12 @@ the **negative** overflow case.
 - What value should a large-magnitude negative overflow clamp to?
 - What does this design clamp it to?
 - That single wrong constant is the entire bug. It only shows up when two
-  operands sum below −128 — inputs some seeds produce and others do not.
+  operands sum below −128, inputs some seeds produce and others do not.
 
 ## 5. Fix vs. quarantine
 
-You could *quarantine* `random_stress` — tell SimCrux to stop failing the suite
-on it — and the dashboard goes green. **That is not a fix.** The bug still ships;
+You could *quarantine* `random_stress`, tell SimCrux to stop failing the suite
+on it, and the dashboard goes green. **That is not a fix.** The bug still ships;
 you have only hidden the one test that found it. Quarantine buys time to fix, it
 is not a substitute. Fix the constant, rebuild, and watch every seed go green for
 the right reason.

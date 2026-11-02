@@ -3,9 +3,9 @@
 **Tool:** LintCrux · **Time:** ~60 minutes · **Files:** `src/sync_fifo.v`
 
 A linter will happily hand you fifty findings. The skill that matters is not
-running it — it is *triage*: reading the report, telling the real problems from
+running it, it is *triage*: reading the report, telling the real problems from
 the noise, and deciding what to fix, waive, or ignore. This lab is that skill on
-a small, honest example.
+a small, realistic example.
 
 ## Setup
 
@@ -14,7 +14,7 @@ a small, honest example.
 lintcrux fixtures/lint.json   # open the unified report
 ```
 
-The design is a small synchronous FIFO (`src/sync_fifo.v`). It works — but it is
+The design is a small synchronous FIFO (`src/sync_fifo.v`). It works, but it is
 not clean.
 
 ## 1. Read the whole report
@@ -27,8 +27,8 @@ Look at the violation table. How many findings are there? What rules fired?
 
 Two findings are `UNUSEDSIGNAL`:
 
-- `debug_count` — a register declared and never touched. Leftover scaffolding.
-- `almost` — a flag that is computed and then never read.
+- `debug_count`: a register declared and never touched. Leftover scaffolding.
+- `almost`: a flag that is computed and then never read.
 
 Both are *cosmetic*: they do not change what the FIFO does. But they are noise,
 and noise is where real bugs hide. In the RTL, find both and decide: delete, or
@@ -41,7 +41,7 @@ is compared against a 3-bit constant.
 
 - Find it in `src/sync_fifo.v`. Why is a width mismatch a *latent bug* and not
   just style? Think about what happens at the boundary values.
-- This is the whole point of triage: the width mismatch matters more than the two
+- This is what triage is for: the width mismatch matters more than the two
   unused signals combined, even though it is one finding against two.
 
 ## 4. Filter like you would on a real project
@@ -54,11 +54,11 @@ is compared against a 3-bit constant.
 ## 5. Make the calls
 
 Write down, for each of the three findings: fix / waive / ignore, and one line
-of why. There is no single right answer — triage is judgement — but a defensible
+of why. There is no single right answer, triage is judgement, but a defensible
 call is: fix the width mismatch, delete or waive the two unused signals.
 
 ## What you should be able to do now
 
 Open a lint report, read and count the by-rule view, filter by rule and severity,
-and — the real skill — separate findings that are latent bugs from findings that
+and, the real skill, separate findings that are latent bugs from findings that
 are only noise.

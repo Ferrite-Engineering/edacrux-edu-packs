@@ -1,4 +1,4 @@
-# cocotb-driven-testbench — student handout
+# cocotb-driven-testbench: student handout
 
 [Cocotb](https://www.cocotb.org/) is a Python-based testbench
 framework. Instead of writing testbenches in Verilog or VHDL,
@@ -8,12 +8,12 @@ Verilator, VCS, Questa, …).
 
 Cocotb tests usually emit *structured log messages* through Python's
 standard `logging` module. WaveCrux can load this log alongside the
-VCD and overlay the log lines on the waveform canvas — clicking a
+VCD and overlay the log lines on the waveform canvas, clicking a
 log line jumps the cursor to the timestamp in the log entry.
 
 This lab's design under test is a UART receiver. The cocotb test
 (documented in [`../tb/test_uart_rx.py`](../tb/test_uart_rx.py))
-sends four bytes — 0x55, 0xAA, 0x55, 0xAA — into the receiver and
+sends four bytes, 0x55, 0xAA, 0x55, 0xAA, into the receiver and
 asserts each one is received correctly. The log it produced is in
 `fixtures/cocotb_run.log`.
 
@@ -26,7 +26,7 @@ asserts each one is received correctly. The log it produced is in
    `fixtures/cocotb_run.log`. WaveCrux parses the file and opens a
    *Cocotb Log* panel below the waveform.
 
-## Part 1 — observe the overlay
+## Part 1: observe the overlay
 
 Each log line in the Cocotb Log panel shows:
 
@@ -41,7 +41,7 @@ Look at the waveform canvas: every log line is rendered as a tick mark
 on a "log overlay" rail above the waveform lanes. Hover over a tick
 to see its message.
 
-## Part 2 — click to jump
+## Part 2: click to jump
 
 1. Find the log line:
    ```
@@ -52,15 +52,15 @@ to see its message.
 4. Observe the value column: `rx_valid = 1`, `rx_data = 0x55`. The
    log entry matches the simulator state at that exact tick.
 
-## Part 3 — filter by severity
+## Part 3: filter by severity
 
 1. At the top of the Cocotb Log panel, find the severity filter
    chip group (INFO, DEBUG, WARNING, ERROR).
 2. **Disable DEBUG.** The log shrinks to just the INFO and higher
-   lines — the high-level test narrative.
+   lines, the high-level test narrative.
 3. Re-enable DEBUG. Now the per-bit driving messages reappear.
 
-## Part 4 — filter by keyword
+## Part 4: filter by keyword
 
 1. In the search box at the top of the Cocotb Log panel, type
    `Received`.
@@ -68,9 +68,9 @@ to see its message.
 3. Click each in turn and watch the cursor visit the four byte-
    completion events.
 
-## Part 5 — exercises
+## Part 5: exercises
 
-### Exercise 1 — first stop bit
+### Exercise 1: first stop bit
 
 > **Q:** The cocotb log says the *first* stop bit is driven at
 > `78265.00ns`. Click that line. What time does the cursor land on?
@@ -79,7 +79,7 @@ to see its message.
 >
 > ___________________________________________________________________
 
-### Exercise 2 — the inter-byte gap
+### Exercise 2: the inter-byte gap
 
 > **Q:** The log line `83620.00ns INFO     UartRxTest   Sending
 > byte 0xAA` corresponds to the moment the testbench begins driving
@@ -90,7 +90,7 @@ to see its message.
 >
 > ___________________________________________________________________
 
-### Exercise 3 — what would a FAIL log look like?
+### Exercise 3: what would a FAIL log look like?
 
 The current log ends with:
 

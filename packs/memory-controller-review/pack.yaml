@@ -21,7 +21,7 @@ learning_objectives:
   en:
     - "Read a lint report on a register-mapped memory controller and identify the real findings."
     - "Cross-probe from a lint finding to the structure it concerns in NetCrux."
-    - "See that a signal flagged as unused has been dropped by synthesis — the finding and its resolution in two views."
+    - "See that a signal flagged as unused has been dropped by synthesis, the finding and its resolution in two views."
     - "Distinguish a lint finding that is a design intent from one that is dead code."
     - "Decide, with both the lint and the structure in front of you, what to fix and what to keep."
 prerequisites:
@@ -58,5 +58,5 @@ maintainers:
 
 short_description: >
   A NetCrux + LintCrux pair pack: triage a memory controller's lint report, then
-  cross-probe each finding into the schematic — including an unused register that
+  cross-probe each finding into the schematic, including an unused register that
   synthesis has already dropped from the structure.

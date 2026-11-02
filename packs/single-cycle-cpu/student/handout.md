@@ -1,8 +1,8 @@
-# single-cycle-cpu — student handout
+# single-cycle-cpu: student handout
 
 This lab traces a tiny **RV32I single-cycle CPU** executing a known
 15-instruction program. Each instruction executes in *exactly one*
-clock cycle — there is no pipelining and no hazards. At each clock
+clock cycle, there is no pipelining and no hazards. At each clock
 edge:
 
 1. PC presents the next instruction address.
@@ -23,7 +23,7 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
    and add `pc`, `instr`, `alu_out`, `rf_we`, `branch_taken`, and a
    few `regs[N]` entries from the register file.)
 
-## Part 1 — apply the RISC-V decoder
+## Part 1: apply the RISC-V decoder
 
 1. Right-click on `instr` (or `pc`) and choose **Add Decoder →
    RISC-V**.
@@ -34,11 +34,11 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 4. Open the **Transaction Table** (**Ctrl+T**).
 
 > **A:** The table should list 14 distinct retired instructions (the
-> first 7 cycles plus PC 0x20 onward — note that PC=0x1C is *never*
+> first 7 cycles plus PC 0x20 onward, note that PC=0x1C is *never*
 > executed because BEQ skipped it). The 14th and onward are
 > repetitions of the `jal` self-loop.
 
-## Part 2 — navigate the hierarchy
+## Part 2: navigate the hierarchy
 
 1. Expand `tb_rv32_cpu.dut` in the signal tree.
 2. Expand `u_regfile`. The 32 register entries appear as
@@ -50,7 +50,7 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 >
 > ___________________________________________________________________
 
-## Part 3 — correlate execution with register writes
+## Part 3: correlate execution with register writes
 
 1. Add the following register lanes to the lane panel (drag from the
    signal tree or use Ctrl+F):
@@ -64,15 +64,15 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 >
 > Time = ____ ns. Cycle number from reset (use the cursor / 10 ns) = ____
 
-## Part 4 — exercises
+## Part 4: exercises
 
-### Exercise 1 — find the branch
+### Exercise 1: find the branch
 
 The BEQ at PC=0x18 is taken (because x3 == x5 == 12, both 0x0C).
 
 1. Focus the `pc` row.
 2. Press **Home** then **E** repeatedly. The cursor steps every
-   10 ns — once per instruction.
+   10 ns, once per instruction.
 
 > **Q:** Identify the cycle where `pc` advances from `0x18` to
 > `0x20`, skipping `0x1C` entirely. What time is that? What does
@@ -80,19 +80,19 @@ The BEQ at PC=0x18 is taken (because x3 == x5 == 12, both 0x0C).
 >
 > ___________________________________________________________________
 
-### Exercise 2 — verify the immediate field
+### Exercise 2: verify the immediate field
 
 The BEQ encoding for "+8" produces the offset `imm_b = 8`. The
 machine-code value of the BEQ instruction is `0x00518463`.
 
 > **Q:** Decode the imm_b field by hand from `0x00518463`. *(Hint:
 > the layout is `imm[12], imm[10:5], rs2, rs1, funct3, imm[4:1],
-> imm[11], opcode` — bits 31, 30:25, 24:20, 19:15, 14:12, 11:8, 7,
+> imm[11], opcode`, bits 31, 30:25, 24:20, 19:15, 14:12, 11:8, 7,
 > 6:0.)*
 >
 > imm_b in binary = ___________________ ; in decimal = ____
 
-### Exercise 3 — what would happen if x3 != x5?
+### Exercise 3: what would happen if x3 != x5?
 
 If `mem[0]` stored a different value than 12, then after LW the
 register `x5` would hold that other value, and the BEQ at PC=0x18
@@ -118,7 +118,7 @@ Plus answers to Parts 2, 3, and the three exercises.
 
 ## Cross-probing to the datapath (NetCrux)
 
-The waveform showed you the CPU *in time* — instructions flowing through, registers
+The waveform showed you the CPU *in time*, instructions flowing through, registers
 changing value cycle by cycle. NetCrux shows you the CPU *in space*: the datapath
 those values move through.
 
@@ -136,5 +136,5 @@ netcrux fixtures/netlist.json
   the same event.
 
 > On a full install this is a cross-probe: select the register in WaveCrux, land on
-> its write path in NetCrux. Here you make the jump by hand — the structure you land
+> its write path in NetCrux. Here you make the jump by hand, the structure you land
 > on is the real synthesised datapath.

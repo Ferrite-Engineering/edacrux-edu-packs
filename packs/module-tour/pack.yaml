@@ -18,8 +18,8 @@ learning_objectives:
   en:
     - "Navigate a multi-level design hierarchy by pushing into and popping out of module instances."
     - "Recognise module reuse: two register slots are two instances of one module."
-    - "Trace fan-out — one net driving several sinks — from a driver to its loads."
-    - "Trace fan-in — the several sources that converge on one net — back to its drivers."
+    - "Trace fan-out, one net driving several sinks, from a driver to its loads."
+    - "Trace fan-in, the several sources that converge on one net, back to its drivers."
     - "Follow a feedback path where a block's output returns to its own input."
 prerequisites:
   - mux-adder-walkthrough
@@ -51,5 +51,5 @@ maintainers:
   - Ferrite Engineering
 
 short_description: >
-  A small clocked datapath — two register slots and an ALU with a feedback path
-  — for practising hierarchy navigation and fan-in / fan-out tracing in NetCrux.
+  A small clocked datapath, two register slots and an ALU with a feedback path,
+  for practising hierarchy navigation and fan-in / fan-out tracing in NetCrux.
