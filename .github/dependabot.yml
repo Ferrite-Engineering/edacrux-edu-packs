@@ -1,9 +1,9 @@
 # Keeps the SHA-pinned GitHub Actions in .github/workflows current. Dependabot
 # understands full-SHA pins and rewrites the trailing `# vX.Y.Z` comment.
 #
-# Merge policy: this repository works direct-to-main, so a bot PR is the one
-# place a change waits for review. Updates arrive as ONE grouped PR a week;
-# merge it by hand once CI is green on it. The bot only edits `uses:` lines,
+# Merge policy: updates arrive as one grouped PR a week, and
+# dependabot-merge.yml merges it once every check on it has passed; a PR with
+# a failed check stays open for a person. The bot only edits `uses:` lines,
 # so `timeout-minutes` and `permissions:` are untouched.
 version: 2
 updates:

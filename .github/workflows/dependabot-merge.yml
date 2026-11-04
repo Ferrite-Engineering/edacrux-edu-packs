@@ -1,0 +1,57 @@
+# Merges Dependabot's weekly pull requests once every check on them has
+# passed, so nobody has to merge them by hand. A pull request with a failed
+# check stays open and this job fails, which sends the failure notice. One with
+# no checks at all is also left for a person: nothing has tested it.
+name: Dependabot merge
+
+on:
+  schedule:
+    # Dependabot opens its pull request on Monday; CI has settled by these.
+    - cron: "17 18 * * 1"
+    - cron: "17 6 * * 2,3"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  checks: read
+  contents: write
+  pull-requests: write
+  statuses: read
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Merge green Dependabot pull requests
+        run: |
+          set -euo pipefail
+          failed=0
+          for n in $(gh pr list --author app/dependabot --state open --json number --jq '.[].number'); do
+            checks=$(gh pr view "$n" --json statusCheckRollup --jq '[.statusCheckRollup[] |
+              if .__typename == "CheckRun"
+              then {done: (.status == "COMPLETED"), ok: (.conclusion | IN("SUCCESS", "SKIPPED", "NEUTRAL"))}
+              else {done: (.state | IN("PENDING", "EXPECTED") | not), ok: (.state == "SUCCESS")}
+              end]')
+            total=$(jq length <<<"$checks")
+            pending=$(jq '[.[] | select(.done | not)] | length' <<<"$checks")
+            bad=$(jq '[.[] | select(.done and (.ok | not))] | length' <<<"$checks")
+            if [ "$total" -eq 0 ]; then
+              echo "::error::#$n has no checks, so nothing has tested it; merge it by hand"
+              failed=1
+            elif [ "$bad" -gt 0 ]; then
+              echo "::error::#$n has $bad failed check(s); left open"
+              failed=1
+            elif [ "$pending" -gt 0 ]; then
+              echo "#$n still has $pending check(s) running; a later run merges it"
+            elif gh pr merge "$n" --squash --delete-branch || gh pr merge "$n" --merge --delete-branch; then
+              echo "#$n merged"
+            else
+              echo "::error::#$n could not be merged"
+              failed=1
+            fi
+          done
+          exit "$failed"
