@@ -1,8 +1,8 @@
 // A small sync FIFO, deliberately seeded with lint issues a triage lab needs:
 //  - an unused signal
 //  - a width mismatch on an assignment
-//  - a case that isn't full (missing default)
-//  - a signal read before it's fully driven in one path
+//  - a second unused signal (computed, never read)
+//  (the lab uses three findings: two unused signals and one width mismatch)
 module sync_fifo #(
     parameter WIDTH = 8,
     parameter DEPTH = 4

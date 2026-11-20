@@ -19,15 +19,18 @@ educational Basys 3 board widget that ships with WaveCrux Open Core.
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open…** select `fixtures/reference.vcd`.
+1. Launch WaveCrux, **File → Open File** (**Cmd+O** on macOS, **Ctrl+O**
+   elsewhere), and select `fixtures/reference.vcd`.
 2. The default lane panel shows your signals. Add `sw`, `btn`, `led`,
    `count`, `seg`, and `an` if not already present.
 
 ## Part 1: open the Stage panel
 
-1. Press **F4** (or **View → Stage**) to open the Stage panel.
-2. Click **➕ Insert Widget** at the top of the Stage panel.
-3. From the widget catalog, choose **Educational Boards → Digilent
+1. Use **Toggle Stage Panel** (**Cmd+Shift+G** on macOS,
+   **Ctrl+Shift+G** elsewhere) to open the Stage panel.
+2. Click the **+** button at the top of the Stage panel (tooltip **Add
+   Widget**). It opens **Add Stage Widget**.
+3. In the widget catalog, choose the category **Board**, then **Digilent
    Basys 3**.
 4. The widget appears on the Stage canvas with a stylized rendering
    of the board's switches, LEDs, buttons, and 7-segment display.
@@ -38,12 +41,14 @@ educational Basys 3 board widget that ships with WaveCrux Open Core.
 WaveCrux's Stage binding dialog lets you map design signals to board
 pins one at a time. The pre-saved binding file
 [`../stage/basys3_layout.json`](../stage/basys3_layout.json) has the
-complete map; if your instructor has loaded the saved session it is
-applied automatically. Otherwise:
+complete map. The saved session does not restore the board, so bind the
+signals yourself:
 
-1. Right-click the Basys 3 widget and choose **Bind Signals…**.
-2. For each board pin, click the pin and select the matching design
-   signal from the dropdown:
+1. Select the Basys 3 widget and open its **Signal Bindings** pane. Each
+   empty slot reads **Bind a signal…**, and the board also offers
+   **Auto-bind**.
+2. For each board pin, click its slot and select the matching design
+   signal:
    - `LED[3:0]` ← `tb_basys3.dut.led`
    - `SW[3:0]`  ← `tb_basys3.dut.sw`
    - `BTN[3:0]` ← `tb_basys3.dut.btn`

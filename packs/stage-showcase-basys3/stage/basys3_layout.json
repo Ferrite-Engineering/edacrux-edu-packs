@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "panel_name": "Basys 3 demo",
-  "widget": "basys3_board",
+  "widget": "basys3",
   "bindings": {
     "led[0]": "tb_basys3.dut.led[0]",
     "led[1]": "tb_basys3.dut.led[1]",

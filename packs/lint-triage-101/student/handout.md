@@ -9,10 +9,10 @@ a small, realistic example.
 
 ## Setup
 
-```
-./build.sh                    # lint the FIFO, produce the report
-lintcrux fixtures/lint.json   # open the unified report
-```
+Open LintCrux, choose **File → Open Source Files…**, and select
+`src/sync_fifo.v`. LintCrux runs Verilator on it (Verilator must be on your
+PATH). `fixtures/lint.json` is the reference report the answers below were
+taken from; LintCrux does not open it directly.
 
 The design is a small synchronous FIFO (`src/sync_fifo.v`). It works, but it is
 not clean.
@@ -21,7 +21,8 @@ not clean.
 
 Look at the violation table. How many findings are there? What rules fired?
 
-- Open the **by-rule breakdown**. Which rule accounts for the most findings?
+- Type a rule name into **Filter by rule or message…**, or open the **Rules**
+  tab, to count findings per rule. Which rule accounts for the most findings?
 
 ## 2. The unused signals
 

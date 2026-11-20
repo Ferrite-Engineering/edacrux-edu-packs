@@ -11,10 +11,12 @@ that fires the state transition on the cycle dwell reaches 29.
 ## Setup
 
 1. Launch WaveCrux.
-2. **File → Open Session…** select `fixtures/reference.wavecrux`. (If
-   it is still the placeholder, open `fixtures/reference.vcd`, add
-   `clk`, `rst_n`, `state`, `red_light`, `green_light`, and
-   `yellow_light` to the lane panel.)
+2. **File → Open File** (**Cmd+O** on macOS, **Ctrl+O** elsewhere), then
+   select `fixtures/reference.wavecrux`. (If the lanes are missing, open
+   `fixtures/reference.vcd` instead and add `clk`, `rst_n`, `state`,
+   `red_light`, `green_light`, and `yellow_light` to the lane panel.)
+   The saved session does not assign the translate filter, so Part 2
+   does that step.
 
 ## Part 1: observe the raw state
 
@@ -46,7 +48,7 @@ signal values to friendly labels.
    ```
 
 2. Right-click (or long-press) the `state` row in the lane panel and
-   choose **Apply Translate Filter…**.
+   choose **Assign Translate Filter…**.
 3. Navigate to `translate/fsm_states.txt` and confirm.
 4. The lane now shows `RED`, `GREEN`, `YELLOW` segments instead of
    `00`, `01`, `10`.
@@ -58,7 +60,7 @@ Move the cursor to t = 325 ns again. The value column now reads
 
 WaveCrux can render an FSM-state graph from a translated state signal.
 
-1. Right-click `state` and choose **Open in FSM Visualizer**.
+1. Right-click `state` and choose **Visualize as FSM**.
 2. A bottom panel opens showing a node-and-edge graph: three nodes
    (RED, GREEN, YELLOW), three edges (the cyclic transitions). The
    *active* node is highlighted at the current cursor position.

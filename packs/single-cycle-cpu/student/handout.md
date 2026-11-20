@@ -18,20 +18,23 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (Or open `fixtures/reference.vcd`
-   and add `pc`, `instr`, `alu_out`, `rf_we`, `branch_taken`, and a
-   few `regs[N]` entries from the register file.)
+1. Launch WaveCrux and choose **File → Open File** (**Cmd+O** on macOS,
+   **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`. (Or
+   open `fixtures/reference.vcd` and add `pc`, `instr`, `alu_out`,
+   `rf_we`, `branch_taken`, and a few `regs[N]` entries from the
+   register file.) The saved session lays out these signals but does
+   not include the decoder lane, so Part 1 adds it.
 
 ## Part 1: apply the RISC-V decoder
 
-1. Right-click on `instr` (or `pc`) and choose **Add Decoder →
-   RISC-V**.
+1. Right-click on `instr` (or `pc`) and choose **Add Protocol
+   Decoder**, then pick **RISC-V Instruction Trace**.
 2. WaveCrux loads the binding from
    `decoders/riscv_binding.json` (RV32I, 32-bit XLEN).
-3. Click **Apply**. A new lane appears beneath `instr` showing the
-   decoded mnemonic at each cycle.
-4. Open the **Transaction Table** (**Ctrl+T**).
+3. Click **Add Decoder**. A new lane appears beneath `instr` showing
+   the decoded mnemonic at each cycle.
+4. Open the **Transaction Table** with **Toggle Transaction Table**
+   (**Cmd+Shift+T** on macOS, **Ctrl+Shift+T** elsewhere).
 
 > **A:** The table should list 14 distinct retired instructions (the
 > first 7 cycles plus PC 0x20 onward, note that PC=0x1C is *never*
@@ -41,9 +44,10 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 ## Part 2: navigate the hierarchy
 
 1. Expand `tb_rv32_cpu.dut` in the signal tree.
-2. Expand `u_regfile`. The 32 register entries appear as
-   `regs[0]`..`regs[31]`.
-3. Expand `dut` further to see the data memory `dmem[0]`..`dmem[31]`.
+2. Expand `u_regfile`. The trace records the registers this program
+   uses, `regs[1]`..`regs[11]`.
+3. Expand `dut` further to see the data memory words the program
+   touches, `dmem[0]` and `dmem[1]`.
 
 > **Q:** What register holds `x1`, what holds `x10`, what holds the
 > stack pointer (x2 in conventional RISC-V calling convention)?
@@ -122,9 +126,8 @@ The waveform showed you the CPU *in time*, instructions flowing through, registe
 changing value cycle by cycle. NetCrux shows you the CPU *in space*: the datapath
 those values move through.
 
-```
-netcrux fixtures/netlist.json
-```
+Open NetCrux and choose **File → Open Netlist JSON…**, then select
+`fixtures/netlist.json`.
 
 - The top module, `rv32_cpu`, is assembled from two blocks you can push into: an
   **instruction memory** (`imem`) and a **register file** (`regfile`). Find both.
