@@ -14,10 +14,11 @@ Four bytes are transmitted: `0x55, 0xAA, 0x55, 0xAA`.
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (If it is the placeholder, open
-   `fixtures/reference.vcd` and add `tx`, `tx_busy`, `state`, and
-   `tx_data` to the lane panel.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (If the lanes are missing, open `fixtures/reference.vcd` and add
+   `tx`, `tx_busy`, `state`, and `tx_data` to the lane panel.) The
+   saved session does not include the decoder lane, so Part 2 adds it.
 
 ## Part 1: manual framing
 
@@ -43,14 +44,21 @@ If you got `0x55`, you are doing it right.
 
 ## Part 2: apply the UART decoder
 
-1. Right-click (or long-press) on the `tx` row and choose **Add Decoder
-   → UART**.
-2. WaveCrux loads the binding from `decoders/uart_binding.json`. The
-   parameters are pre-populated: 115_200 baud, 8 data bits, 1 stop bit,
-   no parity.
-3. Click **Apply**. A new lane appears under `tx` showing decoded
-   frame brackets and byte values.
-4. Open the **Transaction Table** (View menu or **Ctrl+T**).
+1. Choose **Tools → Add Protocol Decoder** (**Cmd+Shift+D** on macOS,
+   **Ctrl+Shift+D** elsewhere), open the **Serial Bus** group and pick
+   **UART**.
+2. The Inspector opens on **UART Configuration**. Under **Signal
+   Bindings**, set the required `tx` pin to `tb_uart_tx.dut.tx` from its
+   **Select signal…** list (`decoders/uart_binding.json` lists it).
+3. Under **Parameters**, set **Baud Rate** to `115200` (the default is
+   9600). **Data Bits** 8, **Parity** `None` and **Stop Bits** `1` are
+   already the defaults. Set **Group Gap (bits)** to `0`: this
+   transmitter sends the four bytes back to back, and the default of 10
+   merges bytes with a gap shorter than that into one transaction.
+4. Click **Add Decoder**. A new lane appears showing decoded frame
+   brackets and byte values.
+5. Open the transaction table with **View → Toggle Transaction Table**
+   (**Cmd+Shift+T** on macOS, **Ctrl+Shift+T** elsewhere).
 
 > **A:** The transaction table should list four BYTE entries:
 > 0x__, 0x__, 0x__, 0x__
@@ -59,9 +67,10 @@ If you got `0x55`, you are doing it right.
 
 1. Focus the `tx` row and press **Home** to return to t = 0.
 2. Press **E** to step to the start-bit edge (t = 80 ns). Place marker
-   `a`.
+   `a` (press **M**, then **A**).
 3. Press **E** to step to the next edge (the rising edge after the
-   start bit at t ≈ 8760 ns). Place marker `b`.
+   start bit at t ≈ 8760 ns). Place marker `b` (press **M**, then
+   **B**).
 4. The status bar shows the delta `a → b`.
 
 > **A:** Measured bit period = ______ ns

@@ -12,16 +12,22 @@ that was already correct.
 
 ```
 ./build.sh
-simcrux  fixtures/results.json    # the regression
-wavecrux fixtures/reference.vcd   # the waveform (session: reference.wavecrux)
 ```
+
+- **The regression:** `fixtures/results.json` records the verdict of
+  each test. SimCrux loads a `simcrux.yaml` project (**File → Open
+  Config…**) rather than this file, and this pack does not include
+  one, so read `results.json` in any text editor.
+- **The waveform:** in WaveCrux, choose **File → Open File…** (**Cmd+O**
+  on macOS, **Ctrl+O** elsewhere) and select `fixtures/reference.wavecrux`
+  (or `fixtures/reference.vcd`).
 
 The design is a UART transmitter (8N1). The suite sends three bytes and checks
 each on the receive side.
 
 ## 1. The red bar (SimCrux)
 
-Open the dashboard. Two tests pass; **`tx_0xFF` fails**.
+Open `fixtures/results.json`. Two tests pass; **`tx_0xFF` fails**.
 
 The reflex is "the transmitter is broken for 0xFF." Resist it. You have not
 looked at what the transmitter actually did, only at a test's verdict.

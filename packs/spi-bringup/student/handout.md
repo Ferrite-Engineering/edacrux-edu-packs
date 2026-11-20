@@ -12,10 +12,17 @@ debugging lives, and no single tool closes it. You will use all three.
 
 ```
 ./build.sh
-simcrux  fixtures/results.json    # the regression
-wavecrux fixtures/reference.vcd   # the waveform (session: reference.wavecrux)
-netcrux  fixtures/netlist.json    # the structure
 ```
+
+- **The regression:** `fixtures/results.json` records the verdict of
+  each test. SimCrux loads a `simcrux.yaml` project (**File → Open
+  Config…**) rather than this file, and this pack does not include
+  one, so read `results.json` in any text editor.
+- **The waveform:** in WaveCrux, choose **File → Open File…** (**Cmd+O**
+  on macOS, **Ctrl+O** elsewhere) and select `fixtures/reference.wavecrux`
+  (or `fixtures/reference.vcd`).
+- **The structure:** in NetCrux, choose **File → Open Netlist JSON…**
+  and select `fixtures/netlist.json`.
 
 The design is an SPI **mode-0** master (sample on rising SCLK, shift on falling)
 with a loopback slave, so a correct master receives exactly what it sent.
@@ -52,9 +59,7 @@ The waveform tells you *when* the sampling is wrong. Now find *where*.
 
 ## 3. The structure (NetCrux)
 
-```
-netcrux fixtures/netlist.json
-```
+Open `fixtures/netlist.json` in NetCrux (**File → Open Netlist JSON…**).
 
 - `spi_master` is built from **two shift registers**: one drives MOSI, one
   captures MISO. Identify the **receive** one.

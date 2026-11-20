@@ -14,7 +14,9 @@ then measure the actual bit period with cursor markers.
 
 See [`student/handout.md`](student/handout.md) for the walkthrough and
 [`instructor/notes.md`](instructor/notes.md) for grading notes. The
-decoder binding lives in [`decoders/uart_binding.json`](decoders/uart_binding.json).
+decoder's signal bindings and settings are listed in
+[`decoders/uart_binding.json`](decoders/uart_binding.json), for reference
+when you configure the decoder by hand.
 
 ## Using this in a course
 

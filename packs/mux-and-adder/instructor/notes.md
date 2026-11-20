@@ -4,7 +4,7 @@
 
 1. Navigate a hierarchical design in the signal-tree browser.
 2. Use the signal-search dialog with substring and glob patterns.
-3. Filter the signal-tree view by direction.
+3. Filter search results by direction (Input, Output, Inout).
 4. Render the same signal in multiple formats simultaneously across
    multiple lanes.
 5. Recognize that an entirely-combinational design's outputs change
@@ -50,9 +50,10 @@ or "the design is combinational" both receive full credit.
   press **E** will land on every clock edge — useful for clock
   navigation in *other* labs, less useful here. Recommend they focus
   one of the input signals or `result` instead.
-- **Direction-filter chip is hidden behind narrow window.** On
-  smaller windows, the chip may collapse into an overflow menu.
-  Worth pointing out before students get stuck.
+- **Direction chips are not showing.** They sit behind the
+  **Filters** button in the **Search Signals** dialog, so students who
+  only see the search box and the results have not opened it. Worth
+  pointing out before students get stuck.
 
 ## Grading rubric (suggested)
 

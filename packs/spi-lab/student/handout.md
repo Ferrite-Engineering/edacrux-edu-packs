@@ -21,10 +21,11 @@ first, at a 5 MHz SCLK derived from the 50 MHz system clock.
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (Or open `fixtures/reference.vcd`
-   directly and add `cs_n`, `sclk`, `mosi`, `miso`, and the slave's
-   `last_byte` to the lane panel.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (Or open `fixtures/reference.vcd` directly and add `cs_n`, `sclk`,
+   `mosi`, `miso`, and the slave's `last_byte` to the lane panel.) The
+   saved session does not include the decoder lane, so Part 2 adds it.
 
 ## Part 1: identify CPOL and CPHA by eye
 
@@ -50,11 +51,19 @@ Without the decoder applied, look at the raw signals:
 
 ## Part 2: apply the SPI decoder
 
-1. Right-click on `mosi` (or `sclk`) and choose **Add Decoder → SPI**.
-2. WaveCrux loads the binding from `decoders/spi_binding.json` with
-   the parameters CPOL=0, CPHA=0, MSB-first, word size 8.
-3. Click **Apply**. A new lane appears showing per-transfer brackets
-   with the decoded byte values.
+1. Choose **Tools → Add Protocol Decoder** (**Cmd+Shift+D** on macOS,
+   **Ctrl+Shift+D** elsewhere), open the **Serial Bus** group and pick
+   **SPI**.
+2. The Inspector opens on **SPI Configuration**. Under **Signal
+   Bindings**, choose **Auto-bind signals**, or pick each pin from its
+   **Select signal…** list using `decoders/spi_binding.json` as the key.
+   The pins are `sclk`, `mosi`, `miso` and `cs`; the `cs` pin takes
+   `cs_n`.
+3. Under **Parameters**, the defaults already match this lab:
+   **CPOL** `0 (Idle Low)`, **CPHA** `0 (Leading Edge)`, **Bit Order**
+   `MSB First`, **Word Size** 8 and **CS Active Level** `Active Low`.
+4. Click **Add Decoder**. A new lane appears showing per-transfer
+   brackets with the decoded byte values.
 
 > **A:** Decoded transactions (in order): 0x__, 0x__, 0x__, 0x__
 
@@ -74,8 +83,10 @@ These should match the decoder's transaction table exactly.
 
 ### Exercise 1: wrong CPOL
 
-1. Right-click on the decoder lane and choose **Reconfigure**.
-2. Change CPOL from 0 to 1. Click **Apply**.
+1. Right-click on the decoder lane and choose **Configure…**. The
+   Inspector opens on the decoder.
+2. Change **CPOL** from `0 (Idle Low)` to `1 (Idle High)`. Click
+   **Update Decoder**.
 3. Observe how the decoded transactions change.
 
 > **Q:** What goes wrong? Why? *(Hint: think about which SCLK edge
@@ -88,7 +99,8 @@ When done, change CPOL back to 0.
 ### Exercise 2: measure SCLK frequency
 
 1. Place markers `a` and `b` on two adjacent rising edges of SCLK
-   (the first two are at t = 180 ns and t = 380 ns).
+   (the first two are at t = 180 ns and t = 380 ns). With the cursor on
+   an edge, press **M** and then the marker's letter key.
 2. The marker delta is one SCLK period.
 
 > **A:** SCLK period = ____ ns. Frequency = 1 / period = ____ MHz.

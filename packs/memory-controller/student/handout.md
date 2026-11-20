@@ -25,9 +25,11 @@ tear down).
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (Or open `fixtures/reference.vcd`
-   and add the signals listed in the session file.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (Or open `fixtures/reference.vcd` and add the signals listed in the
+   session file.) The saved session lays out the signals but does not
+   include the decoder lane, so Part 2 adds it.
 2. The signals are grouped into "control" (`wb_cyc`, `wb_stb`,
    `wb_we`, `wb_ack`), "address_data" (`wb_adr`, `dat_master_to_slave`,
    `dat_slave_to_master`), and "master_state" (`last_read`, `done`).
@@ -51,13 +53,21 @@ tear down).
 
 ## Part 2: apply the Wishbone decoder
 
-1. Right-click on any of the Wishbone control signals and choose
-   **Add Decoder → Wishbone**.
-2. WaveCrux loads the binding from `decoders/wishbone_binding.json`
-   (variant=B4, addr_width=32, data_width=32) with all 10 signal
-   bindings pre-populated.
-3. Click **Apply**.
-4. Open the **Transaction Table** (**Ctrl+T**).
+1. Choose **Tools → Add Protocol Decoder** (**Cmd+Shift+D** on macOS,
+   **Ctrl+Shift+D** elsewhere), open the **AMBA** group and pick
+   **Wishbone**.
+2. The Inspector opens on **Wishbone Configuration**. Under **Signal
+   Bindings**, choose **Auto-bind signals**, or pick each pin from its
+   **Select signal…** list using
+   `decoders/wishbone_binding.json` as the key (`clk`, `rst`, `adr`,
+   `dat_o`, `dat_i`, `we`, `sel`, `stb`, `cyc` and `ack`).
+3. Under **Parameters**, leave **Revision** at **B3 (Classic +
+   bursts)**: this master holds `stb` until `ack` and has no `stall`
+   signal, which only **B4 (Pipelined)** uses. Leave **Address Width**
+   and **Data Width** at 32.
+4. Click **Add Decoder**.
+5. Open the transaction table with **View → Toggle Transaction Table**
+   (**Cmd+Shift+T** on macOS, **Ctrl+Shift+T** elsewhere).
 
 > **A:** The transaction table should show:
 > - 8 WRITEs to addresses 0x00 through 0x1C with data
@@ -79,7 +89,10 @@ tear down).
 
 ### Exercise 1: switching-activity heatmap
 
-Open the **Switching Activity** panel (View menu or **Ctrl+H**).
+Add the bus signals to the lane panel, then choose **Tools → Analyze
+Switching Activity** (**Cmd+Shift+A** on macOS, **Ctrl+Shift+A**
+elsewhere). The **Activity** tab opens at the bottom, headed
+**Switching Activity**, with a **Transitions** column per signal.
 
 > **Q:** Which signal in the bus has the highest toggle count over the
 > entire trace? Which has the lowest (among the data lines)? Why?

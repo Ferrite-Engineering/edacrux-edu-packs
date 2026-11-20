@@ -68,8 +68,8 @@ else if (enable)  count <= count + 8'd1;
 hold `count = 0x00` from t = 0 to t = 22 ns (during reset). They are
 *never* equal again after the simulation begins.
 
-**Exercise 2.** X-trace from `count` should surface (in order of
-distance from the symptom): the right-hand-side of the assignment
+**Exercise 2.** Working backward from `count` by hand should surface
+(in order of distance from the symptom): the right-hand-side of the assignment
 (`count + 1`), the `enable` predicate, the `~enable` bitwise-not gate,
 and finally the `enable` input port. The bitwise-not is the suspect —
 this should be the "aha" moment.

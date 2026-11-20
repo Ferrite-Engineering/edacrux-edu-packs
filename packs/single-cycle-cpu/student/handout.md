@@ -18,7 +18,7 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 
 ## Setup
 
-1. Launch WaveCrux and choose **File → Open File** (**Cmd+O** on macOS,
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on macOS,
    **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`. (Or
    open `fixtures/reference.vcd` and add `pc`, `instr`, `alu_out`,
    `rf_we`, `branch_taken`, and a few `regs[N]` entries from the
@@ -27,13 +27,17 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 
 ## Part 1: apply the RISC-V decoder
 
-1. Right-click on `instr` (or `pc`) and choose **Add Protocol
-   Decoder**, then pick **RISC-V Instruction Trace**.
-2. WaveCrux loads the binding from
-   `decoders/riscv_binding.json` (RV32I, 32-bit XLEN).
-3. Click **Add Decoder**. A new lane appears beneath `instr` showing
-   the decoded mnemonic at each cycle.
-4. Open the **Transaction Table** with **Toggle Transaction Table**
+1. Choose **Tools → Add Protocol Decoder** (**Cmd+Shift+D** on macOS,
+   **Ctrl+Shift+D** elsewhere), open the **Instruction Trace** group
+   and pick **RISC-V Instruction Trace**.
+2. The Inspector opens on **RISC-V Instruction Trace Configuration**.
+   Under **Signal Bindings**, set `clk` to `tb_rv32_cpu.clk`,
+   `instruction` to `tb_rv32_cpu.dut.instr` and the optional `pc` to
+   `tb_rv32_cpu.dut.pc` (`decoders/riscv_binding.json` lists the two
+   CPU signals). Under **Parameters**, **XLEN** stays at `32`.
+3. Click **Add Decoder**. A new lane appears showing the decoded
+   mnemonic at each cycle.
+4. Open the transaction table with **View → Toggle Transaction Table**
    (**Cmd+Shift+T** on macOS, **Ctrl+Shift+T** elsewhere).
 
 > **A:** The table should list 14 distinct retired instructions (the
@@ -56,11 +60,13 @@ and machine-encoded in [`../src/program.hex`](../src/program.hex).
 
 ## Part 3: correlate execution with register writes
 
-1. Add the following register lanes to the lane panel (drag from the
-   signal tree or use Ctrl+F):
+1. Add the following register lanes to the lane panel (click each in
+   the signal tree, or use **Search → Search Signals**, **Cmd+F** on
+   macOS and **Ctrl+F** elsewhere):
    - `regs[1]`, `regs[2]`, `regs[3]`, `regs[4]`, `regs[5]`,
      `regs[7]`, `regs[8]`, `regs[9]`, `regs[10]`, `regs[11]`.
-2. Display all in **Decimal** or **Hexadecimal** (your choice).
+2. Display all in **Unsigned Decimal** or **Hexadecimal** (your choice;
+   right-click a lane and choose **Display Format**).
 3. Move the cursor through the trace and watch the registers update.
 
 > **A:** Note the time at which `regs[3]` first becomes 12 (the sum

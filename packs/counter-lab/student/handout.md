@@ -13,13 +13,13 @@ period).
 ## Setup
 
 1. Launch WaveCrux.
-2. **File → Open Session…** and select `fixtures/reference.wavecrux`.
-   Your instructor may have replaced the placeholder with a saved
-   session; if so, the signals will already be loaded and the cursor
-   will be sitting near the reset release. Otherwise, **File → Open…**
-   and select `fixtures/reference.vcd` directly, then expand the signal
-   tree on the left and add `clk`, `rst_n`, `enable`, `count`, and
-   `overflow` to the lane panel by double-clicking or by drag-and-drop.
+2. Choose **File → Open File…** (**Cmd+O** on macOS, **Ctrl+O**
+   elsewhere) and select `fixtures/reference.wavecrux`. The signals
+   will already be loaded and the cursor will be sitting near the reset
+   release. Otherwise, choose **File → Open File…** and select
+   `fixtures/reference.vcd` directly, then expand the signal tree on
+   the left and add `clk`, `rst_n`, `enable`, `count`, and `overflow`
+   to the lane panel by clicking each one or by drag-and-drop.
 
 ## Part 1: read the cursor
 
@@ -36,8 +36,9 @@ period).
 ## Part 2: change display format
 
 By default `count` displays in hexadecimal. Right-click (or long-press
-on touch) the `count` row and switch the format to **Decimal**, then
-**Binary**, then back to **Hexadecimal**.
+on touch) the `count` row, choose **Display Format**, and switch the
+format to **Unsigned Decimal**, then **Binary**, then back to
+**Hexadecimal**.
 
 > **Q:** When `count = 0x80`, what is its decimal value? What is its
 > binary representation? *Answer in the box below.*
@@ -66,7 +67,7 @@ moment.
 - Click on the `overflow` row, then press **Home** to return the cursor
   to t = 0.
 - Press **E** until the cursor lands on the rising edge of `overflow`.
-- Place a named marker by pressing **M** and naming it `rollover`.
+- Place a marker named `r` for the rollover: press **M**, then **R**.
 
 > **Q:** At what time does `overflow` go high? At what time does it go
 > low again? *(Both should be ±10 ns of clean values.)*
@@ -102,7 +103,7 @@ assign overflow = enable && (count == 8'hFF);
 
 ## What to turn in
 
-A screenshot of the WaveCrux window with the `rollover` marker placed
+A screenshot of the WaveCrux window with the `r` (rollover) marker placed
 and the `a` / `b` markers from Exercise 2 visible in the marker strip.
 Include your answers to Exercises 1, 2, and 3 in the body of your
 submission.

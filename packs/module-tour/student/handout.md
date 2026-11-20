@@ -11,8 +11,10 @@ several places) and **fan-in** (several signals converging on one).
 
 ```
 ./build.sh
-netcrux fixtures/netlist.json
 ```
+
+Then open NetCrux, choose **File → Open Netlist JSON…**, and select
+`fixtures/netlist.json`.
 
 The top module is **`core`**, a tiny clocked datapath.
 

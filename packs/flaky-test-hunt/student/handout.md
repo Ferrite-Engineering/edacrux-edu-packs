@@ -11,15 +11,21 @@ real cause, and the discipline for dealing with it.
 
 ```
 ./build.sh                       # run the suite across 8 seeds
-simcrux fixtures/results.json    # open the seed grid
 ```
+
+`fixtures/results.json` records the outcome of each test on each seed.
+SimCrux loads a `simcrux.yaml` project (**File → Open Config…**) rather
+than this file, and this pack does not include one, so read
+`results.json` in any text editor.
 
 The design is an 8-bit signed **saturating adder** (`src/sat_add.v`): results
 that overflow should clamp to +127 or −128.
 
-## 1. Read the seed grid
+## 1. Read the seed results
 
-The suite ran three tests across eight seeds. On the dashboard:
+The suite ran three tests across eight seeds. In `results.json`, each
+test lists the seeds it passed on (`pass_seeds`) and failed on
+(`fail_seeds`):
 
 - Which tests passed on **every** seed?
 - Which test passed on some seeds and failed on others?
@@ -44,7 +50,7 @@ generate. **This is cause two: a real bug.**
 
 A flaky failure you cannot reproduce, you cannot fix. Pin a failing seed:
 
-- From the grid, note a seed where `random_stress` failed.
+- From `fail_seeds`, note a seed where `random_stress` failed.
 - Run `./build.sh`, or `vvp build/sim.vvp +seed=<N>`, and confirm the failure
   is there every time for that seed. Deterministic reproduction is the difference
   between "flaky, ignore it" and "found it."

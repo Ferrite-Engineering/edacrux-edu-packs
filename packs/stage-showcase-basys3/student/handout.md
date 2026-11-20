@@ -19,7 +19,7 @@ educational Basys 3 board widget that ships with WaveCrux Open Core.
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open File** (**Cmd+O** on macOS, **Ctrl+O**
+1. Launch WaveCrux, **File → Open File…** (**Cmd+O** on macOS, **Ctrl+O**
    elsewhere), and select `fixtures/reference.vcd`.
 2. The default lane panel shows your signals. Add `sw`, `btn`, `led`,
    `count`, `seg`, and `an` if not already present.

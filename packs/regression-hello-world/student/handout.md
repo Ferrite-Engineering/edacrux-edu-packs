@@ -11,15 +11,20 @@ lab.
 
 ```
 ./build.sh                      # run the regression
-simcrux fixtures/results.json   # open the dashboard
 ```
+
+`fixtures/results.json` is the recorded result of that run. SimCrux loads
+a `simcrux.yaml` project (**File → Open Config…**) rather than this file,
+and this pack does not include one, so read `results.json` in any text
+editor.
 
 The design under test is a 4-function ALU (`src/alu4.v`): add, subtract, AND, OR.
 The suite (`tb/tb_alu.v`) is six directed tests.
 
 ## 1. Read the summary
 
-The dashboard opens on the summary. Answer, just from it:
+The `summary` block at the end of `results.json` holds the totals. Answer,
+just from it:
 
 - How many tests ran?
 - How many passed? How many failed?
@@ -41,7 +46,7 @@ one, say `add_carry`, and confirm you can see, in the RTL, why 15 + 1 should be
 
 ## 3. Read a single test
 
-On the dashboard, find the test named **`sub_zero`**.
+In `results.json`, find the test named **`sub_zero`**.
 
 - What is its outcome?
 - What was it checking? (Find it in the testbench.)

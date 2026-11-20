@@ -37,7 +37,10 @@ first: 1, 0, 1, 0, 1, 0, 1, 0. Assembling MSB-first to read out the
 byte value gives `01010101` = 0x55.
 
 **Part 2 transaction table.** Four BYTE entries: 0x55, 0xAA, 0x55,
-0xAA.
+0xAA. This needs **Group Gap (bits)** set to 0: the transmitter sends
+the bytes back to back, and at the decoder's default of 10 they merge
+into one entry. If the table is empty or shows errors, check that
+**Baud Rate** was changed from its default of 9600 to 115200.
 
 **Part 3 measurement.**
 - Bit period = 8680 ns (or 8.68 µs).

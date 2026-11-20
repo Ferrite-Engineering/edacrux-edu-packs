@@ -11,7 +11,7 @@ that fires the state transition on the cycle dwell reaches 29.
 ## Setup
 
 1. Launch WaveCrux.
-2. **File → Open File** (**Cmd+O** on macOS, **Ctrl+O** elsewhere), then
+2. **File → Open File…** (**Cmd+O** on macOS, **Ctrl+O** elsewhere), then
    select `fixtures/reference.wavecrux`. (If the lanes are missing, open
    `fixtures/reference.vcd` instead and add `clk`, `rst_n`, `state`,
    `red_light`, `green_light`, and `yellow_light` to the lane panel.)

@@ -14,9 +14,15 @@ selects one of four registers.
 
 ```
 ./build.sh
-lintcrux fixtures/lint.json      # the lint report
-netcrux  fixtures/netlist.json   # the structure
 ```
+
+- **The lint report:** in LintCrux, choose **File → Open Source Files…**
+  and select `src/mem_ctrl.v`, `src/regfile.v` and `src/addr_decoder.v`.
+  LintCrux runs Verilator on them (Verilator must be on your PATH).
+  `fixtures/lint.json` is the reference report the findings below were
+  taken from; LintCrux does not open it directly.
+- **The structure:** in NetCrux, choose **File → Open Netlist JSON…**
+  and select `fixtures/netlist.json`.
 
 ## 1. Read the lint report (LintCrux)
 

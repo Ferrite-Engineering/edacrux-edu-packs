@@ -8,7 +8,7 @@ After completing this lab a student should be able to:
 2. Read signal values from the value column at a given cursor time.
 3. Change display format per signal (hex / decimal / binary).
 4. Use **Q** / **E** to step through transitions of the focused signal.
-5. Place named markers and read inter-marker deltas from the status bar.
+5. Place lettered markers and read inter-marker deltas from the status bar.
 6. Reason about how a combinational signal (`overflow`) relates to the
    register it depends on (`count`).
 
@@ -84,7 +84,7 @@ falls coincident with the rollover edge.
 
 | Item | Points |
 |---|---:|
-| Screenshot shows `rollover` marker at t ≈ 2570 ns | 2 |
+| Screenshot shows the `r` (rollover) marker at t ≈ 2570 ns | 2 |
 | Markers `a` and `b` at `count = 1` and `count = 128` | 2 |
 | Correct answer to Exercise 1 (both edges within ±10 ns) | 2 |
 | Correct cycle count in Exercise 2 (127) | 2 |

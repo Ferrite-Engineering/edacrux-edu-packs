@@ -11,8 +11,10 @@ Build the netlist and open it in NetCrux:
 
 ```
 ./build.sh
-netcrux fixtures/netlist.json     # or File → Open in the app
 ```
+
+Then open NetCrux, choose **File → Open Netlist JSON…**, and select
+`fixtures/netlist.json`.
 
 ## 1. The top module
 

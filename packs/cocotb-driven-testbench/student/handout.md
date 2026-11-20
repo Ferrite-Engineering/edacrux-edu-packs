@@ -19,12 +19,14 @@ asserts each one is received correctly. The log it produced is in
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open…** select
-   `fixtures/reference.vcd`. The lane panel should show `rx`,
-   `state`, `rx_data`, `rx_valid`, `clk`, `rst_n`.
-2. **File → Open Cocotb Log…** and select
-   `fixtures/cocotb_run.log`. WaveCrux parses the file and opens a
-   *Cocotb Log* panel below the waveform.
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.vcd`. Add
+   `rx`, `state`, `rx_data`, `rx_valid`, `clk` and `rst_n` to the lane
+   panel if they are not already there.
+2. Choose **Tools → Load Cocotb Log** and select
+   `fixtures/cocotb_run.log` in the **Open Cocotb Log** dialog. WaveCrux
+   parses the file and opens the **Cocotb Log** panel below the
+   waveform.
 
 ## Part 1: observe the overlay
 
@@ -38,8 +40,9 @@ Each log line in the Cocotb Log panel shows:
 Scroll through the log panel. The lines are color-coded by severity.
 
 Look at the waveform canvas: every log line is rendered as a tick mark
-on a "log overlay" rail above the waveform lanes. Hover over a tick
-to see its message.
+on a thin overlay strip above the waveform lanes, coloured by severity.
+The strip only shows where the log lines fall in time; the messages
+are in the panel.
 
 ## Part 2: click to jump
 
@@ -55,15 +58,16 @@ to see its message.
 ## Part 3: filter by severity
 
 1. At the top of the Cocotb Log panel, find the severity filter
-   chip group (INFO, DEBUG, WARNING, ERROR).
-2. **Disable DEBUG.** The log shrinks to just the INFO and higher
+   chips (**Trace**, **Debug**, **Info**, **Warning**, **Error**,
+   **Critical**).
+2. **Turn off Debug.** The log shrinks to just the Info and higher
    lines, the high-level test narrative.
-3. Re-enable DEBUG. Now the per-bit driving messages reappear.
+3. Turn Debug back on. Now the per-bit driving messages reappear.
 
 ## Part 4: filter by keyword
 
-1. In the search box at the top of the Cocotb Log panel, type
-   `Received`.
+1. In the **Filter by keyword…** box at the top of the Cocotb Log
+   panel, type `Received`.
 2. Only the four "Received byte" lines remain.
 3. Click each in turn and watch the cursor visit the four byte-
    completion events.

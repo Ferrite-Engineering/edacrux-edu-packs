@@ -34,10 +34,12 @@ The master walks through five operations:
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (Or open `fixtures/reference.vcd`
-   and add the channel signals grouped under aw_channel, w_channel,
-   b_channel, ar_channel, r_channel.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (Or open `fixtures/reference.vcd` and add the channel signals
+   grouped under aw_channel, w_channel, b_channel, ar_channel,
+   r_channel.) The saved session does not include the decoder lane, so
+   Part 2 adds it.
 
 ## Part 1: handshake by hand
 
@@ -65,12 +67,19 @@ slave applies backpressure.
 
 ## Part 2: apply the AXI4-Lite decoder
 
-1. Right-click on any channel signal and choose **Add Decoder →
-   AXI4-Lite**.
-2. WaveCrux loads the binding from
-   `decoders/axi4lite_binding.json` with all 19 channel signals.
-3. Click **Apply**.
-4. Open the **Transaction Table** (**Ctrl+T**).
+1. Choose **Tools → Add Protocol Decoder** (**Cmd+Shift+D** on macOS,
+   **Ctrl+Shift+D** elsewhere), open the **AMBA** group and pick
+   **AXI4-Lite**.
+2. The Inspector opens on **AXI4-Lite Configuration**. Under **Signal
+   Bindings**, choose **Auto-bind signals**: the pins carry the same
+   names as the testbench signals. `decoders/axi4lite_binding.json`
+   lists all 19 channel signals if you would rather pick each pin from
+   its **Select signal…** list.
+3. Under **Parameters**, leave **Address Width** and **Data Width** at
+   32.
+4. Click **Add Decoder**.
+5. Open the transaction table with **View → Toggle Transaction Table**
+   (**Cmd+Shift+T** on macOS, **Ctrl+Shift+T** elsewhere).
 
 > **A:** Five transactions appear:
 > 1. WRITE 0x00 ← 0x________ ; resp=______
@@ -89,7 +98,8 @@ the access. Find it in the waveform:
 1. Press **Home**. Focus the `bresp` row.
 2. Press **E** until `bresp` takes the value `2'b10` (the SLVERR
    code).
-3. Place marker `slverr_write` here.
+3. Place marker `w` here (press **M**, then **W**). Marker names are
+   single letters.
 
 > **A:** SLVERR write returned at t = ______ ns. The response channel
 > that carries it is the **__** channel.
@@ -97,7 +107,7 @@ the access. Find it in the waveform:
 Similarly, find the SLVERR *read*:
 
 4. Focus the `rresp` row. Press **E** until `rresp` = `2'b10`.
-5. Place marker `slverr_read`.
+5. Place marker `r` (press **M**, then **R**).
 
 > **A:** SLVERR read returned at t = ______ ns; channel = __.
 
@@ -141,8 +151,7 @@ next begins.
 A screenshot showing:
 - The AXI4-Lite decoder applied with all five transactions in the
   table.
-- Markers `slverr_write` and `slverr_read` on the two SLVERR
-  responses.
+- Markers `w` and `r` on the two SLVERR responses.
 - The `last_bresp` / `last_rresp` / `last_rdata` lanes visible.
 
 Plus answers to Parts 1, 2, 3, and the three exercises.

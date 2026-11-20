@@ -13,10 +13,11 @@ frequency from a cursor delta, and recognize an LFSR's period.
 
 ## Setup
 
-1. Launch WaveCrux, **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (If it is the placeholder, open
-   `fixtures/reference.vcd` and add `clk`, `sin`, `u_shift.q`,
-   `u_shift.sout`, and `u_lfsr.state` to the lane panel.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (If the lanes are missing, open `fixtures/reference.vcd` and add
+   `clk`, `sin`, `u_shift.q`, `u_shift.sout`, and `u_lfsr.state` to the
+   lane panel.)
 
 ## Part 1: deterministic shift
 
@@ -37,12 +38,16 @@ frequency from a cursor delta, and recognize an LFSR's period.
 
 ## Part 2: switching activity
 
-WaveCrux's status bar shows the *transition count* for the focused
-signal across a time range.
+WaveCrux counts the *transitions* of every signal in the lane panel
+over the time range you are looking at.
 
-1. Place markers `a` at t = 30 ns and `b` at t = 1030 ns.
-2. Focus the `sout` lane. Observe the transition count reported in
-   the status bar for the range `[a, b]`.
+1. Zoom and pan until the visible range runs from t = 30 ns to
+   t = 1030 ns, as closely as you can. The analysis counts the
+   transitions inside the visible range.
+2. Choose **Tools → Analyze Switching Activity** (**Cmd+Shift+A** on
+   macOS, **Ctrl+Shift+A** elsewhere). The **Activity** tab opens at
+   the bottom, headed **Switching Activity**. Read the **Transitions**
+   column on the `sout` row.
 
 > **A:** Transition count on `sout` over [30, 1030] ns: ______
 
@@ -51,14 +56,14 @@ signal across a time range.
 The LFSR is initialized to `5'b00001` on reset. Its state evolves on
 every clock until it returns to `5'b00001` after a full period.
 
-1. Focus the `u_lfsr.state` lane. Place marker `m0` at the first time
-   `state = 5'b00001` after reset releases, this should be at
-   t = 22 ns (still the reset value, since the next posedge has not
-   fired yet).
-2. Press **E** until `state` returns to `5'b00001`. Place marker `m1`
-   there.
+1. Focus the `u_lfsr.state` lane. Place marker `m` (press **M**, then
+   **M**) at the first time `state = 5'b00001` after reset releases,
+   this should be at t = 22 ns (still the reset value, since the next
+   posedge has not fired yet).
+2. Press **E** until `state` returns to `5'b00001`. Place marker `n`
+   there (press **M**, then **N**).
 
-> **A:** Marker delta `m0 → m1` = ______ ns
+> **A:** Marker delta `m → n` = ______ ns
 >
 > Period in clock cycles = ______
 >
@@ -96,6 +101,6 @@ The 5-bit LFSR has 32 possible states but visits only 31. Read
 
 ## What to turn in
 
-A screenshot showing both designs side-by-side with markers `m0` and
-`m1` on the LFSR period. Plus your answers to Parts 1, 2, 3, and the
+A screenshot showing both designs side-by-side with markers `m` and
+`n` on the LFSR period. Plus your answers to Parts 1, 2, 3, and the
 three exercises.

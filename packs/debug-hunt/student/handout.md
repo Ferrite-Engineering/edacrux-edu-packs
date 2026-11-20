@@ -22,23 +22,27 @@ or your instructor's solution before finishing.** You can read
 ## Setup
 
 1. Launch WaveCrux.
-2. **File → Open…** open `fixtures/buggy.vcd`. This becomes the
-   *primary* tab.
-3. **View → Compare With File…** select `fixtures/golden.vcd`. This
-   loads the golden trace as a reference.
-4. WaveCrux maps signal names by full path between the two. Confirm
-   the signal-mapping dialog matches:
+2. Choose **File → Open File…** (**Cmd+O** on macOS, **Ctrl+O**
+   elsewhere) and open `fixtures/buggy.vcd`. Add `count`, `enable` and
+   `rst_n` to the lane panel.
+3. Choose **Tools → Compare Waveforms** (**Cmd+Shift+C** on macOS,
+   **Ctrl+Shift+C** elsewhere) and select `fixtures/golden.vcd`. This
+   loads the golden trace as the comparison file, and the **Diff** tab
+   opens in the left dock.
+4. WaveCrux matches signals between the two by path, ignoring the
+   testbench's root name. In the **Diff** tab, under **MATCHED
+   SIGNALS**, confirm these pairs match:
    - `tb_counter_buggy.dut.count` ↔ `tb_counter_golden.dut.count`
    - `tb_counter_buggy.dut.enable` ↔ `tb_counter_golden.dut.enable`
    - `tb_counter_buggy.dut.rst_n` ↔ `tb_counter_golden.dut.rst_n`
-5. Click **Configure Diff**. A new visual style highlights the regions
-   where the two `count` traces disagree.
+5. The toolbar reads **Comparing: golden.vcd** and the regions where
+   the two `count` traces disagree are highlighted.
 
 ## Part 1: locate the first divergence
 
-1. Press **Home** then **Ctrl + ]** (jump to next diff).
+1. Press **Home** then **F7** (**Tools → Next Divergence**).
 2. The cursor lands on the first cycle where buggy `count` ≠ golden
-   `count`.
+   `count`. The toolbar reads **Divergence 1 of N**.
 
 > **A:** First divergence at t = ____ ns. At that time:
 >
@@ -47,8 +51,8 @@ or your instructor's solution before finishing.** You can read
 
 ## Part 2: locate the second-most-suspicious moment
 
-Press **Ctrl + ]** to step to the next diff. Repeat until you have
-observed at least three divergence regions.
+Press **F7** to step to the next divergence (**Shift+F7** steps back).
+Repeat until you have observed at least three divergence regions.
 
 > **Q:** Describe in plain language *when* the buggy counter
 > increments. (Hint: focus the `enable` lane and the `count` lane in
@@ -79,14 +83,15 @@ whole 500 ns window.
 >
 > ___________________________________________________________________
 
-### Exercise 2: X-trace from the symptom
+### Exercise 2: work backward from the symptom
 
-WaveCrux's **X-trace** feature walks backward from a signal of
-interest through its fan-in cone. Right-click on `count` in the
-buggy trace and choose **X-trace from here**.
+WaveCrux's **Trace X Origin** command walks backward from a signal
+through its fan-in cone, but it only appears on signals that carry
+unknown (`x`) values, and this trace has none. Do the same walk by hand
+from `counter_buggy.v`, starting at `count`.
 
-> **Q:** What signals does X-trace identify as upstream of `count`?
-> Does that list match what you'd expect from reading the source?
+> **Q:** What signals and expressions sit upstream of `count`, from the
+> assignment back to the input port? Is the suspect among them?
 >
 > ___________________________________________________________________
 
@@ -116,9 +121,8 @@ You found the bug's *symptom* in the waveform: `count` advances when `enable` is
 high, the opposite of what it should do. Now see the bug's *shape* in the
 structure.
 
-```
-netcrux fixtures/netlist.json
-```
+Open NetCrux and choose **File → Open Netlist JSON…**, then select
+`fixtures/netlist.json`.
 
 - The counter is a single **enabled register** (an `$adffe` cell) fed by an
   **increment adder** (`$add`). Find both.

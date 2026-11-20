@@ -24,11 +24,22 @@ Between them sits a synchronizer.
 
 ```
 ./build.sh
-netcrux  fixtures/netlist.json    # structure: start here
-wavecrux fixtures/reference.vcd   # waveform  (session: reference.wavecrux)
-simcrux  fixtures/results.json    # regression (green, and misleading)
-lintcrux fixtures/lint.json       # lint      (clean, and misleading)
 ```
+
+- **Structure (start here):** in NetCrux, choose **File → Open Netlist
+  JSON…** and select `fixtures/netlist.json`.
+- **Waveform:** in WaveCrux, choose **File → Open File…** (**Cmd+O** on
+  macOS, **Ctrl+O** elsewhere) and select `fixtures/reference.wavecrux`
+  (or `fixtures/reference.vcd`).
+- **Regression (green, and misleading):** `fixtures/results.json`
+  records the verdict of each test. SimCrux loads a `simcrux.yaml`
+  project (**File → Open Config…**) rather than this file, and this pack
+  does not include one, so read `results.json` in any text editor.
+- **Lint (clean, and misleading):** in LintCrux, choose **File → Open
+  Source Files…** and select the four files in `src/`. LintCrux runs
+  Verilator on them (Verilator must be on your PATH).
+  `fixtures/lint.json` is the reference report; LintCrux does not open
+  it directly.
 
 ## Deliverable 1: Map the domains (NetCrux)
 

@@ -15,11 +15,20 @@ to registers, read back the result.
 
 ```
 ./build.sh
-netcrux  fixtures/netlist.json    # structure
-lintcrux fixtures/lint.json       # lint baseline
-simcrux  fixtures/results.json    # directed regression (green baseline)
-wavecrux fixtures/reference.vcd   # waveform
 ```
+
+- **Structure:** in NetCrux, choose **File → Open Netlist JSON…** and
+  select `fixtures/netlist.json`.
+- **Lint baseline:** in LintCrux, choose **File → Open Source Files…**
+  and select the four files in `src/`. LintCrux runs Verilator on them
+  (Verilator must be on your PATH). `fixtures/lint.json` is the
+  reference report; LintCrux does not open it directly.
+- **Directed regression (green baseline):** `fixtures/results.json`
+  records the verdict of each test. SimCrux loads a `simcrux.yaml`
+  project (**File → Open Config…**) rather than this file, and this pack
+  does not include one, so read `results.json` in any text editor.
+- **Waveform:** in WaveCrux, choose **File → Open File…** (**Cmd+O** on
+  macOS, **Ctrl+O** elsewhere) and select `fixtures/reference.vcd`.
 
 ## Deliverable 1: Document the structure (NetCrux)
 

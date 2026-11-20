@@ -17,10 +17,10 @@ and `top.v` before starting.
 
 ## Setup
 
-1. Launch WaveCrux and **File → Open Session…** select
-   `fixtures/reference.wavecrux`. (If it is the placeholder version,
-   open `fixtures/reference.vcd` directly and add the signals listed
-   below.)
+1. Launch WaveCrux and choose **File → Open File…** (**Cmd+O** on
+   macOS, **Ctrl+O** elsewhere). Select `fixtures/reference.wavecrux`.
+   (If the lanes are missing, open `fixtures/reference.vcd` directly
+   and add the signals listed below.)
 2. The signal tree on the left should show:
    - `tb_top` (the testbench scope)
      - `dut` (the `top` module instance)
@@ -43,23 +43,27 @@ and `top.v` before starting.
 
 ## Part 2: signal search
 
-1. Press **Ctrl + F** (or **Cmd + F** on macOS) to open the
-   signal-search dialog.
-2. Type `*_in` to glob-match the top-level input ports. You should see
+1. Choose **Search → Search Signals** (**Cmd+F** on macOS, **Ctrl+F**
+   elsewhere) to open the **Search Signals** dialog.
+2. Switch the match mode to **Glob** and type `*_in` in **Signal name
+   or pattern…** to match the top-level input ports. You should see
    `a_in`, `b_in`, and `c_in`.
 3. Click each result to add it to the lane panel.
 
 ## Part 3: direction filter
 
-1. In the signal-tree pane, click the **direction filter** chip.
-2. Cycle through `inputs`, `outputs`, and `all`. Notice how the listed
-   variables narrow to just the matching direction.
-3. Return to `all` before continuing.
+1. In the **Search Signals** dialog, open **Filters**. The direction
+   chips are **Input**, **Output** and **Inout**.
+2. Turn on **Input**, then **Output** instead. Notice how the listed
+   signals narrow to just the matching direction.
+3. Choose **Clear Filters** before continuing.
 
 ## Part 4: multiple formats on multiple lanes
 
-1. Right-click (or long-press) `a_in` and **Duplicate Lane**. Set one
-   lane to **Hexadecimal** and the duplicate to **Decimal**.
+1. Click `a_in` in the signal tree twice: a second click adds a second
+   lane for the same signal. Right-click (or long-press) each lane and
+   choose **Display Format**, then set one lane to **Hexadecimal** and
+   the other to **Unsigned Decimal**.
 2. Move the cursor to **t = 175 ns**. The hex lane reads `FF`; the
    decimal lane reads `255`.
 3. Move the cursor to **t = 225 ns** and confirm `result` reads `00`
